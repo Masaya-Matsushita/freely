@@ -6,5 +6,7 @@
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
-  }
+  },
+  // Tailwind CSS IntelliSenseを効かせる
+  "editor.quickSuggestions": { "strings": true }
 }
