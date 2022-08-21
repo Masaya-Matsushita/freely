@@ -1,0 +1,12 @@
+{
+  // 自動インポートの際、baseUrlに基づく絶対パスを優先
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+  // ファイル保存時にESLlintとPrettierを走らせる
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  // Tailwind CSS IntelliSenseを効かせる
+  "editor.quickSuggestions": { "strings": true }
+}
