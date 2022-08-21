@@ -1,0 +1,4 @@
+{
+  // 自動インポートの際、baseUrlに基づく絶対パスを優先
+  "javascript.preferences.importModuleSpecifier": "non-relative"
+}
