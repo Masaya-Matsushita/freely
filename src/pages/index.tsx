@@ -1,6 +1,6 @@
 import { Button } from '@mantine/core'
 import type { NextPage } from 'next'
-import { useMediaQuery } from '@/libs/mantine/useMediaQuery'
+import { useMediaQuery } from '@/lib/mantine/useMediaQuery'
 
 const Home: NextPage = () => {
   const largerThanXxs = useMediaQuery('xxs')
