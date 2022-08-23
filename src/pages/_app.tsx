@@ -2,8 +2,15 @@ import '@/style/globals.css'
 import { MantineProvider } from '@mantine/core'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
+import type { NextPageWithLayout } from '@/type/NextPageWithLayout'
 
-function MyApp({ Component, pageProps }: AppProps) {
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
+}
+
+const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
+  const getLayout = Component.getLayout ?? ((page) => page)
+
   return (
     <div>
       <Head>
@@ -18,7 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           colorScheme: 'light',
         }}
       >
-        <Component {...pageProps} />
+        {getLayout(<Component {...pageProps} />)}
       </MantineProvider>
     </div>
   )
