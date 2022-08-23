@@ -1,9 +1,9 @@
 import { useErrorHandler } from 'react-error-boundary'
 import { SimpleButton } from '@/component/SimpleButton'
-import { EnterLayout } from '@/pages-layout/EnterLayout'
+import { PlanLayout } from '@/pages-layout/PlanLayout'
 import { NextPageWithLayout } from '@/type/NextPageWithLayout'
 
-const Top: NextPageWithLayout = () => {
+const Plan: NextPageWithLayout = () => {
   const handleError = useErrorHandler()
 
   const handleClick = () => {
@@ -16,12 +16,12 @@ const Top: NextPageWithLayout = () => {
 
   return (
     <div>
-      <div className='text-lg text-red-500'>Hello World!</div>
+      <div className='text-lg text-blue-500'>Hello World!</div>
       <SimpleButton text='btn' onClick={handleClick} narrow />
     </div>
   )
 }
 
-Top.getLayout = EnterLayout
+Plan.getLayout = PlanLayout
 
-export default Top
+export default Plan
