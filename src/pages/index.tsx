@@ -1,21 +1,11 @@
-import { Button } from '@mantine/core'
-import type { NextPage } from 'next'
-import { useMediaQuery } from '@/libs/mantine/useMediaQuery'
+import { Index } from '@/pages-component/index'
+import { EnterLayout } from '@/pages-layout/EnterLayout'
+import { NextPageWithLayout } from '@/type/NextPageWithLayout'
 
-const Home: NextPage = () => {
-  const largerThanXxs = useMediaQuery('xxs')
-  const largerThanXs = useMediaQuery('xs')
-  const largerThanSm = useMediaQuery('sm')
-  const largerThanMd = useMediaQuery('md')
-  const largerThanLg = useMediaQuery('lg')
-  const largerThanXl = useMediaQuery('xl')
-
-  return (
-    <>
-      <div className='text-lg text-red-500'>Hello World!</div>
-      <Button mt={largerThanXxs ? 'lg' : 'sm'}>btn</Button>
-    </>
-  )
+const IndexPage: NextPageWithLayout = () => {
+  return <Index />
 }
 
-export default Home
+IndexPage.getLayout = EnterLayout
+
+export default IndexPage

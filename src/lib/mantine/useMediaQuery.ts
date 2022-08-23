@@ -1,7 +1,9 @@
 import { useMediaQuery as useMediaQueryOriginal } from '@mantine/hooks'
 
+// useMediaQueryOriginalの第1引数をブレークポイントの値のみに制限
+
 const map = {
-  xxs: '320px',
+  xxs: '340px',
   xs: '576px',
   sm: '768px',
   md: '992px',
@@ -9,7 +11,9 @@ const map = {
   xl: '1400px',
 } as const
 
-// useMediaQueryの第1引数をブレークポイントの値のみに制限するフック
+/**
+ * @package
+ */
 export const useMediaQuery = (
   query: keyof typeof map,
   initialValue: Parameters<typeof useMediaQueryOriginal>[1] = true,

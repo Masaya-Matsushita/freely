@@ -5,7 +5,7 @@ module.exports = {
     extend: {},
     // Mantineと一致させる
     screens: {
-      xxs: '320px',
+      xxs: '340px',
       xs: '576px',
       sm: '768px',
       md: '992px',
