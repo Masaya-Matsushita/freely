@@ -5,7 +5,10 @@ import { ErrorFallback } from './ErrorFallback'
 // エラーをキャッチ
 export const ErrorBoundary: FC<{ children: ReactNode }> = ({ children }) => {
   return (
-    <OriginalErrorBoundary FallbackComponent={ErrorFallback} onReset={() => location.reload()}>
+    <OriginalErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onReset={() => location.reload()}
+    >
       {children}
     </OriginalErrorBoundary>
   )
