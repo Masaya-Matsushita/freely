@@ -1,21 +1,10 @@
 import { Button, Paper } from '@mantine/core'
 import Image from 'next/image'
-import { FC, ReactNode } from 'react'
 import type { FallbackProps } from 'react-error-boundary'
-import { ErrorBoundary } from 'react-error-boundary'
 import { useMediaQuery } from '@/lib/mantine'
 
-// エラーをキャッチ
-export const LayoutErrorBoundary: FC<{ children: ReactNode }> = ({ children }) => {
-  return (
-    <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => location.reload()}>
-      {children}
-    </ErrorBoundary>
-  )
-}
-
 // エラー時のUI
-const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
+export const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
   const largerThanLg = useMediaQuery('lg')
 
   return (
