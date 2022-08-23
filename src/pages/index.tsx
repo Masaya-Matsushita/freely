@@ -1,7 +1,7 @@
 import { Button } from '@mantine/core'
 import type { NextPage } from 'next'
 import { useErrorHandler } from 'react-error-boundary'
-import { useMediaQuery } from '@/lib/mantine/useMediaQuery'
+import { useMediaQuery } from '@/lib/mantine'
 
 const Home: NextPage = () => {
   const largerThanXxs = useMediaQuery('xxs')
