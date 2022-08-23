@@ -2,7 +2,9 @@ import { FC, ReactNode } from 'react'
 import { ErrorBoundary as OriginalErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from './ErrorFallback'
 
-// エラーをキャッチ
+/**
+ * @package
+ */
 export const ErrorBoundary: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <OriginalErrorBoundary

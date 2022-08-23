@@ -9,7 +9,9 @@ const PATH = {
   FORGOT_PASSWORD: '/[planId]/forgot-password',
 } as const
 
-// 動的パスに値を設定
+/**
+ * @package
+ */
 export const getPath = (pathKey: keyof typeof PATH, ...args: string[]) => {
   const val = PATH[pathKey]
 
@@ -17,6 +19,7 @@ export const getPath = (pathKey: keyof typeof PATH, ...args: string[]) => {
     return val
   }
 
+  // パスの動的部分を置き換え
   const dirs = val.slice(1).split('/')
 
   const newPath = dirs.map((dir) => {

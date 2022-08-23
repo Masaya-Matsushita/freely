@@ -1,6 +1,9 @@
 import { useErrorHandler } from 'react-error-boundary'
 import { SimpleButton } from '@/component/SimpleButton'
 
+/**
+ * @package
+ */
 export const Plan = () => {
   const handleError = useErrorHandler()
 

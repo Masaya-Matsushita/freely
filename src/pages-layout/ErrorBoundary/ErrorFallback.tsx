@@ -3,7 +3,9 @@ import Image from 'next/image'
 import type { FallbackProps } from 'react-error-boundary'
 import { useMediaQuery } from '@/lib/mantine'
 
-// エラー時のUI
+/**
+ * @package
+ */
 export const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
   const largerThanLg = useMediaQuery('lg')
 

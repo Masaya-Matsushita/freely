@@ -7,6 +7,9 @@ type Props = {
   narrow?: true
 }
 
+/**
+ * @package
+ */
 export const SimpleButton: FC<Props> = (props) => {
   return (
     <Button
