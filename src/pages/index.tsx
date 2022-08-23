@@ -1,11 +1,8 @@
-import { Button } from '@mantine/core'
 import type { NextPage } from 'next'
 import { useErrorHandler } from 'react-error-boundary'
-import { useMediaQuery } from '@/lib/mantine'
+import { SimpleButton } from '@/component/SimpleButton'
 
 const Home: NextPage = () => {
-  const largerThanXxs = useMediaQuery('xxs')
-
   const handleError = useErrorHandler()
 
   const handleClick = () => {
@@ -17,12 +14,10 @@ const Home: NextPage = () => {
   }
 
   return (
-    <>
+    <div>
       <div className='text-lg text-red-500'>Hello World!</div>
-      <Button mt={largerThanXxs ? 'lg' : 'sm'} onClick={handleClick}>
-        btn
-      </Button>
-    </>
+      <SimpleButton text='btn' onClick={handleClick} narrow />
+    </div>
   )
 }
 

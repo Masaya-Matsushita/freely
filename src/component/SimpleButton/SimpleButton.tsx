@@ -7,7 +7,7 @@ type Props = {
   narrow?: true
 }
 
-export const CommonButton: FC<Props> = (props) => {
+export const SimpleButton: FC<Props> = (props) => {
   return (
     <Button
       onClick={props.onClick}
