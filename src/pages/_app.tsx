@@ -1,8 +1,7 @@
 import '@/style/globals.css'
 import type { AppProps } from 'next/app'
-import Head from 'next/head'
 import { AppMantineProvider } from '@/lib/mantine'
-import type { NextPageWithLayout } from '@/type/NextPageWithLayout'
+import type { NextPageWithLayout } from '@/lib/next'
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
