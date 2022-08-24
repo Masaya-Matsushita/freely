@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import { FC } from 'react'
+import { getUrl } from '../const'
 
 type MetaData = {
   pageTitle?: string
@@ -8,6 +9,7 @@ type MetaData = {
   pageImg?: string
   pageImgWidth?: number
   pageImgHeight?: number
+  enter?: true
 }
 
 /**
@@ -20,6 +22,7 @@ export const Seo: FC<MetaData> = ({
   pageImg,
   pageImgWidth,
   pageImgHeight,
+  enter,
 }) => {
   const defaultTitle = 'Freely'
   const defaultDescription =
@@ -31,6 +34,7 @@ export const Seo: FC<MetaData> = ({
   const imgUrl = pageImg
   const imgWidth = pageImgWidth ? pageImgWidth : 1920
   const imgHeight = pageImgHeight ? pageImgHeight : 1280
+  const canonicalUrl = enter ? getUrl('INDEX') : getUrl('PLAN', 'foo')
 
   return (
     <Head>
@@ -45,7 +49,7 @@ export const Seo: FC<MetaData> = ({
       <meta property='og:image' content={imgUrl} />
       <meta property='og:image:width' content={String(imgWidth)} />
       <meta property='og:image:height' content={String(imgHeight)} />
-      <link rel='canonical' href={url} />
+      <link rel='canonical' href={canonicalUrl} />
       <link rel='icon' href='/favicon.ico' />
     </Head>
   )

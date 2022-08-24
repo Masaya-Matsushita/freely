@@ -21,6 +21,7 @@ export const Index = () => {
       <Seo
         pagePath={'https://freely-azure.vercel.app/'}
         pageImg={'/Naoshima.JPG'}
+        enter
       />
       <div className='text-lg text-red-500'>Hello World!</div>
       <SimpleButton text='btn' onClick={handleClick} narrow />

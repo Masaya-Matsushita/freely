@@ -33,3 +33,10 @@ export const getPath = (pathKey: keyof typeof PATH, ...args: string[]) => {
 
   return '/' + newPath.join('/')
 }
+
+/**
+ * @package
+ */
+export const getUrl = (pathKey: keyof typeof PATH, ...args: string[]) => {
+  return 'https://freely-azure.vercel.app' + getPath(pathKey, args[0], args[1])
+}
