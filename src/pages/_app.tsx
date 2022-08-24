@@ -11,11 +11,11 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? ((page) => page)
 
   return (
-    <div>
+    <>
       <AppMantineProvider>
         {getLayout(<Component {...pageProps} />)}
       </AppMantineProvider>
-    </div>
+    </>
   )
 }
 

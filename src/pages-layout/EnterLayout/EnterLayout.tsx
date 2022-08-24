@@ -1,4 +1,5 @@
 import { ReactElement } from 'react'
+import { Header } from './Header'
 import { ErrorBoundary } from 'src/pages-layout/ErrorBoundary'
 
 /**
@@ -7,8 +8,8 @@ import { ErrorBoundary } from 'src/pages-layout/ErrorBoundary'
 export const EnterLayout = (page: ReactElement) => {
   return (
     <ErrorBoundary>
-      <header>Enter</header>
-      <main>{page}</main>
+      <Header />
+      <main className='min-h-screen bg-main-100'>{page}</main>
       <footer>Footer</footer>
     </ErrorBoundary>
   )
