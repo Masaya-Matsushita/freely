@@ -1,6 +1,6 @@
 import { useErrorHandler } from 'react-error-boundary'
-import { Seo } from '@/component/Seo'
-import { SimpleButton } from '@/component/SimpleButton'
+import { Seo } from 'src/component/Seo'
+import { SimpleButton } from 'src/component/SimpleButton'
 
 /**
  * @package

@@ -1,7 +1,7 @@
 import { Button, Paper } from '@mantine/core'
 import Image from 'next/image'
 import type { FallbackProps } from 'react-error-boundary'
-import { useMediaQuery } from '@/lib/mantine'
+import { useMediaQuery } from 'src/lib/mantine'
 
 /**
  * @package

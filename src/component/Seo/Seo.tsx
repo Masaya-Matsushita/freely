@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { FC } from 'react'
-import { getUrl } from '../../lib/const'
+import { getUrl } from 'src/lib/const'
 
 type MetaData = {
   pageTitle?: string
