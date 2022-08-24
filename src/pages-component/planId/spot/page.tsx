@@ -4,7 +4,7 @@ import { Seo } from 'src/component/Seo'
 /**
  * @package
  */
-export const Plan = () => {
+export const Spot = () => {
   const { asPath } = useRouter()
   return (
     <div>

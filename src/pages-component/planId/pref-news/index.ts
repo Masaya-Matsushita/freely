@@ -1,0 +1,1 @@
+export { PrefNews } from './page'

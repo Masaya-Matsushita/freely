@@ -4,7 +4,7 @@ import { Seo } from 'src/component/Seo'
 /**
  * @package
  */
-export const Index = () => {
+export const Create = () => {
   const { asPath } = useRouter()
 
   return (
