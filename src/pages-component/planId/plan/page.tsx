@@ -19,14 +19,10 @@ export const Plan = () => {
   return (
     <div>
       <Seo
-        pageTitle={'test'}
-        pageDescription={
-          'これはplanページです。aaaaaaaaaaa aaaaaaaaaaaaaaaa aaaaaaaaaaaaaa aaaaaaaaaaaaaaa'
-        }
+        pageTitle={'Plan'}
+        pageDescription={'旅行のプランに招待されました！'}
         pagePath={'https://freely-azure.vercel.app/123/plan'}
         pageImg={'/Naoshima.JPG'}
-        pageImgWidth={1920}
-        pageImgHeight={1280}
       />
       <div className='text-lg text-blue-500'>Hello World!</div>
       <SimpleButton text='btn' onClick={handleClick} narrow />

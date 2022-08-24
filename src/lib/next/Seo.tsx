@@ -29,8 +29,8 @@ export const Seo: FC<MetaData> = ({
   const description = pageDescription ? pageDescription : defaultDescription
   const url = pagePath
   const imgUrl = pageImg
-  const imgWidth = pageImgWidth ? pageImgWidth : 1280
-  const imgHeight = pageImgHeight ? pageImgHeight : 640
+  const imgWidth = pageImgWidth ? pageImgWidth : 1920
+  const imgHeight = pageImgHeight ? pageImgHeight : 1280
 
   return (
     <Head>
