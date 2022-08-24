@@ -18,7 +18,7 @@ export const Index = () => {
 
   return (
     <div>
-      <Seo pageImg={'/Naoshima.JPG'} />
+      <Seo />
       <div className='text-lg text-red-500'>Hello World!</div>
       <SimpleButton text='btn' onClick={handleClick} narrow />
     </div>

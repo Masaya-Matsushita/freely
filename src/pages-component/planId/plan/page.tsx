@@ -23,9 +23,8 @@ export const Plan = () => {
   return (
     <div>
       <Seo
-        pageTitle={'Plan'}
+        pageTitle={'プラン'}
         pageDescription={'旅行のプランに招待されました！'}
-        pageImg={'/Naoshima.JPG'}
       />
       <div className='text-lg text-blue-500'>Hello World!</div>
       <SimpleButton text='btn' onClick={handleClick} narrow />
