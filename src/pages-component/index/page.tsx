@@ -1,6 +1,6 @@
 import { useErrorHandler } from 'react-error-boundary'
+import { Seo } from '@/component/Seo'
 import { SimpleButton } from '@/component/SimpleButton'
-import { Seo } from '@/lib/next'
 
 /**
  * @package
@@ -18,7 +18,7 @@ export const Index = () => {
 
   return (
     <div>
-      <Seo />
+      <Seo pageImg={'/Naoshima.JPG'} />
       <div className='text-lg text-red-500'>Hello World!</div>
       <SimpleButton text='btn' onClick={handleClick} narrow />
     </div>
