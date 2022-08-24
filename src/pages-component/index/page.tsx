@@ -1,5 +1,6 @@
 import { useErrorHandler } from 'react-error-boundary'
 import { SimpleButton } from '@/component/SimpleButton'
+import { Seo } from '@/lib/next'
 
 /**
  * @package
@@ -17,6 +18,7 @@ export const Index = () => {
 
   return (
     <div>
+      <Seo />
       <div className='text-lg text-red-500'>Hello World!</div>
       <SimpleButton text='btn' onClick={handleClick} narrow />
     </div>
