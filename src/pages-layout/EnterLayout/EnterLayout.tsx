@@ -35,7 +35,7 @@ export const EnterLayout = (page: ReactElement) => {
 const Header = () => {
   return (
     <HeaderWrapper>
-      <div className='ml-8 text-3xl font-medium tracking-wider text-dark-500'>
+      <div className='ml-8 text-2xl font-medium tracking-wider text-dark-500'>
         Freely
       </div>
       <div className='mr-3 flex items-center'>
