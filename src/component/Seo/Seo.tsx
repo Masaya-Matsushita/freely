@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { FC } from 'react'
-import { getUrl } from '../const'
+import { getUrl } from '../../lib/const'
 
 type MetaData = {
   pageTitle?: string
@@ -8,7 +8,6 @@ type MetaData = {
   pageImg?: string
   pageImgWidth?: number
   pageImgHeight?: number
-  planId?: string
 }
 
 /**
@@ -20,24 +19,17 @@ export const Seo: FC<MetaData> = ({
   pageImg,
   pageImgWidth,
   pageImgHeight,
-  planId,
 }) => {
-  // FIXME: useRouterから動的に取得したplanIdをurlに渡したいが、一度nullが渡るとメタデータは更新できない。
-  if (planId === 'loading') {
-    return null
-  }
-
   const defaultTitle = 'Freely'
   const defaultDescription =
-    'Freelyは、世界一シンプル＆簡単な旅行計画表サービスです。大まかに計画を立てて、ゆっくり旅行がしたい人にぴったりです。'
+    '世界一シンプル＆簡単な旅行計画表サービス「Freely」。大まかに計画を立てて、ゆっくり旅行がしたい人にぴったりです。'
 
   const title = pageTitle ? `${pageTitle} | ${defaultTitle}` : defaultTitle
   const description = pageDescription ? pageDescription : defaultDescription
   const imgUrl = pageImg
   const imgWidth = pageImgWidth ? pageImgWidth : 1920
   const imgHeight = pageImgHeight ? pageImgHeight : 1280
-  const url = planId ? getUrl('PLAN', planId) : getUrl('INDEX')
-  const canonicalUrl = planId ? getUrl('PLAN', 'foo') : getUrl('INDEX')
+  const url = getUrl('INDEX')
 
   return (
     <Head>
@@ -52,7 +44,7 @@ export const Seo: FC<MetaData> = ({
       <meta property='og:image' content={imgUrl} />
       <meta property='og:image:width' content={String(imgWidth)} />
       <meta property='og:image:height' content={String(imgHeight)} />
-      <link rel='canonical' href={canonicalUrl} />
+      <link rel='canonical' href={url} />
       <link rel='icon' href='/favicon.ico' />
     </Head>
   )

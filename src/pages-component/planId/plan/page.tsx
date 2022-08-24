@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useErrorHandler } from 'react-error-boundary'
+import { Seo } from '@/component/Seo'
 import { SimpleButton } from '@/component/SimpleButton'
-import { Seo } from '@/lib/next'
 
 /**
  * @package
@@ -25,7 +25,6 @@ export const Plan = () => {
       <Seo
         pageTitle={'Plan'}
         pageDescription={'旅行のプランに招待されました！'}
-        planId={typeof planId === 'string' ? planId : 'loading'}
         pageImg={'/Naoshima.JPG'}
       />
       <div className='text-lg text-blue-500'>Hello World!</div>
