@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { useErrorHandler } from 'react-error-boundary'
 import { SimpleButton } from '@/component/SimpleButton'
 import { Seo } from '@/lib/next'
@@ -6,6 +7,9 @@ import { Seo } from '@/lib/next'
  * @package
  */
 export const Plan = () => {
+  const router = useRouter()
+  const planId = router.query.planId
+
   const handleError = useErrorHandler()
 
   const handleClick = () => {
@@ -21,7 +25,7 @@ export const Plan = () => {
       <Seo
         pageTitle={'Plan'}
         pageDescription={'旅行のプランに招待されました！'}
-        pagePath={'https://freely-azure.vercel.app/123/plan'}
+        planId={typeof planId === 'string' ? planId : 'loading'}
         pageImg={'/Naoshima.JPG'}
       />
       <div className='text-lg text-blue-500'>Hello World!</div>

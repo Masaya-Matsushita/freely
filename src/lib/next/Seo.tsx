@@ -5,11 +5,10 @@ import { getUrl } from '../const'
 type MetaData = {
   pageTitle?: string
   pageDescription?: string
-  pagePath?: string
   pageImg?: string
   pageImgWidth?: number
   pageImgHeight?: number
-  enter?: true
+  planId?: string
 }
 
 /**
@@ -18,23 +17,27 @@ type MetaData = {
 export const Seo: FC<MetaData> = ({
   pageTitle,
   pageDescription,
-  pagePath,
   pageImg,
   pageImgWidth,
   pageImgHeight,
-  enter,
+  planId,
 }) => {
+  // FIXME: useRouterから動的に取得したplanIdをurlに渡したいが、一度nullが渡るとメタデータは更新できない。
+  if (planId === 'loading') {
+    return null
+  }
+
   const defaultTitle = 'Freely'
   const defaultDescription =
     'Freelyは、世界一シンプル＆簡単な旅行計画表サービスです。大まかに計画を立てて、ゆっくり旅行がしたい人にぴったりです。'
 
   const title = pageTitle ? `${pageTitle} | ${defaultTitle}` : defaultTitle
   const description = pageDescription ? pageDescription : defaultDescription
-  const url = pagePath
   const imgUrl = pageImg
   const imgWidth = pageImgWidth ? pageImgWidth : 1920
   const imgHeight = pageImgHeight ? pageImgHeight : 1280
-  const canonicalUrl = enter ? getUrl('INDEX') : getUrl('PLAN', 'foo')
+  const url = planId ? getUrl('PLAN', planId) : getUrl('INDEX')
+  const canonicalUrl = planId ? getUrl('PLAN', 'foo') : getUrl('INDEX')
 
   return (
     <Head>
