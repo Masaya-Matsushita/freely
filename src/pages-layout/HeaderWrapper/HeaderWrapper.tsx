@@ -5,7 +5,7 @@ import { FC, ReactNode } from 'react'
  */
 export const HeaderWrapper: FC<{ children: ReactNode }> = ({ children }) => {
   return (
-    <header className='flex h-24 items-center justify-between border-b border-solid border-white border-b-slate-300 pt-6'>
+    <header className='flex h-[108px] items-center justify-between border-b border-solid border-white border-b-slate-300 pt-6'>
       {children}
     </header>
   )
