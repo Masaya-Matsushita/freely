@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { ReactElement } from 'react'
 import { getPath } from 'src/lib/const'
 import { ErrorBoundary } from 'src/pages-layout/ErrorBoundary'
+import { Footer } from 'src/pages-layout/Footer'
 import { HeaderWrapper } from 'src/pages-layout/HeaderWrapper'
 import { Seo } from 'src/pages-layout/Seo'
 
@@ -29,7 +30,7 @@ export const EnterLayout = (page: ReactElement) => {
       <Seo />
       <Header />
       <main className='min-h-[calc(100vh-96px)] bg-main-100'>{page}</main>
-      <footer>Footer</footer>
+      <Footer />
     </ErrorBoundary>
   )
 }
