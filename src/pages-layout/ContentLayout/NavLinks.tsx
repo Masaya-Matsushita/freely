@@ -4,29 +4,27 @@ import {
   IconLock,
   IconNotes,
 } from '@tabler/icons'
-import { useRouter } from 'next/router'
+import { FC } from 'react'
 import { getPath } from 'src/lib/const'
 import { ActiveLink } from 'src/lib/next'
 
 /**
  * @package
  */
-export const NavLinks = () => {
-  const planId = useRouter().query.planId
-
+export const NavLinks: FC<{ planId: string }> = (props) => {
   const LINKS = [
     {
-      href: getPath('PLAN', String(planId)),
+      href: getPath('PLAN', props.planId),
       label: '計画表',
       icon: <IconNotes size={28} stroke={1.7} />,
     },
     {
-      href: getPath('PREF_NEWS', String(planId)),
+      href: getPath('PREF_NEWS', props.planId),
       label: '旅先の情報',
       icon: <IconChartLine size={28} stroke={1.7} />,
     },
     {
-      href: getPath('FORGOT_PASSWORD', String(planId)),
+      href: getPath('FORGOT_PASSWORD', props.planId),
       label: 'パスワード再設定',
       icon: <IconLock size={28} stroke={1.7} />,
     },
