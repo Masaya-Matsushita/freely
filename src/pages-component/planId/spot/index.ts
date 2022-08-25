@@ -1,0 +1,1 @@
+export { Spot } from './page'
