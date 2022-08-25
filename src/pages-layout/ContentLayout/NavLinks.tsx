@@ -48,12 +48,14 @@ export const NavLinks: FC<{ planId: string }> = (props) => {
                   }`}
                 >
                   <div
-                    className={`mr-4 h-10 w-1 rounded-sm ${
+                    className={`mr-4 h-10 w-1 shrink-0 rounded-sm ${
                       isActive ? 'bg-main-500' : 'bg-white'
                     }`}
                   ></div>
-                  {icon}
-                  <div className='ml-2'>{label}</div>
+                  <div>{icon}</div>
+                  <div className='ml-2 overflow-hidden text-clip xxs:whitespace-nowrap'>
+                    {label}
+                  </div>
                 </a>
               )
             }}

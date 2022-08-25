@@ -1,6 +1,6 @@
-import { Burger, CloseButton, Drawer } from '@mantine/core'
+import { Burger, CloseButton, Drawer, UnstyledButton } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { IconShare } from '@tabler/icons'
+import { IconArrowLeft, IconArrowRight, IconShare } from '@tabler/icons'
 import { useRouter } from 'next/router'
 import { ReactElement, useEffect } from 'react'
 import { NavLinks } from './NavLinks'
@@ -14,9 +14,14 @@ import { HeaderWrapper } from 'src/pages-layout/HeaderWrapper'
 export const ContentLayout = (page: ReactElement) => {
   return (
     <ErrorBoundary>
-      <Header />
-      <main>{page}</main>
-      <footer>Footer</footer>
+      <div className='min-h-screen'>
+        <Header />
+        <div className='flex'>
+          <SideNav />
+          <main className='flex-1 bg-main-100'>{page}</main>
+        </div>
+        <footer>Footer</footer>
+      </div>
     </ErrorBoundary>
   )
 }
@@ -69,7 +74,7 @@ const Header = () => {
           onClick={() => drawerHandlers.open()}
           title='メニューを開く'
           color='#495057'
-          className='ml-6'
+          className='ml-6 sm:hidden'
         />
         <div className='text-2xl font-medium tracking-wider text-dark-500'>
           Freely
@@ -85,5 +90,44 @@ const Header = () => {
         }}
       />
     </HeaderWrapper>
+  )
+}
+
+const SideNav = () => {
+  const router = useRouter()
+  const planId = router.query.planId
+  const [opened, handlers] = useDisclosure(true)
+
+  return (
+    <nav className='hidden sm:block'>
+      <div
+        style={{ transition: 'all 0.3s' }}
+        className={`flex h-screen ${
+          opened ? 'w-[276px]' : 'w-[90px]'
+        } flex-col justify-between border-solid border-white border-r-slate-200`}
+      >
+        {typeof planId === 'string' ? <NavLinks planId={planId} /> : null}
+        <div className='flex flex-col'>
+          <hr
+            style={{ transition: 'all 0.3s' }}
+            className={`mx-2 h-[1px] ${
+              opened ? 'w-64' : 'w-[72px]'
+            } border-0 bg-slate-300`}
+          />
+          <UnstyledButton onClick={() => handlers.toggle()} className='mx-8 '>
+            {opened ? (
+              <div className='flex h-7 items-center gap-2 text-slate-400'>
+                <IconArrowLeft color='#AFAFAF' stroke={2} />
+                <div className='overflow-hidden text-clip whitespace-nowrap'>
+                  折りたたむ
+                </div>
+              </div>
+            ) : (
+              <IconArrowRight color='#AFAFAF' stroke={2} />
+            )}
+          </UnstyledButton>
+        </div>
+      </div>
+    </nav>
   )
 }
