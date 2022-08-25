@@ -3,6 +3,7 @@ import { ReactElement } from 'react'
 import { getPath } from 'src/lib/const'
 import { ErrorBoundary } from 'src/pages-layout/ErrorBoundary'
 import { HeaderWrapper } from 'src/pages-layout/HeaderWrapper'
+import { Seo } from 'src/pages-layout/Seo'
 
 const LINKS = [
   {
@@ -25,6 +26,7 @@ const LINKS = [
 export const EnterLayout = (page: ReactElement) => {
   return (
     <ErrorBoundary>
+      <Seo />
       <Header />
       <main className='min-h-[calc(100vh-96px)] bg-main-100'>{page}</main>
       <footer>Footer</footer>

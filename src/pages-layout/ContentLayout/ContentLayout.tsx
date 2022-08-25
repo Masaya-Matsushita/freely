@@ -3,6 +3,7 @@ import { ReactElement } from 'react'
 import { Header } from './Header'
 import { SideNav } from './SideNav'
 import { ErrorBoundary } from 'src/pages-layout/ErrorBoundary'
+import { Seo } from 'src/pages-layout/Seo'
 
 /**
  * @package
@@ -13,6 +14,7 @@ export const ContentLayout = (page: ReactElement) => {
 
   return (
     <ErrorBoundary>
+      <Seo invite />
       {typeof planId === 'string' ? (
         <div>
           <Header router={router} planId={planId} />
