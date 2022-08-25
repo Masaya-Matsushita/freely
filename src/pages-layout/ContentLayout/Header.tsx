@@ -5,19 +5,18 @@ import { NextRouter } from 'next/router'
 import { FC, useEffect } from 'react'
 import { NavLinks } from './NavLinks'
 import { ShareModal } from './ShareModal'
-import { useMediaQuery } from 'src/lib/mantine'
 import { HeaderWrapper } from 'src/pages-layout/HeaderWrapper'
 
 type Props = {
   router: NextRouter
   planId: string
+  largerThanSm: boolean
 }
 
 /**
  * @package
  */
 export const Header: FC<Props> = (props) => {
-  const largerThanSm = useMediaQuery('sm')
   const [drawerOpened, drawerHandlers] = useDisclosure(false)
   const [modalOpened, modalHandlers] = useDisclosure(false)
 
@@ -76,7 +75,7 @@ export const Header: FC<Props> = (props) => {
         <div className='flex items-center gap-2'>
           <IconShare size={28} color='#6466F1' stroke={1.8} />
           <div className='font-bold tracking-wider text-main-500'>
-            {largerThanSm ? 'メンバーを招待' : '招待'}
+            {props.largerThanSm ? 'メンバーを招待' : '招待'}
           </div>
         </div>
       </UnstyledButton>

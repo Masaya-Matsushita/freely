@@ -1,6 +1,6 @@
 import { Button, CloseButton, CopyButton, Modal, Paper } from '@mantine/core'
 import { IconScan, IconUnlink } from '@tabler/icons'
-import Image from 'next/image'
+import { useQRCode } from 'next-qrcode'
 import { FC, ReactElement, ReactNode } from 'react'
 import { getUrl } from 'src/lib/const'
 
@@ -20,6 +20,9 @@ type WrapperProps = {
  * @package
  */
 export const ShareModal: FC<ShareModalProps> = (props) => {
+  const { Canvas } = useQRCode()
+  const planUrl = getUrl('PLAN', props.planId)
+
   return (
     <Modal
       opened={props.opened}
@@ -57,10 +60,10 @@ export const ShareModal: FC<ShareModalProps> = (props) => {
             className='mb-3 w-64 p-1 sm:mb-5 sm:w-80 sm:p-2'
           >
             <div className='mx-2 overflow-hidden text-clip whitespace-nowrap text-sm font-medium tracking-tight text-dark-500 sm:mx-4'>
-              {getUrl('PLAN', props.planId)}
+              {planUrl}
             </div>
           </Paper>
-          <CopyButton value={getUrl('PLAN', props.planId)} timeout={2000}>
+          <CopyButton value={planUrl} timeout={2000}>
             {({ copied, copy }) => (
               <Button
                 variant='light'
@@ -87,7 +90,19 @@ export const ShareModal: FC<ShareModalProps> = (props) => {
           label='QRコードから開く'
           icon={<IconScan color='#6466F1' size={28} />}
         >
-          <Image src='/sample-qr.jpeg' width='200px' height='200px' alt='' />
+          <Canvas
+            text={planUrl}
+            options={{
+              type: 'image/jpeg',
+              quality: 0.3,
+              level: 'M',
+              width: 220,
+              color: {
+                dark: '#000',
+                light: '#FFF',
+              },
+            }}
+          />
         </Wrapper>
       </div>
     </Modal>

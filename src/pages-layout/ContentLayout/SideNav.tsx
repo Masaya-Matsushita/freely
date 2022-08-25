@@ -3,6 +3,7 @@ import { useDisclosure } from '@mantine/hooks'
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons'
 import { FC } from 'react'
 import { NavLinks } from './NavLinks'
+import { FooterLabel, SystemRequirement } from 'src/pages-layout/Footer'
 
 /**
  * @package
@@ -11,13 +12,13 @@ export const SideNav: FC<{ planId: string }> = (props) => {
   const [opened, handlers] = useDisclosure(true)
 
   return (
-    <nav className='hidden sm:block'>
-      <div
-        style={{ transition: 'all 0.3s' }}
-        className={`flex ${
-          opened ? 'w-[276px]' : 'w-[90px]'
-        } min-h-[calc(100vh-96px)] flex-col justify-between border-solid border-white border-r-slate-200`}
-      >
+    <nav
+      style={{ transition: 'all 0.3s' }}
+      className={`hidden border-solid border-white border-r-slate-200 sm:block ${
+        opened ? 'w-[276px]' : 'w-[90px]'
+      }`}
+    >
+      <div className='flex min-h-[calc(100vh-96px)] flex-col justify-between'>
         <NavLinks planId={props.planId} />
         <div className='mb-8 flex flex-col'>
           <hr
@@ -43,6 +44,12 @@ export const SideNav: FC<{ planId: string }> = (props) => {
           </UnstyledButton>
         </div>
       </div>
+      {opened ? (
+        <footer className='mx-2 mb-12 mt-24 space-y-4 text-slate-400'>
+          <FooterLabel />
+          <SystemRequirement />
+        </footer>
+      ) : null}
     </nav>
   )
 }

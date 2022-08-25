@@ -1,9 +1,15 @@
+import { PageTitle } from 'src/component/PageTitle'
 import { NextPageWithLayout } from 'src/lib/next'
 import { ForgotPassword } from 'src/pages-component/planId/forgot-password'
 import { ContentLayout } from 'src/pages-layout/ContentLayout'
 
 const ForgotPasswordPage: NextPageWithLayout = () => {
-  return <ForgotPassword />
+  return (
+    <>
+      <PageTitle page='パスワード再設定' />
+      <ForgotPassword />
+    </>
+  )
 }
 
 ForgotPasswordPage.getLayout = ContentLayout

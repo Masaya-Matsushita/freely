@@ -43,7 +43,7 @@ export const NavLinks: FC<{ planId: string }> = (props) => {
             {(isActive) => {
               return (
                 <a
-                  className={`flex items-center no-underline ${
+                  className={`flex items-center rounded-sm no-underline hover:bg-main-300 ${
                     isActive ? 'text-main-500' : 'text-dark-500'
                   }`}
                 >
@@ -52,7 +52,7 @@ export const NavLinks: FC<{ planId: string }> = (props) => {
                       isActive ? 'bg-main-500' : 'bg-white'
                     }`}
                   ></div>
-                  <div>{icon}</div>
+                  <div className='flex'>{icon}</div>
                   <div className='ml-2 overflow-hidden text-clip xxs:whitespace-nowrap'>
                     {label}
                   </div>
