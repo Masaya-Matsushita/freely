@@ -1,10 +1,11 @@
-import { Burger, CloseButton, Drawer } from '@mantine/core'
+import { Burger, CloseButton, Drawer, UnstyledButton } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconShare } from '@tabler/icons'
 import { NextRouter } from 'next/router'
 import { FC, useEffect } from 'react'
 import { NavLinks } from './NavLinks'
 import { ShareModal } from './ShareModal'
+import { useMediaQuery } from 'src/lib/mantine'
 import { HeaderWrapper } from 'src/pages-layout/HeaderWrapper'
 
 type Props = {
@@ -16,6 +17,7 @@ type Props = {
  * @package
  */
 export const Header: FC<Props> = (props) => {
+  const largerThanSm = useMediaQuery('sm')
   const [drawerOpened, drawerHandlers] = useDisclosure(false)
   const [modalOpened, modalHandlers] = useDisclosure(false)
 
@@ -65,15 +67,19 @@ export const Header: FC<Props> = (props) => {
           Freely
         </div>
       </div>
-      <IconShare
-        size={32}
-        color='#6466F1'
-        stroke={1.8}
-        className='mr-6 xs:mr-10 md:mr-16'
+      <UnstyledButton
         onClick={() => {
           modalHandlers.open()
         }}
-      />
+        className='mr-4 rounded-md p-2 hover:bg-main-100 xs:mr-8 md:mr-14'
+      >
+        <div className='flex items-center gap-2'>
+          <IconShare size={28} color='#6466F1' stroke={1.8} />
+          <div className='font-bold tracking-wider text-main-500'>
+            {largerThanSm ? 'メンバーを招待' : '招待'}
+          </div>
+        </div>
+      </UnstyledButton>
     </HeaderWrapper>
   )
 }

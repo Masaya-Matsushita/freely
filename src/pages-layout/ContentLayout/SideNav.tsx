@@ -28,7 +28,7 @@ export const SideNav: FC<{ planId: string }> = (props) => {
           />
           <UnstyledButton
             onClick={() => handlers.toggle()}
-            className='mx-8 mt-2 hover:bg-slate-100'
+            className='mx-6 mt-2 rounded-md py-1 px-2 hover:bg-slate-100'
           >
             {opened ? (
               <div className='flex h-7 items-center gap-2 text-slate-400'>
