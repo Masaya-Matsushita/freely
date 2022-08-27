@@ -14,7 +14,9 @@ export const SimpleButton: FC<Props> = (props) => {
   return (
     <Button
       onClick={props.onClick}
-      className={`w-48 tracking-wider ${props.narrow ? 'h-10' : 'h-12'}`}
+      className={`w-56 bg-main-500 text-lg tracking-wider hover:bg-main-400 ${
+        props.narrow ? 'h-12' : 'h-14'
+      }`}
     >
       {props.text}
     </Button>
