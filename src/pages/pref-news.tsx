@@ -5,7 +5,7 @@ import { PrefNews } from 'src/pages-component/pref-news'
 import { ContentLayout } from 'src/pages-layout/ContentLayout'
 import { WeatherObj } from 'src/type/WeatherObj'
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps<WeatherObj> = async () => {
   const WEATHER_URL_TOKYO = `https://api.openweathermap.org/data/2.5/forecast?q=Tokyo,JP&appid=${process.env.OPENWEATHERMAP_APPID}&lang=ja&units=metric`
   const weatherTokyoRes = await fetch(WEATHER_URL_TOKYO)
   const weatherTokyoData = await weatherTokyoRes.json()
