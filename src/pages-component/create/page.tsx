@@ -14,7 +14,10 @@ export const Create = () => {
         <SimpleButton
           text='作成する'
           onClick={() => {
-            push(getPath('PLAN', 'sample_id1'))
+            push({
+              pathname: getPath('PLAN'),
+              query: { plan: 'sample_id1' },
+            })
           }}
         />
       </div>

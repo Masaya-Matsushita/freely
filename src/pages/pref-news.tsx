@@ -1,6 +1,6 @@
 import { PageTitle } from 'src/component/PageTitle'
 import { NextPageWithLayout } from 'src/lib/next'
-import { PrefNews } from 'src/pages-component/planId/pref-news'
+import { PrefNews } from 'src/pages-component/pref-news'
 import { ContentLayout } from 'src/pages-layout/ContentLayout'
 
 const PrefNewsPage: NextPageWithLayout = () => {
