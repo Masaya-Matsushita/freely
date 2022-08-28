@@ -1,16 +1,18 @@
-import { CovidData } from './CovidData'
-import { SakeData } from './SakeData'
-import { WeatherData } from './WeatherData'
+import { FC } from 'react'
+import { Covid19 } from './Covid19'
+import { Sake } from './Sake'
+import { Weather } from './Weather'
+import { WeatherObj } from 'src/type/WeatherObj'
 
 /**
  * @package
  */
-export const PrefNews = () => {
+export const PrefNews: FC<{ weatherData: WeatherObj }> = (props) => {
   return (
     <div>
-      <WeatherData />
-      {/* <CovidData /> */}
-      {/* <SakeData /> */}
+      <Weather data={props.weatherData} />
+      {/* <Covid19 /> */}
+      {/* <Sake /> */}
     </div>
   )
 }

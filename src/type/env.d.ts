@@ -1,5 +1,5 @@
 declare namespace NodeJS {
   interface ProcessEnv {
-    readonly FOO: string
+    readonly OPENWEATHERMAP_APPID: string
   }
 }
