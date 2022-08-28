@@ -1,13 +1,25 @@
-import { useRouter } from 'next/router'
+import { useState } from 'react'
+import useSWR from 'swr'
 
 /**
  * @package
  */
 export const Plan = () => {
-  const { asPath } = useRouter()
+  // const { data, error } = useSWR('https://freely-backend.herokuapp.com/')
+
+  const [data, setData] = useState<any>()
+
+  const handleClick = async () => {
+    const res = await fetch('https://freely-backend.herokuapp.com/')
+    const json = await res.json()
+    setData(json)
+  }
+
+  console.log(data)
+
   return (
     <div>
-      <div className='text-lg text-blue-500'>{asPath}</div>
+      <button onClick={handleClick}>fetch</button>
     </div>
   )
 }
