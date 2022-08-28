@@ -1,19 +1,16 @@
-import useSWR from 'swr'
-
-const fetcher = async (input: RequestInfo, init?: RequestInit) => {
-  const res = await fetch(input, init)
-  return res.json()
-}
+import { CovidData } from './CovidData'
+import { SakeData } from './SakeData'
+import { WeatherData } from './WeatherData'
 
 /**
  * @package
  */
 export const PrefNews = () => {
-  const { data, error } = useSWR(
-    'https://jsonplaceholder.typicode.com/todos/1',
-    fetcher,
+  return (
+    <div>
+      <WeatherData />
+      {/* <CovidData /> */}
+      {/* <SakeData /> */}
+    </div>
   )
-  console.log(data)
-
-  return <div></div>
 }
