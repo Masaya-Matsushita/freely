@@ -1,6 +1,6 @@
 import { PageTitle } from 'src/component/PageTitle'
 import { NextPageWithLayout } from 'src/lib/next'
-import { Edit } from 'src/pages-component/planId/edit'
+import { Edit } from 'src/pages-component/edit'
 import { ContentLayout } from 'src/pages-layout/ContentLayout'
 
 const EditPage: NextPageWithLayout = () => {

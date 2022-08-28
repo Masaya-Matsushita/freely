@@ -1,6 +1,6 @@
 import { PageTitle } from 'src/component/PageTitle'
 import { NextPageWithLayout } from 'src/lib/next'
-import { Plan } from 'src/pages-component/planId/plan'
+import { Plan } from 'src/pages-component/plan'
 import { ContentLayout } from 'src/pages-layout/ContentLayout'
 
 const PlanPage: NextPageWithLayout = () => {

@@ -1,2 +1,1 @@
-export { getPath } from './path'
-export { getUrl } from './path'
+export { APP_DOMAIN, getPath } from './path'

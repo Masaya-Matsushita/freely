@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { FC } from 'react'
-import { getUrl } from 'src/lib/const'
+import { APP_DOMAIN } from 'src/lib/const'
 
 const descriptionList = [
   '世界一シンプル＆簡単な旅行計画表サービス「Freely」。大まかに計画を立てて、ゆっくり旅行がしたい人にぴったりです。',
@@ -12,7 +12,7 @@ const descriptionList = [
  */
 export const Seo: FC<{ invite?: true }> = (props) => {
   const description = props.invite ? descriptionList[1] : descriptionList[0]
-  const url = getUrl('INDEX')
+  const url = APP_DOMAIN
 
   return (
     <Head>

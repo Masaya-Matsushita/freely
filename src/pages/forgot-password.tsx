@@ -1,6 +1,6 @@
 import { PageTitle } from 'src/component/PageTitle'
 import { NextPageWithLayout } from 'src/lib/next'
-import { ForgotPassword } from 'src/pages-component/planId/forgot-password'
+import { ForgotPassword } from 'src/pages-component/forgot-password'
 import { ContentLayout } from 'src/pages-layout/ContentLayout'
 
 const ForgotPasswordPage: NextPageWithLayout = () => {
