@@ -6,6 +6,8 @@ import { ContentLayout } from 'src/pages-layout/ContentLayout'
 import { WeatherObj } from 'src/type/WeatherObj'
 
 export const getStaticProps: GetStaticProps<WeatherObj> = async () => {
+  // TODO: 47都道府県分fetchを繰り返したい
+  // NOTE: 「動的ページを作成してgetStaticPathで回す」内容の記事ばかりだった
   const WEATHER_URL_TOKYO = `https://api.openweathermap.org/data/2.5/forecast?q=Tokyo,JP&appid=${process.env.OPENWEATHERMAP_APPID}&lang=ja&units=metric`
   const weatherTokyoRes = await fetch(WEATHER_URL_TOKYO)
   const weatherTokyoData = await weatherTokyoRes.json()
@@ -19,6 +21,7 @@ export const getStaticProps: GetStaticProps<WeatherObj> = async () => {
       weatherTokyo: weatherTokyoData,
       weatherOsaka: weatherOsakaData,
     },
+    revalidate: 10800,
   }
 }
 
