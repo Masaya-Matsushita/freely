@@ -1,11 +1,12 @@
 import Image from 'next/image'
 import { FC } from 'react'
+import { Forecast } from './Forecast'
 import { WeatherObj } from 'src/type/WeatherObj'
 
 /**
  * @package
  */
-export const PrefNews: FC<{ weatherData: WeatherObj }> = (props) => {
+export const Weather: FC<{ weatherData: WeatherObj }> = (props) => {
   return (
     <div>
       <div className='relative mx-auto mt-12 h-36 w-36 opacity-70 xxs:mt-16 xxs:h-60 xxs:w-60 sm:mt-32 sm:h-80 sm:w-80'>
@@ -14,9 +15,7 @@ export const PrefNews: FC<{ weatherData: WeatherObj }> = (props) => {
       <div className='mx-8 mt-2 text-center leading-7 text-dark-400 xxs:mx-16 xs:mt-8'>
         都道府県を選択すると、天気予報やコロナ情報などが取得できます。
       </div>
-      {/* <Weather data={props.weatherData} /> */}
-      {/* <Covid19 /> */}
-      {/* <Sake /> */}
+      {/* <Forecast data={props.weatherData} /> */}
     </div>
   )
 }

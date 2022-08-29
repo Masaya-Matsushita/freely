@@ -1,7 +1,7 @@
 import { GetStaticProps } from 'next'
 import { PageTitle } from 'src/component/PageTitle'
 import { NextPageWithLayout } from 'src/lib/next'
-import { PrefNews } from 'src/pages-component/pref-news'
+import { Weather } from 'src/pages-component/pref-news/weather'
 import { ContentLayout } from 'src/pages-layout/ContentLayout'
 import { WeatherObj } from 'src/type/WeatherObj'
 
@@ -25,15 +25,15 @@ export const getStaticProps: GetStaticProps<WeatherObj> = async () => {
   }
 }
 
-const PrefNewsPage: NextPageWithLayout<WeatherObj> = (props) => {
+const WeatherPage: NextPageWithLayout<WeatherObj> = (props) => {
   return (
     <>
       <PageTitle page='旅先の情報' />
-      <PrefNews weatherData={props} />
+      <Weather weatherData={props} />
     </>
   )
 }
 
-PrefNewsPage.getLayout = ContentLayout
+WeatherPage.getLayout = ContentLayout
 
-export default PrefNewsPage
+export default WeatherPage
