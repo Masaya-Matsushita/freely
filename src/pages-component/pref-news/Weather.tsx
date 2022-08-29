@@ -59,7 +59,7 @@ export const Weather: FC<{ data: WeatherObj; prefId: string | null }> = (
         </div>
       ) : null}
       {/* 天気予報でISR利用はUX悪い？ */}
-      <Button onClick={() => location.reload()}>データを更新</Button>
+      {/* <Button onClick={() => location.reload()}>データを更新</Button> */}
     </div>
   )
 }
