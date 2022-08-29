@@ -1,4 +1,4 @@
-import { Card } from '@mantine/core'
+import { Button, Card } from '@mantine/core'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { prefList } from 'src/lib/const'
 import { WeatherObj } from 'src/type/WeatherObj'
@@ -12,6 +12,7 @@ export const Weather: FC<{ data: WeatherObj; prefId: string | null }> = (
   const prefId = props.prefId
   const [city, setCity] = useState('')
   const [weather, setWeather] = useState<any>()
+
   const dataList = useMemo(
     () => [
       { city: 'Sapporo', weather: props.data.weatherSapporo },
@@ -41,19 +42,24 @@ export const Weather: FC<{ data: WeatherObj; prefId: string | null }> = (
   return (
     <div>
       {weather ? (
-        <Card mt='lg'>
-          <div>県庁所在地: {weather.city.name}</div>
-          <div>タイムゾーン: {weather.list[3].dt_txt}</div>
-          <div>天気アイコン: {weather.list[3].weather[0].icon}</div>
-          <div>天気ひとこと: {weather.list[3].weather[0].description}</div>
-          <div>風速: {weather.list[3].wind.speed}</div>
-          <div>風向: {weather.list[3].wind.deg}</div>
-          <div>気温: {weather.list[3].main.feels_like}</div>
-          <div>最高気温: {weather.list[3].main.temp_max}</div>
-          <div>最低気温: {weather.list[3].main.temp_min}</div>
-          <div>湿度: {weather.list[3].main.humidity}</div>
-        </Card>
+        <div>
+          <Card mt='lg'>
+            <div>県庁所在地: {weather.city.name}</div>
+            <div>タイムゾーン: {weather.list[3].dt_txt}</div>
+            <div>天気アイコン: {weather.list[3].weather[0].icon}</div>
+            <div>天気ひとこと: {weather.list[3].weather[0].description}</div>
+            <div>風速: {weather.list[3].wind.speed}</div>
+            <div>風向: {weather.list[3].wind.deg}</div>
+            <div>気温: {weather.list[3].main.feels_like}</div>
+            <div>最高気温: {weather.list[3].main.temp_max}</div>
+            <div>最低気温: {weather.list[3].main.temp_min}</div>
+            <div>湿度: {weather.list[3].main.humidity}</div>
+          </Card>
+          <div className='mt-4'>{weather.list[2].dt_txt}発表</div>
+        </div>
       ) : null}
+      {/* 天気予報でISR利用はUX悪い？ */}
+      <Button onClick={() => location.reload()}>データを更新</Button>
     </div>
   )
 }
