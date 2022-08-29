@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import { ReactElement } from 'react'
 import { Header } from './Header'
+import { PrefSelectBox } from './PrefSelectBox'
 import { SideNav } from './SideNav'
 import { useMediaQuery } from 'src/lib/mantine'
 import { ErrorBoundary } from 'src/pages-layout/ErrorBoundary'
@@ -24,7 +25,10 @@ export const ContentLayout = (page: ReactElement) => {
           <div className='flex'>
             <SideNav planId={planId} />
             <main className='min-h-[calc(100vh-96px)] flex-1 bg-main-100'>
-              {page}
+              {router.pathname.slice(0, 10) === '/pref-news' ? (
+                <PrefSelectBox />
+              ) : null}
+              <div>{page}</div>
             </main>
           </div>
           {largerThanSm ? null : <Footer />}

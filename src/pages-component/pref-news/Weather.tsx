@@ -6,10 +6,8 @@ import { WeatherObj } from 'src/type/WeatherObj'
 /**
  * @package
  */
-export const Weather: FC<{ data: WeatherObj; prefId: string | null }> = (
-  props,
-) => {
-  const prefId = props.prefId
+export const Weather: FC<{ data: WeatherObj }> = (props) => {
+  const prefId = localStorage.getItem('prefId')
   const [city, setCity] = useState('')
   const [weather, setWeather] = useState<any>()
 
