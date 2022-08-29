@@ -7,6 +7,7 @@ import { prefList } from 'src/lib/const'
  * @package
  */
 export const PrefSelectBox = () => {
+  // TODO: 状態を渡す必要あり
   const [prefId, setPrefId] = useState<string | null>(null)
 
   const selectboxList = prefList.map((pref) => {

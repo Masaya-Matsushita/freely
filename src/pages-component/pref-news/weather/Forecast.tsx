@@ -1,4 +1,4 @@
-import { Button, Card } from '@mantine/core'
+import { Card } from '@mantine/core'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { prefList } from 'src/lib/const'
 import { WeatherObj } from 'src/type/WeatherObj'
@@ -6,8 +6,8 @@ import { WeatherObj } from 'src/type/WeatherObj'
 /**
  * @package
  */
-export const Forecast: FC<{ data: WeatherObj }> = (props) => {
-  const prefId = localStorage.getItem('prefId')
+export const Forecast: FC<{ data: WeatherObj; prefId: string }> = (props) => {
+  const prefId = props.prefId
   const [city, setCity] = useState('')
   const [weather, setWeather] = useState<any>()
 
@@ -20,7 +20,7 @@ export const Forecast: FC<{ data: WeatherObj }> = (props) => {
   )
 
   useEffect(() => {
-    if (prefId && prefId !== 'null') {
+    if (prefId !== 'null') {
       const pref = prefList.filter((pref) => {
         return pref.id === prefId
       })
@@ -56,8 +56,6 @@ export const Forecast: FC<{ data: WeatherObj }> = (props) => {
           <div className='mt-4'>{weather.list[2].dt_txt}発表</div>
         </div>
       ) : null}
-      {/* 天気予報でISR利用はUX悪い？ */}
-      {/* <Button onClick={() => location.reload()}>データを更新</Button> */}
     </div>
   )
 }
