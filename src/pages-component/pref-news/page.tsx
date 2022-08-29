@@ -1,8 +1,6 @@
-import { NativeSelect } from '@mantine/core'
-import { IconChevronDown, IconMapPin } from '@tabler/icons'
-import { ChangeEvent, FC, useEffect, useState } from 'react'
-import { Covid19 } from './Covid19'
-import { Sake } from './Sake'
+import { Select } from '@mantine/core'
+import { IconMapPin } from '@tabler/icons'
+import { FC, useEffect, useState } from 'react'
 import { Weather } from './Weather'
 import { prefList } from 'src/lib/const'
 import { WeatherObj } from 'src/type/WeatherObj'
@@ -11,42 +9,36 @@ import { WeatherObj } from 'src/type/WeatherObj'
  * @package
  */
 export const PrefNews: FC<{ weatherData: WeatherObj }> = (props) => {
-  const [prefName, setPrefName] = useState('')
-  const [prefId, setPrefId] = useState<number | undefined>()
+  const [prefId, setPrefId] = useState<string | null>(null)
+
+  const selectboxData = prefList.map((pref) => {
+    return { value: String(pref.id), label: pref.name }
+  })
+
+  const handleChange = (val: string) => {
+    setPrefId(val)
+    localStorage.setItem('prefId', val)
+  }
 
   useEffect(() => {
-    const strPrefId = localStorage.getItem('pref')
-    if (strPrefId) {
-      const numPrefId = Number(strPrefId)
-      const selectedPref = prefList.filter((pref) => {
-        return numPrefId === pref.id
-      })
-      setPrefName(selectedPref[0].name)
-      setPrefId(numPrefId)
-    }
+    setPrefId(localStorage.getItem('prefId'))
   }, [])
-
-  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const selectedPref = prefList.filter((pref) => {
-      return e.currentTarget.value === pref.name
-    })
-    setPrefName(selectedPref[0].name)
-    setPrefId(selectedPref[0].id)
-    localStorage.setItem('pref', String(selectedPref[0].id))
-  }
 
   return (
     <div>
-      <NativeSelect
-        data={prefList.map((pref) => pref.name)}
+      <Select
+        data={selectboxData}
         placeholder='選択する'
         label='都道府県名'
         description='天気やコロナ情報などを自動で取得します。'
+        searchable
+        clearable
         icon={<IconMapPin size={20} />}
-        rightSection={<IconChevronDown size={14} />}
-        rightSectionWidth={40}
-        value={prefName}
+        value={prefId}
         onChange={handleChange}
+        transition='pop-top-left'
+        transitionDuration={80}
+        transitionTimingFunction='ease'
         withAsterisk
         classNames={{ root: 'w-96 mt-12 ml-20' }}
       />
