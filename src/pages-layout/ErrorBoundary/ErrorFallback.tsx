@@ -8,6 +8,9 @@ import { useMediaQuery } from 'src/lib/mantine'
  */
 export const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
   const largerThanLg = useMediaQuery('lg')
+  const errorMsg = error.message
+
+  console.log(errorMsg)
 
   return (
     <Paper
@@ -24,14 +27,17 @@ export const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
       />
       <div className='mt-8 w-52 xxs:w-64 lg:mt-12'>
         <div className='text-center text-xl'>エラーが発生しました</div>
+
         <div className='flex items-start'>
           <div className='mt-4 whitespace-nowrap text-gray-400'>詳細：</div>
-          <div className='mt-4 text-gray-400'>{error.message}</div>
+          <div className='mt-4 text-gray-400'>
+            {errorMsg.length < 100 ? errorMsg : errorMsg.slice(0, 80) + '...'}
+          </div>
         </div>
         <Button
           variant='light'
           onClick={resetErrorBoundary}
-          className='ml-auto mt-8 block tracking-wider'
+          className='ml-auto mt-8 block h-10 w-40 bg-main-300 tracking-wider text-main-500 hover:bg-main-300'
         >
           再読み込み
         </Button>
