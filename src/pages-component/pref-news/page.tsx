@@ -11,8 +11,8 @@ import { WeatherObj } from 'src/type/WeatherObj'
 export const PrefNews: FC<{ weatherData: WeatherObj }> = (props) => {
   const [prefId, setPrefId] = useState<string | null>(null)
 
-  const selectboxData = prefList.map((pref) => {
-    return { value: String(pref.id), label: pref.name }
+  const selectboxList = prefList.map((pref) => {
+    return { value: pref.id, label: pref.name }
   })
 
   const handleChange = (val: string) => {
@@ -27,7 +27,7 @@ export const PrefNews: FC<{ weatherData: WeatherObj }> = (props) => {
   return (
     <div>
       <Select
-        data={selectboxData}
+        data={selectboxList}
         placeholder='選択する'
         label='都道府県名'
         description='天気やコロナ情報などを自動で取得します。'

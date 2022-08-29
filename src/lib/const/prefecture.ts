@@ -49,4 +49,4 @@ export const prefList = [
   { id: '45', name: '宮崎県', city: 'Miyazaki' },
   { id: '46', name: '鹿児島県', city: 'Kagoshima' },
   { id: '47', name: '沖縄県', city: 'Naha' },
-]
+] as const
