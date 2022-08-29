@@ -5,10 +5,13 @@ import { WeatherObj } from 'src/type/WeatherObj'
 /**
  * @package
  */
-export const Weather: FC<{ data: WeatherObj }> = (props) => {
+export const Weather: FC<{ data: WeatherObj; prefId?: number }> = (props) => {
   const tokyo = props.data.weatherTokyo
   const osaka = props.data.weatherOsaka
-  console.log(props.data.weatherTokyo)
+
+  if (props.prefId) {
+    console.log(props.prefId)
+  }
 
   return (
     <div className='space-y-4'>
