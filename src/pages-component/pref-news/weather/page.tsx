@@ -10,11 +10,9 @@ import { WeatherObj } from 'src/type/WeatherObj'
 export const Weather: FC<{ data: WeatherObj }> = (props) => {
   const prefId = useRecoilValue(prefIdState)
 
-  return (
-    <div>
-      {prefId && prefId !== 'null' ? (
-        <Forecast data={props.data} prefId={prefId} />
-      ) : null}
-    </div>
-  )
+  if (!prefId || prefId === 'null') {
+    return null
+  }
+
+  return <Forecast data={props.data} prefId={prefId} />
 }

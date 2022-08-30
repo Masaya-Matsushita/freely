@@ -8,7 +8,6 @@ import { SakeObj } from 'src/type/SakeObj'
  */
 export const Sake: FC<{ data: SakeObj }> = (props) => {
   const prefId = useRecoilValue(prefIdState)
-  console.log(prefId)
 
   return (
     <div>

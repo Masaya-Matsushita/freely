@@ -10,7 +10,6 @@ export const Covid19: FC<{ data: Covid19Obj }> = (props) => {
   const hokkaido = props.data.covid19Hokkaido
   const japan = props.data.covid19Japan
   const prefId = useRecoilValue(prefIdState)
-  console.log(prefId)
 
   return (
     <div>

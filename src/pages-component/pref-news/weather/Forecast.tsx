@@ -8,7 +8,6 @@ import { WeatherObj } from 'src/type/WeatherObj'
  */
 export const Forecast: FC<{ data: WeatherObj; prefId: string }> = (props) => {
   const prefId = props.prefId
-  const [city, setCity] = useState('')
   const [weather, setWeather] = useState<any>()
 
   const dataList = useMemo(
@@ -20,22 +19,14 @@ export const Forecast: FC<{ data: WeatherObj; prefId: string }> = (props) => {
   )
 
   useEffect(() => {
-    if (prefId !== 'null') {
-      const pref = prefList.find((pref) => pref.id === prefId)
-      if (pref) {
-        setCity(pref.city)
-      }
-    }
-  }, [prefId])
-
-  useEffect(() => {
+    const city = prefList.find((pref) => pref.id === prefId)?.city
     if (city) {
-      const cityData = dataList.find((data) => data.city === city)
-      if (cityData) {
-        setWeather(cityData.weather)
+      const weather = dataList.find((data) => data.city === city)?.weather
+      if (weather) {
+        setWeather(weather)
       }
     }
-  }, [city, dataList])
+  }, [prefId, dataList])
 
   return (
     <div>
