@@ -1,6 +1,39 @@
+import { FC } from 'react'
+import type { Covid19Obj } from 'src/type/covid19Obj'
+
 /**
  * @package
  */
-export const Covid19 = () => {
-  return <div>covid19 page</div>
+export const Covid19: FC<{ data: Covid19Obj }> = (props) => {
+  const hokkaido = props.data.covid19Hokkaido
+  const japan = props.data.covid19Japan
+
+  return (
+    <div>
+      {japan.errorInfo.errorFlag === '0' ? (
+        <div>
+          {japan.itemList.map(({ date, infectedNum }) => {
+            return (
+              <div key={date}>
+                <div>{date}</div>
+                <div>{infectedNum}</div>
+              </div>
+            )
+          })}
+        </div>
+      ) : null}
+      {hokkaido.errorInfo.errorFlag === '0' ? (
+        <div>
+          {hokkaido.itemList.map(({ date, infectedNum }) => {
+            return (
+              <div key={date}>
+                <div>{date}</div>
+                <div>{infectedNum}</div>
+              </div>
+            )
+          })}
+        </div>
+      ) : null}
+    </div>
+  )
 }
