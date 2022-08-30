@@ -14,5 +14,10 @@ export const ActiveLink: FC<Props> = ({ children, ...linkProps }) => {
   const { asPath } = useRouter()
 
   // 現在のパス(=asPath)と、propsのhrefが一致すればtrue
-  return <Link {...linkProps}>{children(asPath === linkProps.href)}</Link>
+  // pref-newsページには下層ページがあるため、それぞれ先頭10字を比較
+  return (
+    <Link {...linkProps}>
+      {children(asPath.slice(0, 10) === linkProps.href.toString().slice(0, 10))}
+    </Link>
+  )
 }

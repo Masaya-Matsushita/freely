@@ -53,6 +53,7 @@ export const PrefSelectBox: FC<{ router: NextRouter; planId: string }> = (
       />
       {prefId && prefId !== 'null' ? (
         <Tabs
+          defaultValue='weather'
           value={props.router.query.activeTab as string}
           onTabChange={(value) =>
             props.router.push({
