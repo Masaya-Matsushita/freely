@@ -39,7 +39,7 @@ export const NavLinks: FC<{ planId: string }> = (props) => {
     <div className='mx-4 mt-10 space-y-4'>
       {LINKS.map(({ href, label, icon }) => {
         return (
-          <ActiveLink href={href} passHref key={href}>
+          <ActiveLink href={href} passHref key={href} prefetch={false}>
             {(isActive) => {
               return (
                 <a
