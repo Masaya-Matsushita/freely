@@ -21,19 +21,19 @@ export const Forecast: FC<{ data: WeatherObj; prefId: string }> = (props) => {
 
   useEffect(() => {
     if (prefId !== 'null') {
-      const pref = prefList.filter((pref) => {
-        return pref.id === prefId
-      })
-      setCity(pref[0].city)
+      const pref = prefList.find((pref) => pref.id === prefId)
+      if (pref) {
+        setCity(pref.city)
+      }
     }
   }, [prefId])
 
   useEffect(() => {
     if (city) {
-      const cityData = dataList.filter((data) => {
-        return data.city === city
-      })
-      setWeather(cityData[0].weather)
+      const cityData = dataList.find((data) => data.city === city)
+      if (cityData) {
+        setWeather(cityData.weather)
+      }
     }
   }, [city, dataList])
 

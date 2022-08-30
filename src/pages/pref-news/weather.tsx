@@ -8,18 +8,18 @@ import { WeatherObj } from 'src/type/WeatherObj'
 export const getStaticProps: GetStaticProps<WeatherObj> = async () => {
   // TODO: 47都道府県分fetchを繰り返したい
   // NOTE: 「動的ページを作成してgetStaticPathで回す」内容の記事ばかりだった
-  const WEATHER_URL_SAPPORO = `https://api.openweathermap.org/data/2.5/forecast?q=Sapporo,JP&appid=${process.env.OPENWEATHERMAP_APPID}&lang=ja&units=metric`
-  const weatherSapporoRes = await fetch(WEATHER_URL_SAPPORO)
-  const weatherSapporoData = await weatherSapporoRes.json()
+  const SAPPORO_URL = `https://api.openweathermap.org/data/2.5/forecast?q=Sapporo,JP&appid=${process.env.OPENWEATHERMAP_APPID}&lang=ja&units=metric`
+  const sapporoRes = await fetch(SAPPORO_URL)
+  const sapporoData = await sapporoRes.json()
 
-  const WEATHER_URL_AOMORI = `https://api.openweathermap.org/data/2.5/forecast?q=Aomori,JP&appid=${process.env.OPENWEATHERMAP_APPID}&lang=ja&units=metric`
-  const weatherAomoriRes = await fetch(WEATHER_URL_AOMORI)
-  const weatherAomoriData = await weatherAomoriRes.json()
+  const AOMORI_URL = `https://api.openweathermap.org/data/2.5/forecast?q=Aomori,JP&appid=${process.env.OPENWEATHERMAP_APPID}&lang=ja&units=metric`
+  const aomoriRes = await fetch(AOMORI_URL)
+  const aomoriData = await aomoriRes.json()
 
   return {
     props: {
-      weatherSapporo: weatherSapporoData,
-      weatherAomori: weatherAomoriData,
+      weatherSapporo: sapporoData,
+      weatherAomori: aomoriData,
     },
     revalidate: 10800,
   }
@@ -29,7 +29,7 @@ const WeatherPage: NextPageWithLayout<WeatherObj> = (props) => {
   return (
     <>
       <PageTitle page='旅先の情報' />
-      <Weather weatherData={props} />
+      <Weather data={props} />
     </>
   )
 }

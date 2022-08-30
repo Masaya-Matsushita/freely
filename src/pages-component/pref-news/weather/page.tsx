@@ -6,13 +6,13 @@ import { WeatherObj } from 'src/type/WeatherObj'
 /**
  * @package
  */
-export const Weather: FC<{ weatherData: WeatherObj }> = (props) => {
+export const Weather: FC<{ data: WeatherObj }> = (props) => {
   const prefId = localStorage.getItem('prefId')
 
   return (
     <div>
       {prefId && prefId !== 'null' ? (
-        <Forecast data={props.weatherData} prefId={prefId} />
+        <Forecast data={props.data} prefId={prefId} />
       ) : (
         <div>
           <div className='relative mx-auto mt-12 h-36 w-36 opacity-70 xxs:mt-16 xxs:h-60 xxs:w-60 sm:mt-32 sm:h-80 sm:w-80'>
