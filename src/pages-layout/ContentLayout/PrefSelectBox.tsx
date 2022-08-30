@@ -1,12 +1,15 @@
-import { Select } from '@mantine/core'
-import { IconMapPin } from '@tabler/icons'
-import { useEffect, useState } from 'react'
+import { Select, Tabs } from '@mantine/core'
+import { IconBottle, IconCloud, IconMapPin, IconVirus } from '@tabler/icons'
+import { NextRouter } from 'next/router'
+import { FC, useEffect, useState } from 'react'
 import { prefList } from 'src/lib/const'
 
 /**
  * @package
  */
-export const PrefSelectBox = () => {
+export const PrefSelectBox: FC<{ router: NextRouter; planId: string }> = (
+  props,
+) => {
   // TODO: 状態を渡す必要あり
   const [prefId, setPrefId] = useState<string | null>(null)
 
@@ -47,7 +50,28 @@ export const PrefSelectBox = () => {
           root: 'max-w-md xs:mx-auto mx-8 xxs:mx-12 mt-12 xxs:mt-8',
         }}
       />
-      <hr className='mx-2 mt-8 h-[1px] border-0 bg-dark-100' />
+      <Tabs
+        value={props.router.query.activeTab as string}
+        onTabChange={(value) =>
+          props.router.push({
+            pathname: `/pref-news/${value}`,
+            query: { plan: props.planId },
+          })
+        }
+        className='mx-2 mt-12'
+      >
+        <Tabs.List>
+          <Tabs.Tab value='weather' icon={<IconCloud />}>
+            天気
+          </Tabs.Tab>
+          <Tabs.Tab value='covid19' icon={<IconVirus />}>
+            コロナ
+          </Tabs.Tab>
+          <Tabs.Tab value='sake' icon={<IconBottle />}>
+            地酒
+          </Tabs.Tab>
+        </Tabs.List>
+      </Tabs>
     </div>
   )
 }
