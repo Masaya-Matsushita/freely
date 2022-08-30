@@ -9,7 +9,7 @@ export const Covid19: FC<{ data: Covid19Obj }> = (props) => {
   const japan = props.data.covid19Japan
 
   return (
-    <div>
+    <div className='space-y-4'>
       {japan.errorInfo.errorFlag === '0' ? (
         <div>
           {japan.itemList.map(({ date, infectedNum }) => {
