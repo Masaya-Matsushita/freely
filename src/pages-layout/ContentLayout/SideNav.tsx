@@ -14,7 +14,7 @@ export const SideNav: FC<{ planId: string }> = (props) => {
   return (
     <nav
       style={{ transition: 'all 0.3s' }}
-      className={`hidden border-solid border-white border-r-slate-200 sm:block ${
+      className={`hidden border-[2px] border-solid border-white border-r-slate-200 sm:block ${
         opened ? 'w-[276px]' : 'w-[90px]'
       }`}
     >

@@ -1,25 +1,17 @@
-import { useState } from 'react'
 import useSWR from 'swr'
 
 /**
  * @package
  */
 export const Plan = () => {
-  // const { data, error } = useSWR('https://freely-backend.herokuapp.com/')
+  const { data: planData, error: planError } = useSWR('/api/plan')
+  const { data: spotData, error: spotError } = useSWR('/api/spot')
 
-  const [data, setData] = useState<any>()
+  console.log('planData:', planData)
+  console.log('planError:', planError)
 
-  const handleClick = async () => {
-    const res = await fetch('https://freely-backend.herokuapp.com/')
-    const json = await res.json()
-    setData(json)
-  }
+  console.log('spotData:', spotData)
+  console.log('spotError:', spotError)
 
-  console.log(data)
-
-  return (
-    <div>
-      <button onClick={handleClick}>fetch</button>
-    </div>
-  )
+  return <div></div>
 }

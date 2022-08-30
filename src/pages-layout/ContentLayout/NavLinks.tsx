@@ -19,7 +19,7 @@ export const NavLinks: FC<{ planId: string }> = (props) => {
       icon: <IconNotes size={28} stroke={1.7} />,
     },
     {
-      href: getPath('PREF_NEWS', props.planId),
+      href: getPath('WEATHER', props.planId),
       label: '旅先の情報',
       icon: <IconChartLine size={28} stroke={1.7} />,
     },

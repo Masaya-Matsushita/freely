@@ -1,5 +1,6 @@
 import 'src/style/globals.css'
 import type { AppProps } from 'next/app'
+import { RecoilRoot } from 'recoil'
 import { SWRConfig } from 'swr'
 import { AppMantineProvider } from 'src/lib/mantine'
 import type { NextPageWithLayout } from 'src/lib/next'
@@ -19,9 +20,11 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
   return (
     <>
       <AppMantineProvider>
-        <SWRConfig value={{ fetcher }}>
-          {getLayout(<Component {...pageProps} />)}
-        </SWRConfig>
+        <RecoilRoot>
+          <SWRConfig value={{ fetcher }}>
+            {getLayout(<Component {...pageProps} />)}
+          </SWRConfig>
+        </RecoilRoot>
       </AppMantineProvider>
     </>
   )
