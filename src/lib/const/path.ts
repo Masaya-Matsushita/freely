@@ -5,7 +5,9 @@ const PATH = {
   PLAN: '/plan',
   EDIT: '/edit',
   SPOT: '/spot',
-  PREF_NEWS: '/pref-news',
+  WEATHER: '/pref-news/weather',
+  COViD19: '/pref-news/covid19',
+  SAKE: '/pref-news/sake',
   FORGOT_PASSWORD: '/forgot-password',
 } as const
 
@@ -26,7 +28,7 @@ export const getPath = (
   if (planId) {
     return path + '?plan=' + planId
   }
-  
+
   return path
 }
 

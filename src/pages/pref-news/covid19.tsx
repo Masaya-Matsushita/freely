@@ -3,7 +3,7 @@ import { PageTitle } from 'src/component/PageTitle'
 import { NextPageWithLayout } from 'src/lib/next'
 import { Covid19 } from 'src/pages-component/pref-news/covid19'
 import { ContentLayout } from 'src/pages-layout/ContentLayout'
-import type { Covid19Obj } from 'src/type/covid19Obj'
+import { Covid19Obj } from 'src/type/Covid19Obj'
 
 export const getStaticProps: GetStaticProps = async () => {
   // 日本全体

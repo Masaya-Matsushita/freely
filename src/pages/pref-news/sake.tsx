@@ -28,8 +28,6 @@ export const getStaticProps: GetStaticProps = async () => {
 }
 
 const SakePage: NextPageWithLayout<SakeObj> = (props) => {
-  console.log(props)
-
   return (
     <>
       <PageTitle page='旅先の情報' />

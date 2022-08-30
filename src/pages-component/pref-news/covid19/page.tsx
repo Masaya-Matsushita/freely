@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import type { Covid19Obj } from 'src/type/covid19Obj'
+import { Covid19Obj } from 'src/type/Covid19Obj'
 
 /**
  * @package
