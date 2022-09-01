@@ -1,17 +1,34 @@
-import useSWR from 'swr'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 /**
  * @package
  */
 export const Plan = () => {
-  const { data: planData, error: planError } = useSWR('/api/plan')
-  const { data: spotData, error: spotError } = useSWR('/api/spot')
+  // useEffect(() => {
+  // ページ遷移時にplanIdをブラウザに保存する
+  // sessionStorage.setItem('planId', planId)
+  // }, [])
 
-  console.log('planData:', planData)
-  console.log('planError:', planError)
+  const router = useRouter()
+  const planId = router.query.plan
 
-  console.log('spotData:', spotData)
-  console.log('spotError:', spotError)
+  const handleClick = async () => {
+    const planRes = await fetch('/api/plan', {
+      method: 'POST',
+      headers: { 'Content-type': 'application/json' },
+      body: JSON.stringify({ planId: planId }),
+    })
+    const planJson = await planRes.json()
+    console.log('plan:', planJson)
+    const spotRes = await fetch('/api/spot', {
+      method: 'POST',
+      headers: { 'Content-type': 'application/json' },
+      body: JSON.stringify({ planId: planId }),
+    })
+    const spotJson = await spotRes.json()
+    console.log('spot:', spotJson)
+  }
 
-  return <div></div>
+  return <button onClick={handleClick}>btn</button>
 }
