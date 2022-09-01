@@ -15,7 +15,7 @@ export const SideNav: FC<{ planId: string }> = (props) => {
     <nav
       style={{ transition: 'all 0.3s' }}
       className={`hidden border-[2px] border-solid border-white border-r-slate-200 sm:block ${
-        opened ? 'w-[276px]' : 'w-[90px]'
+        opened ? 'w-[240px] md:w-[276px]' : 'w-[90px]'
       }`}
     >
       <div className='flex min-h-[calc(100vh-96px)] flex-col justify-between'>
@@ -23,9 +23,7 @@ export const SideNav: FC<{ planId: string }> = (props) => {
         <div className='mb-8 flex flex-col'>
           <hr
             style={{ transition: 'all 0.3s' }}
-            className={`mx-2 h-[1px] ${
-              opened ? 'w-64' : 'w-[72px]'
-            } border-0 bg-slate-300`}
+            className='mx-2 h-[1px] border-0 bg-slate-300'
           />
           <UnstyledButton
             onClick={() => handlers.toggle()}

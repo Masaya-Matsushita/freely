@@ -33,7 +33,7 @@ module.exports = {
     // Mantineと一致させる
     screens: {
       xxs: '340px',
-      xs: '576px',
+      xs: '550px',
       sm: '768px',
       md: '992px',
       lg: '1200px',
