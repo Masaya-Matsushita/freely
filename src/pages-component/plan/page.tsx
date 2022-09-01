@@ -2,37 +2,26 @@ import { Button, Modal, TextInput } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import useSWR from 'swr'
 
 /**
  * @package
  */
 export const Plan = () => {
-  // useEffect(() => {
-  // ページ遷移時にplanIdをブラウザに保存する
-  // sessionStorage.setItem('planId', planId)
-  // }, [])
-
   const router = useRouter()
   const planId = router.query.plan
   const [password, setPassword] = useState('')
   const [opened, handlers] = useDisclosure(false)
-
-  const handleFetch = async () => {
-    const planRes = await fetch('/api/plan', {
-      method: 'POST',
-      headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify({ planId: planId }),
-    })
-    const planJson = await planRes.json()
-    console.log('plan:', planJson)
-    const spotRes = await fetch('/api/spot', {
-      method: 'POST',
-      headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify({ planId: planId }),
-    })
-    const spotJson = await spotRes.json()
-    console.log('spot:', spotJson)
-  }
+  const { data: planData, error: planError } = useSWR(
+    `/api/plan?planId=${planId}`,
+  )
+  const { data: spotData, error: spotError } = useSWR(
+    `/api/spot?planId=${planId}`,
+  )
+  console.log('plan:', planData)
+  console.error('plan', planError)
+  console.log('spot:', spotData)
+  console.error('spot', spotError)
 
   const handleAuth = async () => {
     if (!localStorage.hasOwnProperty('planId')) {
@@ -46,9 +35,14 @@ export const Plan = () => {
     }
   }
 
+  // TODO: planページで動的パスを実現できる
+  // useEffect(() => {
+  // ページ遷移時にplanIdをブラウザに保存する
+  // sessionStorage.setItem('planId', planId)
+  // }, [])
+
   return (
     <div>
-      <button onClick={handleFetch}>fetch</button>
       <button onClick={() => handlers.open()}>open</button>
       <Modal
         opened={opened}
