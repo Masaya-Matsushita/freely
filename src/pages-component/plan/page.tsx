@@ -14,7 +14,7 @@ export const Plan = () => {
 
   const router = useRouter()
   const planId = router.query.plan
-  const [value, setValue] = useState('')
+  const [password, setPassword] = useState('')
   const [opened, handlers] = useDisclosure(false)
 
   const handleFetch = async () => {
@@ -39,7 +39,7 @@ export const Plan = () => {
       const authRes = await fetch('/api/auth', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify({ planId: planId, password: value }),
+        body: JSON.stringify({ planId: planId, password: password }),
       })
       const authJson = await authRes.json()
       console.log(authJson)
@@ -58,8 +58,8 @@ export const Plan = () => {
         <TextInput
           placeholder='Password'
           label='Password'
-          value={value}
-          onChange={(e) => setValue(e.currentTarget.value)}
+          value={password}
+          onChange={(e) => setPassword(e.currentTarget.value)}
           withAsterisk
         />
         <Button onClick={handleAuth}>auth</Button>
