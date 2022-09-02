@@ -8,9 +8,6 @@ import { useMediaQuery } from 'src/lib/mantine'
  */
 export const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
   const largerThanLg = useMediaQuery('lg')
-  const errorMsg = error.message
-
-  console.log(errorMsg)
 
   return (
     <Paper
@@ -31,7 +28,9 @@ export const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
         <div className='flex items-start'>
           <div className='mt-4 whitespace-nowrap text-gray-400'>詳細：</div>
           <div className='mt-4 text-gray-400'>
-            {errorMsg.length < 100 ? errorMsg : errorMsg.slice(0, 80) + '...'}
+            {error.message.length < 100
+              ? error.message
+              : error.message.slice(0, 80) + '...'}
           </div>
         </div>
         <Button
