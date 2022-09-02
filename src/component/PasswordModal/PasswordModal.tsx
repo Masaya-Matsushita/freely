@@ -1,20 +1,18 @@
 import { Button, Modal, PasswordInput, Popover } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { useRouter } from 'next/router'
 import { FC, useState } from 'react'
 import { useErrorHandler } from 'react-error-boundary'
 
 type Props = {
   opened: boolean
   closeModal: () => void
+  planId: string
 }
 
 /**
  * @package
  */
 export const PasswordModal: FC<Props> = (props) => {
-  const router = useRouter()
-  const planId = router.query.plan
   const handleError = useErrorHandler()
   const [password, setPassword] = useState('')
   const [passwordError, setPasswordError] = useState('')
@@ -24,10 +22,12 @@ export const PasswordModal: FC<Props> = (props) => {
   const savePassword = (planId: string) => {
     const pwListJson = localStorage.getItem('pwList')
     if (pwListJson) {
+      // 既に別のプランを編集したことがある場合
       const pwList = JSON.parse(pwListJson)
       pwList[planId] = password
       localStorage.setItem('pwList', JSON.stringify(pwList))
     } else {
+      // 初めてプランを編集する場合
       localStorage.setItem('pwList', JSON.stringify({ planId: password }))
     }
   }
@@ -35,17 +35,14 @@ export const PasswordModal: FC<Props> = (props) => {
   // パスワード認証
   const handleAuth = async () => {
     try {
-      if (typeof planId !== 'string') {
-        return
-      }
       const res = await fetch('/api/auth', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify({ planId: planId, password: password }),
+        body: JSON.stringify({ planId: props.planId, password: password }),
       })
       const json = await res.json()
       if (json) {
-        savePassword(planId)
+        savePassword(props.planId)
         props.closeModal()
       } else {
         setPasswordError('パスワードが間違っています。')

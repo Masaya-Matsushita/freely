@@ -31,10 +31,15 @@ export const Plan = () => {
     <>
       {/* {planData && spotData ? ( */}
       <div>
-        <UnstyledButton className='mx-4 mt-8 rounded-md p-2 text-3xl font-bold text-dark-500 xs:mx-6 xs:text-4xl sm:mx-10'>
-          {/* {planData.plan_name} */}
-          東京観光
-        </UnstyledButton>
+        <Link href={{ pathname: '/edit', query: { plan: planId } }} passHref>
+          <UnstyledButton
+            component='a'
+            className='mx-4 mt-8 rounded-md p-2 text-3xl font-bold text-dark-500 xs:mx-6 xs:text-4xl sm:mx-10'
+          >
+            {/* {planData.plan_name} */}
+            東京観光
+          </UnstyledButton>
+        </Link>
         {typeof planId === 'string' ? (
           <div className='ml-4 mt-2 flex flex-col xxs:flex-row xs:ml-6 sm:ml-12'>
             {/* <DateBadge planId={planId} label={planData.start_date} /> */}
