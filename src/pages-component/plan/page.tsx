@@ -1,4 +1,4 @@
-import { Badge, Button, Card, UnstyledButton } from '@mantine/core'
+import { Badge, UnstyledButton } from '@mantine/core'
 import { IconPlus, IconStar } from '@tabler/icons'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -36,17 +36,29 @@ export const Plan = () => {
     <>
       {/* {planData ? ( */}
       <div>
-        <UnstyledButton className='mx-4 mt-8 rounded-md p-2 text-3xl font-bold text-dark-500'>
+        <UnstyledButton className='mx-4 mt-8 rounded-md p-2 text-3xl font-bold text-dark-500 xs:mx-6'>
           {/* {planData.plan_name} */}
           東京観光
         </UnstyledButton>
         {typeof planId === 'string' ? (
-          <div className='ml-4 mt-4'>
+          <div className='ml-4 mt-4 flex flex-col xxs:flex-row xs:ml-6'>
             <DateBadge planId={planId} />
-            <span className='mx-2 font-bold text-main-400'>~</span>
+            <div className='mx-2 max-w-[180px] text-center font-bold text-main-400'>
+              ~
+            </div>
             <DateBadge planId={planId} />
           </div>
         ) : null}
+        {/* 世界地図背景
+        <div className='absolute right-2 ml-16 hidden max-w-xs xxs:top-[106px] xxs:block xs:top-24 xs:max-w-md sm:right-12 md:max-w-xl lg:max-w-3xl'>
+          <Image
+            src='/WorldMap.png'
+            width={largerThanSm ? '800px' : '500px'}
+            height={largerThanSm ? '400px' : '300px'}
+            alt=''
+            className='opacity-10'
+          />
+        </div> */}
         <div className='mx-4 mt-12 text-3xl font-bold text-dark-500'>
           スポット一覧
         </div>
@@ -56,11 +68,15 @@ export const Plan = () => {
           <SpotCard />
           <SpotCard />
           <SpotCard />
-          <SpotCard />
-          {/* xxs:w-[calc(50vw-22px)] xs:w-[calc(50vw-32px)] sm:w-[calc((100vw-276px)/2-48px)] md:w-[292px] */}
-          <Button className='mx-6 h-12 w-full rounded-lg bg-white shadow-md hover:bg-slate-100 xxs:mx-[calc(25vw-51px)] xxs:h-20 xxs:w-20'>
-            <IconPlus size={48} color='#495057' />
-          </Button>
+          {/* 追加ボタン候補
+          <div className='my-4 flex w-full items-center justify-center xxs:my-0 xxs:w-[calc(50vw-22px)] xs:w-[calc(50vw-32px)] sm:min-h-[155px] sm:w-[calc(50vw-186px)] md:min-h-[200px] md:w-[292px]'>
+            <Button className='h-14 w-60 rounded-lg bg-white shadow-md shadow-dark-200 xxs:h-[18vw] xxs:w-[18vw] xs:rounded-2xl sm:h-[13vw] sm:w-[13vw] md:h-28 md:w-28'>
+              <IconPlus size={44} color='#495057' />
+            </Button>
+          </div> */}
+          <UnstyledButton className='flex h-[calc(55vw+25px)] w-full items-center justify-center rounded-xl  bg-slate-100 shadow shadow-dark-200 xxs:h-[calc(28vw+30px)] xxs:w-[calc(50vw-22px)] xs:h-[calc(28vw+25px)] xs:w-[calc(50vw-32px)] sm:h-[calc(28vw-60px)] sm:w-[calc(50vw-186px)] md:h-[207px] md:w-[292px]'>
+            <IconPlus size={44} color='#495057' />
+          </UnstyledButton>
         </div>
       </div>
       {/* ) : null} */}
@@ -73,7 +89,7 @@ const DateBadge: FC<{ planId: string }> = (props) => {
     <Link href={{ pathname: '/edit', query: { plan: props.planId } }} passHref>
       <Badge
         component='a'
-        className='bg-main-300 py-3 px-6 text-sm text-main-500 hover:cursor-pointer'
+        className='max-w-[180px] bg-main-300 py-3 px-6 text-sm text-main-500 hover:cursor-pointer'
       >
         2022/08/20
       </Badge>
@@ -83,7 +99,7 @@ const DateBadge: FC<{ planId: string }> = (props) => {
 
 const SpotCard = () => {
   return (
-    <UnstyledButton className='rounded-xl shadow shadow-dark-200 xxs:w-[calc(50vw-22px)] xs:w-[calc(50vw-32px)] sm:w-[calc((100vw-276px)/2-48px)] md:w-[292px]'>
+    <UnstyledButton className='rounded-xl shadow shadow-dark-200 xxs:w-[calc(50vw-22px)] xs:w-[calc(50vw-32px)] sm:w-[calc(50vw-186px)] md:w-[292px]'>
       <Image
         src='/Naoshima.JPG'
         height={'900px'}
