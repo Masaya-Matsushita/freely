@@ -15,7 +15,7 @@ export const SideNav: FC<{ planId: string }> = (props) => {
     <nav
       style={{ transition: 'all 0.3s' }}
       className={`hidden border-[2px] border-solid border-white border-r-slate-200 sm:block ${
-        opened ? 'w-[240px] md:w-[276px]' : 'w-[90px]'
+        opened ? 'w-[276px]' : 'w-[90px]'
       }`}
     >
       <div className='flex min-h-[calc(100vh-96px)] flex-col justify-between'>

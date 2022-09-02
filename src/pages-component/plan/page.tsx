@@ -1,5 +1,5 @@
-import { Badge, Card, UnstyledButton } from '@mantine/core'
-import { IconStar } from '@tabler/icons'
+import { Badge, Button, Card, UnstyledButton } from '@mantine/core'
+import { IconPlus, IconStar } from '@tabler/icons'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -51,10 +51,16 @@ export const Plan = () => {
           スポット一覧
         </div>
         <hr className='mx-2 h-[3px] border-0 bg-main-200' />
-        <div className='mx-4 mt-6 flex flex-wrap gap-x-2 gap-y-4 xs:justify-center xs:gap-x-4 xs:gap-y-6 md:justify-start'>
+        <div className='mx-4 mt-6 flex flex-wrap gap-x-3 gap-y-4 xs:mx-6 xs:gap-x-4 xs:gap-y-6 sm:ml-12 md:ml-16 md:mr-8 md:gap-x-6 md:gap-y-8'>
           <SpotCard />
           <SpotCard />
           <SpotCard />
+          <SpotCard />
+          <SpotCard />
+          {/* xxs:w-[calc(50vw-22px)] xs:w-[calc(50vw-32px)] sm:w-[calc((100vw-276px)/2-48px)] md:w-[292px] */}
+          <Button className='mx-6 h-12 w-full rounded-lg bg-white shadow-md hover:bg-slate-100 xxs:mx-[calc(25vw-51px)] xxs:h-20 xxs:w-20'>
+            <IconPlus size={48} color='#495057' />
+          </Button>
         </div>
       </div>
       {/* ) : null} */}
@@ -77,7 +83,7 @@ const DateBadge: FC<{ planId: string }> = (props) => {
 
 const SpotCard = () => {
   return (
-    <UnstyledButton className='w-[168px] grow rounded-xl border-[1px] border-solid border-main-300 shadow-md xs:w-60 xs:grow-0'>
+    <UnstyledButton className='rounded-xl shadow shadow-dark-200 xxs:w-[calc(50vw-22px)] xs:w-[calc(50vw-32px)] sm:w-[calc((100vw-276px)/2-48px)] md:w-[292px]'>
       <Image
         src='/Naoshima.JPG'
         height={'900px'}
