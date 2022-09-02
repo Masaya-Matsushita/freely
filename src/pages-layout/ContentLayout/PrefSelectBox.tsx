@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { NextRouter } from 'next/router'
 import { FC, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
-import { prefList } from 'src/lib/const'
+import { getPath, prefList } from 'src/lib/const'
 import { prefIdState } from 'src/state/prefId'
 
 /**
@@ -53,24 +53,24 @@ export const PrefSelectBox: FC<{ router: NextRouter; planId: string }> = (
       />
       {prefId && prefId !== 'null' ? (
         <Tabs
-          defaultValue='weather'
+          defaultValue='WEATHER'
           value={props.router.query.activeTab as string}
-          onTabChange={(value) =>
+          onTabChange={(value: 'WEATHER' | 'COVID19' | 'SAKE') =>
             props.router.push({
-              pathname: `/pref-news/${value}`,
+              pathname: getPath(value),
               query: { plan: props.planId },
             })
           }
           className='mx-2 mt-12'
         >
           <Tabs.List>
-            <Tabs.Tab value='weather' icon={<IconCloud />}>
+            <Tabs.Tab value='WEATHER' icon={<IconCloud />}>
               天気
             </Tabs.Tab>
-            <Tabs.Tab value='covid19' icon={<IconVirus />}>
+            <Tabs.Tab value='COVID19' icon={<IconVirus />}>
               コロナ
             </Tabs.Tab>
-            <Tabs.Tab value='sake' icon={<IconBottle />}>
+            <Tabs.Tab value='SAKE' icon={<IconBottle />}>
               地酒
             </Tabs.Tab>
           </Tabs.List>

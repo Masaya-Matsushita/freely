@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import { FC } from 'react'
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai'
 import useSWR from 'swr'
+import { getPath } from 'src/lib/const'
 import { Spot } from 'src/type/Spot'
 
 /**
@@ -31,7 +32,10 @@ export const Plan = () => {
     <>
       {/* {planData && spotData ? ( */}
       <div>
-        <Link href={{ pathname: '/edit', query: { plan: planId } }} passHref>
+        <Link
+          href={{ pathname: getPath('EDIT'), query: { plan: planId } }}
+          passHref
+        >
           <UnstyledButton
             component='a'
             className='mx-4 mt-8 rounded-md p-2 text-3xl font-bold text-dark-500 xs:mx-6 xs:text-4xl sm:mx-10'
@@ -76,7 +80,7 @@ export const Plan = () => {
           </div> */}
           <Link
             href={{
-              pathname: '/spot',
+              pathname: getPath('SPOT'),
               query: { plan: planId, mode: 'create' },
             }}
             passHref
@@ -97,7 +101,10 @@ export const Plan = () => {
 
 const DateBadge: FC<{ planId: string; label: any }> = (props) => {
   return (
-    <Link href={{ pathname: '/edit', query: { plan: props.planId } }} passHref>
+    <Link
+      href={{ pathname: getPath('EDIT'), query: { plan: props.planId } }}
+      passHref
+    >
       <Badge
         component='a'
         className='max-w-[180px] bg-main-300 py-3 px-6 text-sm text-main-500 hover:cursor-pointer sm:py-4'
