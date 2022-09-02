@@ -3,7 +3,7 @@ import { DateRangePicker } from '@mantine/dates'
 import type { DateRangePickerValue } from '@mantine/dates'
 import { IconCalendarMinus, IconCheck, IconMail } from '@tabler/icons'
 import { useRouter } from 'next/router'
-import { ChangeEvent, FC, ReactNode, useState } from 'react'
+import { FC, ReactNode, useState } from 'react'
 import { ContentLabel } from 'src/component/ContentLabel'
 import { SimpleButton } from 'src/component/SimpleButton'
 import { getPath } from 'src/lib/const'
@@ -15,7 +15,7 @@ import { useMediaQuery } from 'src/lib/mantine'
  */
 export const Create = () => {
   const router = useRouter()
-  const [active, setActive] = useState(1)
+  const [active, setActive] = useState([false, false, false, false])
   const [planName, setPlanName] = useState('')
   const [dateRange, setDateRange] = useState<DateRangePickerValue>([null, null])
   const [password1, setPassword1] = useState('')
@@ -24,15 +24,18 @@ export const Create = () => {
   const largerThanXs = useMediaQuery('xs')
   const largerThanMd = useMediaQuery('md')
 
-  const handleBlur = (e: ChangeEvent<HTMLInputElement>, num: number) => {
-    const len = e.currentTarget.value.length
-    if (len && active > num) {
-      return
-    } else if (len && active <= num) {
-      setActive(num + 1)
-    } else {
-      setActive(num)
+  // フォームの入力状況からactiveの値を判断
+  const handleBlur = () => {
+    const valList = [planName, dateRange[0], password2, email]
+    const activeList = [false, false, false, false]
+    // 未入力のフォーム以降は全てfalse
+    for (let i = 0; i < valList.length; i++) {
+      if (!valList[i]) {
+        break
+      }
+      activeList[i] = true
     }
+    setActive(activeList)
   }
 
   return (
@@ -52,23 +55,27 @@ export const Create = () => {
         <div className='mx-auto mb-12 max-w-[450px] xs:text-lg md:mb-16 md:max-w-[550px]'>
           簡単ステップで作成
         </div>
-        <Step active={active} number={1} text='旅行のテーマを入力してください'>
+        <Step
+          active={active[0]}
+          number={0}
+          text='旅行のテーマを入力してください'
+        >
           <TextInput
             placeholder='(例) 3泊4日で東京観光！'
             value={planName}
             onChange={(e) => setPlanName(e.currentTarget.value)}
-            onBlur={(e) => handleBlur(e, 1)}
+            onBlur={handleBlur}
             size={largerThanMd ? 'md' : 'sm'}
             classNames={{ input: 'max-w-xs md:max-w-sm' }}
           />
         </Step>
-        <Step active={active} number={2} text='日程を選択してください'>
+        <Step active={active[1]} number={1} text='日程を選択してください'>
           <DateRangePicker
             locale='ja'
             placeholder='日付を選択'
             value={dateRange}
             onChange={setDateRange}
-            onBlur={(e) => handleBlur(e, 2)}
+            onBlur={handleBlur}
             firstDayOfWeek='sunday'
             inputFormat='YYYY/MM/DD'
             labelFormat='YYYY/MM'
@@ -77,8 +84,8 @@ export const Create = () => {
           />
         </Step>
         <Step
-          active={active}
-          number={3}
+          active={active[2]}
+          number={2}
           text='共有パスワードを設定してください'
         >
           <PasswordInput
@@ -95,7 +102,7 @@ export const Create = () => {
             placeholder='再度入力してください'
             value={password2}
             onChange={(e) => setPassword2(e.currentTarget.value)}
-            onBlur={(e) => handleBlur(e, 3)}
+            onBlur={handleBlur}
             size={largerThanMd ? 'md' : 'sm'}
             classNames={{
               visibilityToggle: 'hidden',
@@ -104,8 +111,8 @@ export const Create = () => {
           />
         </Step>
         <Step
-          active={active}
-          number={4}
+          active={active[3]}
+          number={3}
           text='メールアドレスを登録すると、共有パスワードを忘れた際に再設定できます(任意)'
           label='Option'
           icon={<IconMail size={28} color='#495057' />}
@@ -114,7 +121,7 @@ export const Create = () => {
             placeholder='example@mail.com'
             value={email}
             onChange={(e) => setEmail(e.currentTarget.value)}
-            onBlur={(e) => handleBlur(e, 4)}
+            onBlur={handleBlur}
             size={largerThanMd ? 'md' : 'sm'}
             classNames={{ input: 'max-w-xs md:max-w-sm' }}
           />
@@ -136,24 +143,23 @@ export const Create = () => {
 }
 
 const Step: FC<{
-  active: number
+  active: boolean
   number: number
   text: string
   children: ReactNode
   label?: string
   icon?: ReactNode
 }> = (props) => {
-  const num = props.number
-
   return (
     <div className='mt-2 flex items-start justify-center gap-2 xxs:gap-4 md:mt-6 md:gap-10'>
+      {props.active}
       <div className='flex flex-col items-center gap-2 md:gap-4'>
         <div
           className={`flex h-10 w-10 items-center justify-center rounded-full xxs:h-14 xxs:w-14 md:h-16 md:w-16 ${
-            props.active === num ? 'border-solid border-main-500' : null
-          } ${props.active > num ? 'bg-main-500' : 'bg-main-300'}`}
+            props.active ? 'border-solid border-main-500' : null
+          } ${props.active ? 'bg-main-500' : 'bg-main-300'}`}
         >
-          {props.active > num ? (
+          {props.active ? (
             <IconCheck color='#fff' size={32} />
           ) : (
             <div>
@@ -163,7 +169,7 @@ const Step: FC<{
                 </div>
               ) : (
                 <div className='text-xl font-bold text-dark-500 xxs:text-2xl'>
-                  {num}
+                  {props.number + 1}
                 </div>
               )}
             </div>
@@ -171,13 +177,13 @@ const Step: FC<{
         </div>
         <div
           className={`h-40 w-[2px] rounded-sm xs:h-48 md:h-52 md:w-[3px] ${
-            props.active > num ? 'bg-main-400' : 'bg-main-300'
+            props.active ? 'bg-main-400' : 'bg-main-300'
           }`}
         ></div>
       </div>
       <div className='flex max-w-xs flex-1 flex-col gap-1 md:max-w-sm md:gap-2'>
         <div className='text-xl font-bold tracking-wide text-dark-500 md:text-2xl'>
-          {props.label ? `${props.label}` : `Step ${num}`}
+          {props.label ? `${props.label}` : `Step ${props.number + 1}`}
         </div>
         <div className='mb-4 text-sm text-dark-300 md:mb-6 md:text-base'>
           {props.text}
