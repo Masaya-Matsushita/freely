@@ -1,0 +1,1 @@
+export { ContentLabel } from './ContentLabel'
