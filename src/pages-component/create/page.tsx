@@ -3,7 +3,7 @@ import { DateRangePicker } from '@mantine/dates'
 import type { DateRangePickerValue } from '@mantine/dates'
 import { IconCalendarMinus, IconCheck, IconMail } from '@tabler/icons'
 import { useRouter } from 'next/router'
-import { FC, ReactNode, useState } from 'react'
+import { ChangeEvent, FC, ReactNode, useState } from 'react'
 import { ContentLabel } from 'src/component/ContentLabel'
 import { SimpleButton } from 'src/component/SimpleButton'
 import { getPath } from 'src/lib/const'
@@ -15,7 +15,7 @@ import { useMediaQuery } from 'src/lib/mantine'
  */
 export const Create = () => {
   const router = useRouter()
-  const [active, setActive] = useState(2)
+  const [active, setActive] = useState(1)
   const [planName, setPlanName] = useState('')
   const [dateRange, setDateRange] = useState<DateRangePickerValue>([null, null])
   const [password1, setPassword1] = useState('')
@@ -23,6 +23,17 @@ export const Create = () => {
   const [email, setEmail] = useState('')
   const largerThanXs = useMediaQuery('xs')
   const largerThanMd = useMediaQuery('md')
+
+  const handleBlur = (e: ChangeEvent<HTMLInputElement>, num: number) => {
+    const len = e.currentTarget.value.length
+    if (len && active > num) {
+      return
+    } else if (len && active <= num) {
+      setActive(num + 1)
+    } else {
+      setActive(num)
+    }
+  }
 
   return (
     <>
@@ -46,6 +57,7 @@ export const Create = () => {
             placeholder='(例) 3泊4日で東京観光！'
             value={planName}
             onChange={(e) => setPlanName(e.currentTarget.value)}
+            onBlur={(e) => handleBlur(e, 1)}
             size={largerThanMd ? 'md' : 'sm'}
             classNames={{ input: 'max-w-xs md:max-w-sm' }}
           />
@@ -56,6 +68,7 @@ export const Create = () => {
             placeholder='日付を選択'
             value={dateRange}
             onChange={setDateRange}
+            onBlur={(e) => handleBlur(e, 2)}
             firstDayOfWeek='sunday'
             inputFormat='YYYY/MM/DD'
             labelFormat='YYYY/MM'
@@ -82,6 +95,7 @@ export const Create = () => {
             placeholder='再度入力してください'
             value={password2}
             onChange={(e) => setPassword2(e.currentTarget.value)}
+            onBlur={(e) => handleBlur(e, 3)}
             size={largerThanMd ? 'md' : 'sm'}
             classNames={{
               visibilityToggle: 'hidden',
@@ -100,6 +114,7 @@ export const Create = () => {
             placeholder='example@mail.com'
             value={email}
             onChange={(e) => setEmail(e.currentTarget.value)}
+            onBlur={(e) => handleBlur(e, 4)}
             size={largerThanMd ? 'md' : 'sm'}
             classNames={{ input: 'max-w-xs md:max-w-sm' }}
           />
