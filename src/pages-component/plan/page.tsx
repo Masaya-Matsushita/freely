@@ -1,9 +1,10 @@
 import { Badge, UnstyledButton } from '@mantine/core'
-import { IconPlus, IconStar } from '@tabler/icons'
+import { IconPlus } from '@tabler/icons'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
+import { AiFillStar, AiOutlineStar } from 'react-icons/ai'
 import useSWR from 'swr'
 
 /**
@@ -107,14 +108,17 @@ const SpotCard = () => {
         alt=''
         className='rounded-t-lg'
       />
-      <div className='flex h-10 items-center gap-2'>
-        <IconStar
-          stroke={3}
-          size={24}
-          color='#ffec00'
-          className='ml-3 shrink-0'
+      <div className='flex h-10 items-center gap-2 xs:h-12 xs:gap-4'>
+        <AiOutlineStar
+          color='#AFAFAF'
+          size={26}
+          className='ml-3 shrink-0 xs:ml-5'
         />
-        <div className='mr-2 max-h-[40px] overflow-hidden text-ellipsis text-sm font-bold leading-4 text-dark-500'>
+        {/* <AiFillStar
+          color='#f0dc00'
+          size={26}
+          className='ml-3 shrink-0 xs:ml-5'
+        /> */}
           築地市場
         </div>
       </div>
