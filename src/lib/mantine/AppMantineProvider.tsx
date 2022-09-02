@@ -13,14 +13,6 @@ export const AppMantineProvider: FC<{ children: ReactNode }> = ({
       withNormalizeCSS
       theme={{
         colorScheme: 'light',
-        breakpoints: {
-          xxs: 340,
-          xs: 550,
-          sm: 768,
-          md: 992,
-          lg: 1200,
-          xl: 1400,
-        },
       }}
     >
       {children}

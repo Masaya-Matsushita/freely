@@ -37,12 +37,12 @@ export const Plan = () => {
     <>
       {/* {planData ? ( */}
       <div>
-        <UnstyledButton className='mx-4 mt-8 rounded-md p-2 text-3xl font-bold text-dark-500 xs:mx-6'>
+        <UnstyledButton className='mx-4 mt-8 rounded-md p-2 text-3xl font-bold text-dark-500 xs:mx-6 xs:text-4xl sm:mx-10'>
           {/* {planData.plan_name} */}
           東京観光
         </UnstyledButton>
         {typeof planId === 'string' ? (
-          <div className='ml-4 mt-4 flex flex-col xxs:flex-row xs:ml-6'>
+          <div className='ml-4 mt-2 flex flex-col xxs:flex-row xs:ml-6 sm:ml-12'>
             <DateBadge planId={planId} />
             <div className='mx-2 max-w-[180px] text-center font-bold text-main-400'>
               ~
@@ -60,11 +60,12 @@ export const Plan = () => {
             className='opacity-10'
           />
         </div> */}
-        <div className='mx-4 mt-12 text-3xl font-bold text-dark-500'>
+        <div className='ml-4 mt-12 text-3xl font-bold text-dark-500 xs:ml-6 sm:ml-10'>
           スポット一覧
         </div>
-        <hr className='mx-2 h-[3px] border-0 bg-main-200' />
-        <div className='mx-4 mt-6 flex flex-wrap gap-x-3 gap-y-4 xs:mx-6 xs:gap-x-4 xs:gap-y-6 sm:ml-12 md:ml-16 md:mr-8 md:gap-x-6 md:gap-y-8'>
+        <hr className='mx-2 h-[3px] border-0 bg-main-200 xs:mx-4 sm:mx-8' />
+        <div className='mx-4 mt-6 mb-32 flex flex-wrap gap-x-3 gap-y-4 xs:mx-6 xs:mt-8 xs:gap-x-4 xs:gap-y-6 sm:ml-12 md:mt-10 md:ml-16 md:mr-8 md:gap-x-6 md:gap-y-8'>
+          <SpotCard />
           <SpotCard />
           <SpotCard />
           <SpotCard />
@@ -75,7 +76,7 @@ export const Plan = () => {
               <IconPlus size={44} color='#495057' />
             </Button>
           </div> */}
-          <UnstyledButton className='flex h-[calc(55vw+25px)] w-full items-center justify-center rounded-xl  bg-slate-100 shadow shadow-dark-200 xxs:h-[calc(28vw+30px)] xxs:w-[calc(50vw-22px)] xs:h-[calc(28vw+25px)] xs:w-[calc(50vw-32px)] sm:h-[calc(28vw-60px)] sm:w-[calc(50vw-186px)] md:h-[207px] md:w-[292px]'>
+          <UnstyledButton className='flex h-[calc(55vw+25px)] w-full items-center justify-center rounded-xl  bg-slate-100 shadow shadow-dark-200 xxs:h-[calc(28vw+30px)] xxs:w-[calc(50vw-22px)] xs:h-[calc(28vw+35px)] xs:w-[calc(50vw-32px)] sm:h-[calc(28vw-50px)] sm:w-[calc(50vw-186px)] md:h-[217px] md:w-[292px]'>
             <IconPlus size={44} color='#495057' />
           </UnstyledButton>
         </div>
@@ -90,7 +91,7 @@ const DateBadge: FC<{ planId: string }> = (props) => {
     <Link href={{ pathname: '/edit', query: { plan: props.planId } }} passHref>
       <Badge
         component='a'
-        className='max-w-[180px] bg-main-300 py-3 px-6 text-sm text-main-500 hover:cursor-pointer'
+        className='max-w-[180px] bg-main-300 py-3 px-6 text-sm text-main-500 hover:cursor-pointer sm:py-4'
       >
         2022/08/20
       </Badge>
@@ -103,8 +104,8 @@ const SpotCard = () => {
     <UnstyledButton className='rounded-xl shadow shadow-dark-200 xxs:w-[calc(50vw-22px)] xs:w-[calc(50vw-32px)] sm:w-[calc(50vw-186px)] md:w-[292px]'>
       <Image
         src='/Naoshima.JPG'
-        height={'900px'}
-        width={'1600px'}
+        height='900px'
+        width='1600px'
         alt=''
         className='rounded-t-lg'
       />
@@ -119,6 +120,7 @@ const SpotCard = () => {
           size={26}
           className='ml-3 shrink-0 xs:ml-5'
         /> */}
+        <div className='mr-2 max-h-[40px] overflow-hidden text-ellipsis text-sm font-bold text-dark-500'>
           築地市場
         </div>
       </div>
