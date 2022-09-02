@@ -69,9 +69,20 @@ export const Plan = () => {
               <IconPlus size={44} color='#495057' />
             </Button>
           </div> */}
-          <UnstyledButton className='flex h-[calc(55vw+25px)] w-full items-center justify-center rounded-xl  bg-slate-100 shadow shadow-dark-200 xxs:h-[calc(28vw+30px)] xxs:w-[calc(50vw-22px)] xs:h-[calc(28vw+35px)] xs:w-[calc(50vw-32px)] sm:h-[calc(28vw-50px)] sm:w-[calc(50vw-186px)] md:h-[217px] md:w-[292px]'>
-            <IconPlus size={44} color='#495057' />
-          </UnstyledButton>
+          <Link
+            href={{
+              pathname: '/spot',
+              query: { plan: planId, mode: 'create' },
+            }}
+            passHref
+          >
+            <UnstyledButton
+              component='a'
+              className='flex h-[calc(55vw+25px)] w-full items-center justify-center rounded-xl  bg-slate-100 shadow shadow-dark-200 xxs:h-[calc(28vw+30px)] xxs:w-[calc(50vw-22px)] xs:h-[calc(28vw+35px)] xs:w-[calc(50vw-32px)] sm:h-[calc(28vw-50px)] sm:w-[calc(50vw-186px)] md:h-[217px] md:w-[292px]'
+            >
+              <IconPlus size={44} color='#495057' />
+            </UnstyledButton>
+          </Link>
         </div>
       </div>
       {/* ) : <div>取得中です</div>} */}
@@ -92,6 +103,7 @@ const DateBadge: FC<{ planId: string; label: any }> = (props) => {
   )
 }
 
+// TODO:モーダルorページ遷移
 const SpotCard: FC<{ data: Omit<Spot, 'plan_id'> }> = (props) => {
   return (
     <UnstyledButton className='rounded-xl shadow shadow-dark-200 xxs:w-[calc(50vw-22px)] xs:w-[calc(50vw-32px)] sm:w-[calc(50vw-186px)] md:w-[292px]'>
