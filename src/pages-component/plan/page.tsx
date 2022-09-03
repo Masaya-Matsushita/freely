@@ -130,7 +130,7 @@ const SpotCard: FC<{ data: Omit<Spot, 'plan_id'> }> = (props) => {
         />
       ) : (
         <Image
-          // src={props.data.icon}
+          // src={/`${props.data.icon}Image.svg`}
           src='/WorldMap.png'
           height='900px'
           width='1600px'

@@ -18,32 +18,32 @@ type ItemProps = React.ComponentPropsWithoutRef<'div'> & {
 
 const ICON_LIST = [
   {
-    id: 'spot',
+    id: 'Spot',
     image: '/SpotIcon.svg',
     label: '観光',
-    value: 'spot',
+    value: 'Spot',
     description: '史跡、娯楽、体験など',
   },
 
   {
-    id: 'restaurant',
+    id: 'Restaurant',
     image: '/RestaurantIcon.svg',
     label: '食事',
-    value: 'restaurant',
+    value: 'Restaurant',
     description: 'グルメ、カフェなど',
   },
   {
-    id: 'souvenir',
+    id: 'Souvenir',
     image: '/SouvenirIcon.svg',
     label: '買い物',
-    value: 'souvenir',
+    value: 'Souvenir',
     description: 'お土産、ショッピングなど',
   },
   {
-    id: 'hotel',
+    id: 'Hotel',
     image: '/HotelIcon.svg',
     label: '宿泊',
-    value: 'hotel',
+    value: 'Hotel',
     description: '旅館、ホテルなど',
   },
 ]

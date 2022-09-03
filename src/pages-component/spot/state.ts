@@ -3,7 +3,7 @@ import { Reducer } from 'react'
 /**
  * @package
  */
-export type Icon = 'spot' | 'restaurant' | 'souvenir' | 'hotel' | null
+export type Icon = 'Spot' | 'Restaurant' | 'Souvenir' | 'Hotel' | null
 
 type State = {
   active: ('filled' | 'active' | 'blank')[]
