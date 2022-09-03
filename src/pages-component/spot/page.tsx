@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { useReducer } from 'react'
 import { IconSelectBox } from './IconSelectBox'
 import { reducer, initialState } from './state'
+import { ButtonWithLinkArea } from 'src/component/ButtonWithLinkArea'
 import { ContentLabel } from 'src/component/ContentLabel'
 import { StepperCard } from 'src/component/StepperCard'
 import { useMediaQuery } from 'src/lib/mantine'
@@ -14,13 +15,10 @@ import { useMediaQuery } from 'src/lib/mantine'
 export const Spot = () => {
   const router = useRouter()
   const mode = router.query.mode
+  const planId = router.query.plan
   const largerThanXs = useMediaQuery('xs')
   const largerThanMd = useMediaQuery('md')
   const [state, dispatch] = useReducer(reducer, initialState)
-
-  if (typeof mode !== 'string') {
-    return
-  }
 
   // フォームの入力状況からactiveの値を判断
   const handleBlur = () => {
@@ -107,13 +105,22 @@ export const Spot = () => {
 
   return (
     <>
-      <div>
-        <ContentLabel
-          label={`スポット${mode === 'create' ? '登録' : '更新'}`}
-          icon={<IconMapPin size={largerThanXs ? 44 : 36} color='#6466F1' />}
-        />
-        <StepperCard active={state.active} stepList={STEPS} />
-      </div>
+      {typeof mode === 'string' && typeof planId === 'string' ? (
+        <div>
+          <ContentLabel
+            label={`スポット${mode === 'create' ? '登録' : '更新'}`}
+            icon={<IconMapPin size={largerThanXs ? 44 : 36} color='#6466F1' />}
+          />
+          <StepperCard active={state.active} stepList={STEPS} />
+          <div className='mt-20 text-center'>
+            <ButtonWithLinkArea
+              text={mode === 'create' ? '登録' : '更新'}
+              onClick={() => console.log('click')}
+              planId={planId}
+            />
+          </div>
+        </div>
+      ) : null}
     </>
   )
 }
