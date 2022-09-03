@@ -35,6 +35,7 @@ export const StepperCard: FC<Props> = (props) => {
               text: step.text,
               label: step.label,
               icon: step.icon,
+              longer: step.longer,
             }}
           >
             {step.children}

@@ -11,6 +11,7 @@ import { StepperCard } from 'src/component/StepperCard'
 import { getPath } from 'src/lib/const'
 import { useMediaQuery } from 'src/lib/mantine'
 import 'dayjs/locale/ja'
+import { Step } from 'src/type/Step'
 
 /**
  * @package
@@ -46,7 +47,7 @@ export const Create = () => {
     dispatch({ type: 'active', payload: { active: activeList } })
   }
 
-  const STEPS = [
+  const stepList: Step[] = [
     {
       id: 0,
       text: '旅行のテーマを入力してください',
@@ -159,7 +160,7 @@ export const Create = () => {
       <StepperCard
         label='簡単ステップで作成'
         active={state.active}
-        stepList={STEPS}
+        stepList={stepList}
       />
       <div className='flex justify-center py-20'>
         <SimpleButton

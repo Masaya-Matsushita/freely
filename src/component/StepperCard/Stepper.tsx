@@ -25,7 +25,7 @@ export const Stepper: FC<Props> = (props) => {
             <IconCheck color='#fff' size={32} />
           ) : (
             <div>
-              {props.step.icon ? (
+              {props.step.label ? (
                 <div className='flex items-center justify-center'>
                   {props.step.icon}
                 </div>
@@ -39,7 +39,11 @@ export const Stepper: FC<Props> = (props) => {
         </div>
         <div
           style={{ transition: 'all 0.2s' }}
-          className={`h-40 w-[2px] rounded-sm xs:h-48 md:h-52 md:w-[3px] ${
+          className={`${
+            props.step.longer
+              ? 'h-96 xs:h-[450px] md:h-[550px]'
+              : 'h-40 xs:h-48 md:h-52'
+          } w-[2px] rounded-sm  md:w-[3px] ${
             props.active === 'filled' ? 'bg-main-400' : 'bg-main-300'
           }`}
         ></div>

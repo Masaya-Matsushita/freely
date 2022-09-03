@@ -1,13 +1,14 @@
 import { TextInput } from '@mantine/core'
-import { IconMapPin, IconUnlink } from '@tabler/icons'
+import { IconCamera, IconMapPin, IconUnlink } from '@tabler/icons'
 import { useRouter } from 'next/router'
-import { useReducer } from 'react'
+import { useEffect, useReducer } from 'react'
 import { IconSelectBox } from './IconSelectBox'
 import { reducer, initialState } from './state'
 import { ButtonWithLinkArea } from 'src/component/ButtonWithLinkArea'
 import { ContentLabel } from 'src/component/ContentLabel'
 import { StepperCard } from 'src/component/StepperCard'
 import { useMediaQuery } from 'src/lib/mantine'
+import { Step } from 'src/type/Step'
 
 /**
  * @package
@@ -46,7 +47,12 @@ export const Spot = () => {
     dispatch({ type: 'active', payload: { active: activeList } })
   }
 
-  const STEPS = [
+  // 更新の場合、入力箇所までactiveを進める
+  useEffect(() => {
+    handleBlur()
+  }, [])
+
+  const stepList: Step[] = [
     {
       id: 0,
       text: `${
@@ -54,6 +60,8 @@ export const Spot = () => {
           ? 'スポット名を入力してください'
           : '店名、観光地名、施設名など'
       }`,
+      label: `${mode === 'create' ? '' : 'スポット名'}`,
+      icon: <IconMapPin size={30} color='#495057' />,
       children: (
         <TextInput
           placeholder='(例) 東京スカイツリー'
@@ -70,10 +78,13 @@ export const Spot = () => {
     {
       id: 1,
       text: `${
-        mode === 'create'
-          ? 'アイコンor写真を設定してください。(両方を設定した場合は、写真が優先的に適用されます)'
+        String(mode) === 'create'
+          ? 'アイコン or 写真を設定してください（両方を設定した場合は、写真が優先的に適用されます）'
           : '両方を設定した場合は、写真が優先的に適用されます'
       }`,
+      label: `${mode === 'create' ? '' : 'アイコン or 写真'}`,
+      icon: <IconCamera size={28} color='#495057' />,
+      longer: true,
       children: (
         <IconSelectBox
           largerThanMd={largerThanMd}
@@ -111,10 +122,10 @@ export const Spot = () => {
             label={`スポット${mode === 'create' ? '登録' : '更新'}`}
             icon={<IconMapPin size={largerThanXs ? 44 : 36} color='#6466F1' />}
           />
-          <StepperCard active={state.active} stepList={STEPS} />
+          <StepperCard active={state.active} stepList={stepList} />
           <div className='mt-20 text-center'>
             <ButtonWithLinkArea
-              text={mode === 'create' ? '登録' : '更新'}
+              text={mode === 'create' ? '登録する' : '更新する'}
               onClick={() => console.log('click')}
               planId={planId}
             />

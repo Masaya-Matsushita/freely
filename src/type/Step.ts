@@ -3,5 +3,6 @@ export type Step = {
   text: string
   label?: string
   icon?: JSX.Element
+  longer?: true
   children: JSX.Element
 }
