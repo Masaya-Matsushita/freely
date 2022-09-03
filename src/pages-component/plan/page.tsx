@@ -67,7 +67,7 @@ export const Plan = () => {
           スポット一覧
         </div>
         <hr className='mx-2 h-[3px] border-0 bg-main-200 xs:mx-4 sm:mx-8' />
-        <div className='mx-4 mt-6 mb-32 flex flex-wrap gap-x-3 gap-y-4 xs:mx-6 xs:mt-8 xs:gap-x-4 xs:gap-y-6 sm:ml-12 md:mt-10 md:ml-16 md:mr-8 md:gap-x-6 md:gap-y-8'>
+        <div className='mx-4 mt-6 flex flex-wrap gap-x-3 gap-y-4 xs:mx-6 xs:mt-8 xs:gap-x-4 xs:gap-y-6 sm:ml-12 md:mt-10 md:ml-16 md:mr-8 md:gap-x-6 md:gap-y-8'>
           {/* {spotData.map((spot) => (
             <SpotCard key={spot.spot_id} data={spot} />
           ))} */}

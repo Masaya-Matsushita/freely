@@ -25,7 +25,7 @@ export const ContentLayout = (page: ReactElement) => {
           <Header router={router} planId={planId} largerThanSm={largerThanSm} />
           <div className='flex'>
             <SideNav planId={planId} />
-            <main className='min-h-[calc(100vh-96px)] flex-1 bg-main-100'>
+            <main className='min-h-[calc(100vh-96px)] flex-1 bg-main-100 pt-16 pb-40'>
               {router.pathname.slice(0, 10) === getPath('PREF_NEWS') ? (
                 <PrefSelectBox router={router} planId={planId} />
               ) : null}

@@ -6,7 +6,7 @@ import { FC, ReactNode } from 'react'
 export const ContentLabel: FC<{ label: string; icon: ReactNode }> = (props) => {
   return (
     <div>
-      <div className='flex items-center justify-center gap-2 pt-20 xs:pt-24'>
+      <div className='flex items-center justify-center gap-2 pt-4 xs:pt-8'>
         {props.icon}
         <div className='text-2xl font-bold tracking-wider text-dark-500 xxs:text-3xl md:text-4xl'>
           {props.label}
