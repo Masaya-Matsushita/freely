@@ -3,6 +3,7 @@ import { DateRangePicker } from '@mantine/dates'
 import { IconCalendarMinus, IconMail } from '@tabler/icons'
 import { useRouter } from 'next/router'
 import { useReducer } from 'react'
+import { Notes } from './Notes'
 import { reducer, initialState } from './state'
 import { ContentLabel } from 'src/component/ContentLabel'
 import { SimpleButton } from 'src/component/SimpleButton'
@@ -171,6 +172,7 @@ export const Create = () => {
           }}
         />
       </div>
+      <Notes />
     </>
   )
 }
