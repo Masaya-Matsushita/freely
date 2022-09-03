@@ -16,7 +16,12 @@ import 'dayjs/locale/ja'
  */
 export const Create = () => {
   const router = useRouter()
-  const [active, setActive] = useState([false, false, false, false])
+  const [active, setActive] = useState<('filled' | 'active' | 'blank')[]>([
+    'active',
+    'blank',
+    'blank',
+    'blank',
+  ])
   const [planName, setPlanName] = useState('')
   const [dateRange, setDateRange] = useState<DateRangePickerValue>([null, null])
   const [password1, setPassword1] = useState('')
@@ -28,13 +33,19 @@ export const Create = () => {
   // フォームの入力状況からactiveの値を判断
   const handleBlur = () => {
     const valList = [planName, dateRange[0], password2, email]
-    const activeList = [false, false, false, false]
-    // 未入力のフォーム以降は全てfalse
+    const activeList: ('filled' | 'active' | 'blank')[] = [
+      'active',
+      'blank',
+      'blank',
+      'blank',
+    ]
+    // 未入力のフォーム以降は全てblank
     for (let i = 0; i < valList.length; i++) {
       if (!valList[i]) {
         break
       }
-      activeList[i] = true
+      activeList[i] = 'filled'
+      activeList[i + 1] = 'active'
     }
     setActive(activeList)
   }

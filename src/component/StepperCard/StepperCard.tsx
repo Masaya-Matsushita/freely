@@ -4,7 +4,7 @@ import { Stepper } from './Stepper'
 import { Step } from 'src/type/Step'
 
 type Props = {
-  active: boolean[]
+  active: ('filled' | 'active' | 'blank')[]
   stepList: Step[]
 }
 
