@@ -1,9 +1,14 @@
 import { Reducer } from 'react'
 
+/**
+ * @package
+ */
+export type Icon = 'spot' | 'restaurant' | 'souvenir' | 'hotel' | null
+
 type State = {
   active: ('filled' | 'active' | 'blank')[]
   name: string
-  icon: string | null
+  icon: Icon
   image: string
   url: string
 }
@@ -21,7 +26,7 @@ type Action = {
 export const initialState: { [K in keyof State]: State[K] } = {
   active: ['active', 'blank', 'blank'],
   name: '',
-  icon: '',
+  icon: null,
   image: '',
   url: '',
 }

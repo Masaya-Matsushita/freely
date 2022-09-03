@@ -1,12 +1,67 @@
-import { Select, TextInput } from '@mantine/core'
+import { TextInput, Select } from '@mantine/core'
 import { IconMapPin, IconUnlink } from '@tabler/icons'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { useReducer } from 'react'
-import { reducer, initialState } from './state'
+import { useReducer, forwardRef } from 'react'
+import { reducer, initialState, Icon } from './state'
 import { ContentLabel } from 'src/component/ContentLabel'
 import { StepperCard } from 'src/component/StepperCard'
 import { useMediaQuery } from 'src/lib/mantine'
 import 'dayjs/locale/ja'
+
+type ItemProps = React.ComponentPropsWithoutRef<'div'> & {
+  id: string
+  image: string
+  label: string
+  description: string
+}
+
+const ICON_LIST = [
+  {
+    id: 'spot',
+    image: '/SpotIcon.svg',
+    label: '観光',
+    value: 'spot',
+    description: '史跡、娯楽、体験など',
+  },
+
+  {
+    id: 'restaurant',
+    image: '/RestaurantIcon.svg',
+    label: '食事',
+    value: 'restaurant',
+    description: 'グルメ、カフェなど',
+  },
+  {
+    id: 'souvenir',
+    image: '/SouvenirIcon.svg',
+    label: '買い物',
+    value: 'souvenir',
+    description: 'お土産、ショッピングなど',
+  },
+  {
+    id: 'hotel',
+    image: '/HotelIcon.svg',
+    label: '宿泊',
+    value: 'hotel',
+    description: '旅館、ホテルなど',
+  },
+]
+
+// eslint-disable-next-line react/display-name
+const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
+  ({ id, image, label, description, ...others }: ItemProps, ref) => (
+    <div ref={ref} {...others}>
+      <div className='flex items-center gap-4 py-1'>
+        <Image src={image} alt='' height='25px' width='25px' />
+        <div>
+          <div className='text-base text-dark-500'>{label}</div>
+          <div className='text-sm text-dark-300'>{description}</div>
+        </div>
+      </div>
+    </div>
+  ),
+)
 
 /**
  * @package
@@ -78,18 +133,29 @@ export const Spot = () => {
       }`,
       children: (
         <Select
-          data={iconList}
-          placeholder='選択する'
-          label='都道府県名'
+          placeholder='アイコンを選択'
+          itemComponent={SelectItem}
+          data={ICON_LIST}
           clearable
           value={state.icon}
-          onChange={(e) => dispatch({ type: 'icon', payload: { icon: e } })}
-          transition='pop-top-left'
-          transitionDuration={80}
-          transitionTimingFunction='ease'
-          classNames={{
-            root: 'max-w-md xs:mx-auto mx-8 xxs:mx-12 mt-12 xxs:mt-8',
-          }}
+          onChange={(e: Icon) =>
+            dispatch({ type: 'icon', payload: { icon: e } })
+          }
+          onBlur={handleBlur}
+          filter={(value, item) => item.id === value}
+          maxDropdownHeight={400}
+          size={largerThanMd ? 'md' : 'sm'}
+          classNames={{ input: 'max-w-xs md:max-w-sm' }}
+          styles={(theme) => ({
+            item: {
+              '&[data-selected]': {
+                '&, &:hover': {
+                  backgroundColor: theme.colors.indigo[1],
+                  color: theme.colors.indigo[9],
+                },
+              },
+            },
+          })}
         />
       ),
     },
