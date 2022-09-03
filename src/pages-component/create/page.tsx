@@ -1,9 +1,9 @@
 import { PasswordInput, TextInput } from '@mantine/core'
 import { DateRangePicker } from '@mantine/dates'
-import type { DateRangePickerValue } from '@mantine/dates'
 import { IconCalendarMinus, IconMail } from '@tabler/icons'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useReducer } from 'react'
+import { reducer, initialState } from './state'
 import { ContentLabel } from 'src/component/ContentLabel'
 import { SimpleButton } from 'src/component/SimpleButton'
 import { StepperCard } from 'src/component/StepperCard'
@@ -16,23 +16,18 @@ import 'dayjs/locale/ja'
  */
 export const Create = () => {
   const router = useRouter()
-  const [active, setActive] = useState<('filled' | 'active' | 'blank')[]>([
-    'active',
-    'blank',
-    'blank',
-    'blank',
-  ])
-  const [planName, setPlanName] = useState('')
-  const [dateRange, setDateRange] = useState<DateRangePickerValue>([null, null])
-  const [password1, setPassword1] = useState('')
-  const [password2, setPassword2] = useState('')
-  const [email, setEmail] = useState('')
   const largerThanXs = useMediaQuery('xs')
   const largerThanMd = useMediaQuery('md')
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   // フォームの入力状況からactiveの値を判断
   const handleBlur = () => {
-    const valList = [planName, dateRange[0], password2, email]
+    const valList = [
+      state.name,
+      state.dateRange[0],
+      state.password2,
+      state.email,
+    ]
     const activeList: ('filled' | 'active' | 'blank')[] = [
       'active',
       'blank',
@@ -47,7 +42,7 @@ export const Create = () => {
       activeList[i] = 'filled'
       activeList[i + 1] = 'active'
     }
-    setActive(activeList)
+    dispatch({ type: 'active', payload: { active: activeList } })
   }
 
   const STEPS = [
@@ -57,8 +52,10 @@ export const Create = () => {
       children: (
         <TextInput
           placeholder='(例) 3泊4日で東京観光！'
-          value={planName}
-          onChange={(e) => setPlanName(e.currentTarget.value)}
+          value={state.name}
+          onChange={(e) =>
+            dispatch({ type: 'name', payload: { name: e.currentTarget.value } })
+          }
           onBlur={handleBlur}
           size={largerThanMd ? 'md' : 'sm'}
           classNames={{ input: 'max-w-xs md:max-w-sm' }}
@@ -72,8 +69,13 @@ export const Create = () => {
         <DateRangePicker
           locale='ja'
           placeholder='日付を選択'
-          value={dateRange}
-          onChange={setDateRange}
+          value={state.dateRange}
+          onChange={(e) =>
+            dispatch({
+              type: 'dateRange',
+              payload: { dateRange: [e[0], e[1]] },
+            })
+          }
           onBlur={handleBlur}
           firstDayOfWeek='sunday'
           inputFormat='YYYY/MM/DD'
@@ -90,8 +92,13 @@ export const Create = () => {
         <div>
           <PasswordInput
             placeholder='半角英数6~20文字'
-            value={password1}
-            onChange={(e) => setPassword1(e.currentTarget.value)}
+            value={state.password1}
+            onChange={(e) =>
+              dispatch({
+                type: 'password1',
+                payload: { password1: e.currentTarget.value },
+              })
+            }
             size={largerThanMd ? 'md' : 'sm'}
             classNames={{
               visibilityToggle: 'hidden',
@@ -100,8 +107,13 @@ export const Create = () => {
           />
           <PasswordInput
             placeholder='再度入力してください'
-            value={password2}
-            onChange={(e) => setPassword2(e.currentTarget.value)}
+            value={state.password2}
+            onChange={(e) =>
+              dispatch({
+                type: 'password2',
+                payload: { password2: e.currentTarget.value },
+              })
+            }
             onBlur={handleBlur}
             size={largerThanMd ? 'md' : 'sm'}
             classNames={{
@@ -120,8 +132,13 @@ export const Create = () => {
       children: (
         <TextInput
           placeholder='example@mail.com'
-          value={email}
-          onChange={(e) => setEmail(e.currentTarget.value)}
+          value={state.email}
+          onChange={(e) =>
+            dispatch({
+              type: 'email',
+              payload: { email: e.currentTarget.value },
+            })
+          }
           onBlur={handleBlur}
           size={largerThanMd ? 'md' : 'sm'}
           classNames={{ input: 'max-w-xs md:max-w-sm' }}
@@ -138,7 +155,11 @@ export const Create = () => {
           <IconCalendarMinus size={largerThanXs ? 44 : 36} color='#6466F1' />
         }
       />
-      <StepperCard active={active} stepList={STEPS} />
+      <StepperCard
+        label='簡単ステップで作成'
+        active={state.active}
+        stepList={STEPS}
+      />
       <div className='flex justify-center py-20'>
         <SimpleButton
           text='作成する'

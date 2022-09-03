@@ -16,7 +16,7 @@ export const Stepper: FC<Props> = (props) => {
     <div className='mt-2 flex items-start justify-center gap-2 xxs:gap-4 md:mt-6 md:gap-10'>
       <div className='flex flex-col items-center gap-2 md:gap-4'>
         <div
-          style={{ transition: 'all 0.4s' }}
+          style={{ transition: 'all 0.2s' }}
           className={`flex h-10 w-10 items-center justify-center rounded-full xxs:h-14 xxs:w-14 md:h-16 md:w-16 ${
             props.active === 'active' ? 'border-solid border-main-500' : null
           } ${props.active === 'filled' ? 'bg-main-500' : 'bg-main-300'}`}
@@ -38,7 +38,7 @@ export const Stepper: FC<Props> = (props) => {
           )}
         </div>
         <div
-          style={{ transition: 'all 0.4s' }}
+          style={{ transition: 'all 0.2s' }}
           className={`h-40 w-[2px] rounded-sm xs:h-48 md:h-52 md:w-[3px] ${
             props.active === 'filled' ? 'bg-main-400' : 'bg-main-300'
           }`}
