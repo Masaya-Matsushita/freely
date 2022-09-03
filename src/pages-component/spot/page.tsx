@@ -9,6 +9,7 @@ import { ContentLabel } from 'src/component/ContentLabel'
 import { StepperCard } from 'src/component/StepperCard'
 import { useMediaQuery } from 'src/lib/mantine'
 import { Step } from 'src/type/Step'
+import { ImageDropzone } from './ImageDropzone'
 
 /**
  * @package
@@ -118,7 +119,8 @@ export const Spot = () => {
     <>
       {typeof mode === 'string' && typeof planId === 'string' ? (
         <div>
-          <ContentLabel
+          <ImageDropzone />
+          {/* <ContentLabel
             label={`スポット${mode === 'create' ? '登録' : '更新'}`}
             icon={<IconMapPin size={largerThanXs ? 44 : 36} color='#6466F1' />}
           />
@@ -129,7 +131,7 @@ export const Spot = () => {
               onClick={() => console.log('click')}
               planId={planId}
             />
-          </div>
+          </div> */}
         </div>
       ) : null}
     </>

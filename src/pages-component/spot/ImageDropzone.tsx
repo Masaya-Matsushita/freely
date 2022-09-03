@@ -1,7 +1,8 @@
-import { Button, Modal, Slider } from '@mantine/core'
+import { Button, CloseButton, Modal, Slider } from '@mantine/core'
+import { Dropzone } from '@mantine/dropzone'
 import { useDisclosure } from '@mantine/hooks'
-import { IconPlus } from '@tabler/icons'
-import { ComponentProps, useState } from 'react'
+import { IconPhoto } from '@tabler/icons'
+import { useState } from 'react'
 import type { Area, MediaSize } from 'react-easy-crop'
 import Cropper from 'react-easy-crop'
 import { useErrorHandler } from 'react-error-boundary'
@@ -12,8 +13,6 @@ const createImage = (url: string): Promise<HTMLImageElement> =>
     const image = new Image()
     image.addEventListener('load', () => resolve(image))
     image.addEventListener('error', (error) => reject(error))
-    // CodeSandboxでCORSエラーを回避するために必要
-    image.setAttribute('crossOrigin', 'anonymous')
     image.src = url
   })
 
@@ -50,7 +49,10 @@ const getCroppedImg = async (
   return canvas.toDataURL('image/jpeg')
 }
 
-export const TrimmingIcon = () => {
+/**
+ * @package
+ */
+export const ImageDropzone = () => {
   const [croppedImgSrc, setCroppedImgSrc] = useState('')
   const [imgSrc, setImgSrc] = useState('')
   const [crop, setCrop] = useState({ x: 0, y: 0 })
@@ -60,13 +62,13 @@ export const TrimmingIcon = () => {
   const [opened, handler] = useDisclosure(false)
   const handleError = useErrorHandler()
 
-  // 一辺200pxで1:1のトリミング領域
-  const ASPECT_RATIO = 1
-  const CROP_WIDTH = 200
+  // 横幅400pxで16:9のトリミング領域
+  const ASPECT_RATIO = 16 / 9
+  const CROP_WIDTH = 400
 
   // 画像ファイルをアップロードしてモーダルに表示
-  const onFileChange: ComponentProps<'input'>['onChange'] = async (e) => {
-    if (e.target.files && e.target.files.length > 0) {
+  const onFileChange = async (files: File[]) => {
+    if (files && files.length > 0) {
       const reader = new FileReader()
       reader.addEventListener('load', () => {
         if (reader.result) {
@@ -75,7 +77,7 @@ export const TrimmingIcon = () => {
         }
       })
       // 画像をBase64エンコード
-      reader.readAsDataURL(e.target.files[0])
+      reader.readAsDataURL(files[0])
     }
   }
 
@@ -124,9 +126,10 @@ export const TrimmingIcon = () => {
         closeOnClickOutside={false}
         closeOnEscape={false}
         withCloseButton={false}
+        size='lg'
         className='mx-2 mt-16'
       >
-        <div className='relative h-[220px] bg-dark-100'>
+        <div className='relative mx-4 mt-4 h-[300px] bg-dark-100'>
           <Cropper
             image={imgSrc}
             crop={crop}
@@ -142,11 +145,10 @@ export const TrimmingIcon = () => {
               height: CROP_WIDTH / ASPECT_RATIO,
             }}
             onMediaLoaded={onMediaLoaded}
-            showGrid={false}
-            cropShape='round'
+            showGrid={true}
           />
         </div>
-        <div className='mx-8 mt-4'>
+        <div className='mx-auto mt-4 max-w-sm'>
           <div className='ml-1'>Zoom</div>
           <Slider
             size='lg'
@@ -163,41 +165,52 @@ export const TrimmingIcon = () => {
             ]}
           />
         </div>
-        <div className='mt-12 flex justify-between'>
+        <div className='mt-16 mb-6 mr-8 flex justify-end gap-6'>
           <Button
             color='red'
+            variant='outline'
             onClick={() => handler.close()}
-            className='ml-4 h-10 w-28 xs:ml-8 xs:w-36'
+            className='h-11 w-36 font-bold'
           >
             Cancel
           </Button>
-          <Button
-            onClick={showCroppedImage}
-            className='mr-4 h-10 w-28 xs:mr-8 xs:w-36'
-          >
+          <Button onClick={showCroppedImage} className='h-11 w-36 font-bold'>
             OK
           </Button>
         </div>
       </Modal>
-      {/* ユーザーアイコン */}
-      <div className='relative'>
-        <img
-          src={croppedImgSrc}
-          alt='アイコンの描画に失敗しました。'
-          className='h-20 w-20 rounded-full sm:h-24 sm:w-24'
-        />
-        <label htmlFor='iconURL' className='absolute left-14 sm:left-16'>
-          <input
-            id='iconURL'
-            type='file'
-            accept='image/*,.png,.jpg,.jpeg,.gif'
-            onChange={(e) => onFileChange(e)}
-            className='hidden'
-          />
-          <div className='flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 sm:h-8 sm:w-8'>
-            <IconPlus size={20} strokeWidth={3} color={'white'} />
+      <div className='max-w-xs'>
+        {croppedImgSrc ? (
+          <div>
+            <div className='mx-1 flex items-end justify-between text-dark-500'>
+              <div>この写真を設定</div>
+              <CloseButton
+                size='md'
+                iconSize={24}
+                onClick={() => setCroppedImgSrc('')}
+              />
+            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={croppedImgSrc}
+              alt='画像の描画に失敗しました。'
+              className='h-[180px] w-[320px]'
+            />
           </div>
-        </label>
+        ) : (
+          <Dropzone
+            onDrop={onFileChange}
+            onReject={(files) => console.log('rejected files', files)}
+            maxSize={3 * 1024 ** 2}
+            accept={{ 'image/*': [] }}
+            className='mt-7 flex h-[180px] flex-col items-center justify-center border-[1px] text-center md:max-w-sm'
+          >
+            <div>
+              <IconPhoto size={40} stroke={1} color='#999999' />
+              <div className='text-dark-300'>タップで写真を選択</div>
+            </div>
+          </Dropzone>
+        )}
       </div>
     </div>
   )
