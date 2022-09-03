@@ -13,7 +13,7 @@ type State = {
   url: string
 }
 
-type Action = {
+export type Action = {
   type: keyof State
   payload: {
     [K in keyof State]?: State[K]
