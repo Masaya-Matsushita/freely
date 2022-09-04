@@ -1,11 +1,15 @@
 import { Button, CloseButton, Modal, Slider } from '@mantine/core'
 import { Dropzone } from '@mantine/dropzone'
-import { useDisclosure } from '@mantine/hooks'
+import {
+  useDisclosure,
+  useMediaQuery as useOriginalMediaQuery,
+} from '@mantine/hooks'
 import { IconPhoto } from '@tabler/icons'
 import { useState } from 'react'
 import type { Area, MediaSize } from 'react-easy-crop'
 import Cropper from 'react-easy-crop'
 import { useErrorHandler } from 'react-error-boundary'
+import { useMediaQuery } from 'src/lib/mantine'
 
 // urlをもとにimage要素を作成
 const createImage = (url: string): Promise<HTMLImageElement> =>
@@ -61,23 +65,40 @@ export const ImageDropzone = () => {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>()
   const [opened, handler] = useDisclosure(false)
   const handleError = useErrorHandler()
+  const largerThanXxs = useMediaQuery('xxs')
+  const largerThanXs = useMediaQuery('xs')
+  const largerThan490 = useOriginalMediaQuery('(min-width: 490px)')
 
-  // 横幅400pxで16:9のトリミング領域
+  // 16:9のトリミング領域
   const ASPECT_RATIO = 16 / 9
-  const CROP_WIDTH = 400
+
+  // 画面幅に合わせてトリミングサイズを指定
+  let cropWidth = 210
+
+  if (largerThanXs) {
+    cropWidth = 400
+  } else if (largerThan490) {
+    cropWidth = 300
+  } else if (largerThanXxs) {
+    cropWidth = 240
+  }
 
   // 画像ファイルをアップロードしてモーダルに表示
   const onFileChange = async (files: File[]) => {
-    if (files && files.length > 0) {
-      const reader = new FileReader()
-      reader.addEventListener('load', () => {
-        if (reader.result) {
-          setImgSrc(reader.result.toString() || '')
-          handler.open()
-        }
-      })
-      // 画像をBase64エンコード
-      reader.readAsDataURL(files[0])
+    try {
+      if (files && files.length > 0) {
+        const reader = new FileReader()
+        reader.addEventListener('load', () => {
+          if (reader.result) {
+            setImgSrc(reader.result.toString() || '')
+            handler.open()
+          }
+        })
+        // 画像をBase64エンコード
+        reader.readAsDataURL(files[0])
+      }
+    } catch (error) {
+      handleError(error)
     }
   }
 
@@ -88,13 +109,13 @@ export const ImageDropzone = () => {
     // 画像のアスペクト比が大きい(画像が横長)の場合
     if (mediaAspectRadio > ASPECT_RATIO) {
       // 縦幅に合わせてZoomのデフォルト値を指定
-      const result = CROP_WIDTH / ASPECT_RATIO / height
+      const result = cropWidth / ASPECT_RATIO / height
       setZoom(result)
       setMinZoom(result)
       return
     }
     // 横幅に合わせてZoomのデフォルト値を指定
-    const result = CROP_WIDTH / width
+    const result = cropWidth / width
     setZoom(result)
     setMinZoom(result)
   }
@@ -127,9 +148,11 @@ export const ImageDropzone = () => {
         closeOnEscape={false}
         withCloseButton={false}
         size='lg'
-        className='mx-2 mt-16'
+        classNames={{
+          modal: 'bg-main-100 xxs:mx-3 mt-16',
+        }}
       >
-        <div className='relative mx-4 mt-4 h-[300px] bg-dark-100'>
+        <div className='relative mt-2 h-52 bg-dark-300 xs:mx-4 xs:mt-4 xs:h-[300px]'>
           <Cropper
             image={imgSrc}
             crop={crop}
@@ -141,14 +164,14 @@ export const ImageDropzone = () => {
             onCropComplete={onCropComplete}
             onZoomChange={setZoom}
             cropSize={{
-              width: CROP_WIDTH,
-              height: CROP_WIDTH / ASPECT_RATIO,
+              width: cropWidth,
+              height: cropWidth / ASPECT_RATIO,
             }}
             onMediaLoaded={onMediaLoaded}
             showGrid={true}
           />
         </div>
-        <div className='mx-auto mt-4 max-w-sm'>
+        <div className='mx-2 mt-4 max-w-sm xs:mx-auto'>
           <div className='ml-1'>Zoom</div>
           <Slider
             size='lg'
@@ -165,53 +188,58 @@ export const ImageDropzone = () => {
             ]}
           />
         </div>
-        <div className='mt-16 mb-6 mr-8 flex justify-end gap-6'>
+        <div className='mx-2 mt-16 mb-6 flex justify-end gap-4 xs:mr-8 xs:gap-6'>
           <Button
             color='red'
             variant='outline'
             onClick={() => handler.close()}
-            className='h-11 w-36 font-bold'
+            className='h-10 w-24 font-bold xs:h-11 xs:w-36'
           >
             Cancel
           </Button>
-          <Button onClick={showCroppedImage} className='h-11 w-36 font-bold'>
+          <Button
+            onClick={showCroppedImage}
+            className='h-10 w-24 font-bold xs:h-11 xs:w-36'
+          >
             OK
           </Button>
         </div>
       </Modal>
-      <div className='max-w-xs'>
-        {croppedImgSrc ? (
-          <div>
-            <div className='mx-1 flex items-end justify-between text-dark-500'>
-              <div>この写真を設定</div>
-              <CloseButton
-                size='md'
-                iconSize={24}
-                onClick={() => setCroppedImgSrc('')}
-              />
+      {croppedImgSrc ? (
+        <div className='max-w-xs md:max-w-sm'>
+          <div className='flex items-end justify-between text-dark-500'>
+            <div className='ml-1 text-xs text-dark-500 xxs:text-sm'>
+              設定中の写真
             </div>
+            <CloseButton
+              size={largerThan490 ? 'md' : 'sm'}
+              iconSize={largerThan490 ? 22 : 20}
+              onClick={() => setCroppedImgSrc('')}
+            />
+          </div>
+          <div className='rounded-md border-solid border-slate-200 p-[3px] xs:p-1.5'>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={croppedImgSrc}
               alt='画像の描画に失敗しました。'
-              className='h-[180px] w-[320px]'
+              className='h-full w-full rounded-md'
             />
           </div>
-        ) : (
-          <Dropzone
-            onDrop={onFileChange}
-            onReject={(files) => console.log('rejected files', files)}
-            maxSize={3 * 1024 ** 2}
-            accept={{ 'image/*': [] }}
-            className='mt-7 flex h-[180px] flex-col items-center justify-center border-[1px] text-center md:max-w-sm'
-          >
-            <div>
-              <IconPhoto size={40} stroke={1} color='#999999' />
-              <div className='text-dark-300'>タップで写真を選択</div>
-            </div>
-          </Dropzone>
-        )}
-      </div>
+        </div>
+      ) : (
+        <Dropzone
+          onDrop={onFileChange}
+          onReject={(files) => console.log('rejected files', files)}
+          maxSize={3 * 1024 ** 2}
+          accept={{ 'image/*': [] }}
+          className='mt-7 flex h-[180px] max-w-xs flex-col items-center justify-center border-[1px] text-center md:h-[216px] md:max-w-sm'
+        >
+          <div>
+            <IconPhoto size={40} stroke={1} color='#999999' />
+            <div className='text-dark-300'>タップで写真を選択</div>
+          </div>
+        </Dropzone>
+      )}
     </div>
   )
 }

@@ -3,13 +3,13 @@ import { IconCamera, IconMapPin, IconUnlink } from '@tabler/icons'
 import { useRouter } from 'next/router'
 import { useEffect, useReducer } from 'react'
 import { IconSelectBox } from './IconSelectBox'
+import { ImageDropzone } from './ImageDropzone'
 import { reducer, initialState } from './state'
 import { ButtonWithLinkArea } from 'src/component/ButtonWithLinkArea'
 import { ContentLabel } from 'src/component/ContentLabel'
 import { StepperCard } from 'src/component/StepperCard'
 import { useMediaQuery } from 'src/lib/mantine'
 import { Step } from 'src/type/Step'
-import { ImageDropzone } from './ImageDropzone'
 
 /**
  * @package
@@ -87,12 +87,15 @@ export const Spot = () => {
       icon: <IconCamera size={28} color='#495057' />,
       longer: true,
       children: (
-        <IconSelectBox
-          largerThanMd={largerThanMd}
-          handleBlur={handleBlur}
-          icon={state.icon}
-          dispatch={dispatch}
-        />
+        <div>
+          <IconSelectBox
+            largerThanMd={largerThanMd}
+            handleBlur={handleBlur}
+            icon={state.icon}
+            dispatch={dispatch}
+          />
+          <ImageDropzone />
+        </div>
       ),
     },
     {
@@ -119,8 +122,7 @@ export const Spot = () => {
     <>
       {typeof mode === 'string' && typeof planId === 'string' ? (
         <div>
-          <ImageDropzone />
-          {/* <ContentLabel
+          <ContentLabel
             label={`スポット${mode === 'create' ? '登録' : '更新'}`}
             icon={<IconMapPin size={largerThanXs ? 44 : 36} color='#6466F1' />}
           />
@@ -131,7 +133,7 @@ export const Spot = () => {
               onClick={() => console.log('click')}
               planId={planId}
             />
-          </div> */}
+          </div>
         </div>
       ) : null}
     </>
