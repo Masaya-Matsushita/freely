@@ -30,11 +30,11 @@ export const ShareModal: FC<ShareModalProps> = (props) => {
       withCloseButton={false}
       size='lg'
       classNames={{
-        modal: 'p-0 rounded-lg mt-16 xs:mx-8 mx-4 xs:mt-8',
+        modal: 'p-0 rounded-lg mt-16 xs:mx-8 mx-4 xs:mt-24',
       }}
     >
       <div className='mb-1 mt-4 flex items-center'>
-        <div className='ml-12 text-2xl font-semibold text-dark-500 xxs:ml-4 sm:ml-8'>
+        <div className='ml-12 text-xl font-semibold text-dark-500 xxs:ml-4 sm:ml-8 md:text-2xl'>
           メンバーを招待
         </div>
         <CloseButton
@@ -45,7 +45,7 @@ export const ShareModal: FC<ShareModalProps> = (props) => {
           className='ml-auto mr-12 xxs:mr-4'
         />
       </div>
-      <div className='ml-12 text-dark-400 xxs:ml-4 sm:ml-8'>
+      <div className='ml-12 text-sm text-dark-400 xxs:ml-4 xs:text-base sm:ml-8'>
         一緒にプランを作成しよう
       </div>
       <hr className='mb-0 h-[1px] border-0 bg-dark-100' />

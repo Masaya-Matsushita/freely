@@ -222,18 +222,16 @@ export const ImageDropzone: FC<Props> = (props) => {
       {/* 画像のドロップゾーン */}
       {props.image ? (
         <div className='max-w-xs md:max-w-sm'>
-          <div className='flex items-end justify-between text-dark-500'>
-            <div className='ml-1 text-xs text-dark-500 xxs:text-sm'>
-              この写真を設定
-            </div>
-            <CloseButton
-              size={largerThanXs ? 'md' : 'sm'}
-              iconSize={largerThanXs ? 22 : 20}
-              onClick={() =>
-                props.dispatch({ type: 'image', payload: { image: '' } })
-              }
-            />
-          </div>
+          {/* <div className='flex items-end justify-between text-dark-500'> */}
+          <CloseButton
+            size={largerThanXs ? 'md' : 'sm'}
+            iconSize={largerThanXs ? 22 : 20}
+            onClick={() =>
+              props.dispatch({ type: 'image', payload: { image: '' } })
+            }
+            className='ml-auto mr-1'
+          />
+          {/* </div> */}
           <div className='rounded-md border-solid border-slate-200 p-[3px] xs:p-1.5'>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img

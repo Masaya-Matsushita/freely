@@ -72,9 +72,9 @@ export const Header: FC<Props> = (props) => {
         }}
         className='mr-4 rounded-md p-2 hover:bg-main-100 xs:mr-8 md:mr-14'
       >
-        <div className='flex items-center gap-2'>
-          <IconShare size={28} color='#6466F1' stroke={1.8} />
-          <div className='font-bold tracking-wider text-main-500'>
+        <div className='flex items-center gap-3'>
+          <IconShare size={26} color='#6466F1' stroke={1.8} />
+          <div className='text-sm font-bold tracking-wider text-main-500'>
             {props.largerThanSm ? 'メンバーを招待' : '招待'}
           </div>
         </div>

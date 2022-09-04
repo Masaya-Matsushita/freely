@@ -1,5 +1,6 @@
 import { IconCheck } from '@tabler/icons'
 import { FC } from 'react'
+import { useMediaQuery } from 'src/lib/mantine'
 import { Step } from 'src/type/Step'
 
 type Props = {
@@ -12,17 +13,21 @@ type Props = {
  * @package
  */
 export const Stepper: FC<Props> = (props) => {
+  const largerThanXs = useMediaQuery('xs')
+
   return (
     <div className='mt-2 flex items-start justify-center gap-2 xxs:gap-4 md:mt-6 md:gap-10'>
       <div className='flex flex-col items-center gap-2 md:gap-4'>
         <div
           style={{ transition: 'all 0.2s' }}
-          className={`flex h-10 w-10 items-center justify-center rounded-full xxs:h-14 xxs:w-14 md:h-16 md:w-16 ${
-            props.active === 'active' ? 'border-solid border-main-500' : null
+          className={`flex h-10 w-10 items-center justify-center rounded-full xxs:h-[52px] xxs:w-[52px] xs:h-14 xs:w-14 md:h-16 md:w-16 ${
+            props.active === 'active'
+              ? 'border-[1.5px] border-solid border-main-500'
+              : null
           } ${props.active === 'filled' ? 'bg-main-500' : 'bg-main-300'}`}
         >
           {props.active === 'filled' ? (
-            <IconCheck color='#fff' size={32} />
+            <IconCheck color='#fff' size={largerThanXs ? 32 : 28} />
           ) : (
             <div>
               {props.step.label ? (
