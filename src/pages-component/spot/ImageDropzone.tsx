@@ -13,6 +13,7 @@ import { useMediaQuery } from 'src/lib/mantine'
 type Props = {
   image: string
   dispatch: Dispatch<Action>
+  handleStep: () => void
 }
 
 // urlをもとにimage要素を作成
@@ -156,7 +157,10 @@ export const ImageDropzone: FC<Props> = (props) => {
           modal: 'bg-main-100 xxs:mx-3 mt-16',
         }}
       >
-        <div className='relative mt-2 h-52 bg-dark-300 xs:mx-4 xs:mt-4 xs:h-[300px]'>
+        <div className='ml-2 mt-2 mb-1 text-sm text-dark-500 xs:ml-6 xs:text-base'>
+          範囲を選択
+        </div>
+        <div className='relative h-52 bg-dark-300 xs:mx-4 xs:h-[300px]'>
           <Cropper
             image={state.imgSrc}
             crop={state.crop}
@@ -220,11 +224,11 @@ export const ImageDropzone: FC<Props> = (props) => {
         <div className='max-w-xs md:max-w-sm'>
           <div className='flex items-end justify-between text-dark-500'>
             <div className='ml-1 text-xs text-dark-500 xxs:text-sm'>
-              設定中の写真
+              この写真を設定
             </div>
             <CloseButton
-              size={largerThan490 ? 'md' : 'sm'}
-              iconSize={largerThan490 ? 22 : 20}
+              size={largerThanXs ? 'md' : 'sm'}
+              iconSize={largerThanXs ? 22 : 20}
               onClick={() =>
                 props.dispatch({ type: 'image', payload: { image: '' } })
               }
@@ -245,7 +249,7 @@ export const ImageDropzone: FC<Props> = (props) => {
           onReject={(files) => console.log('rejected files', files)}
           maxSize={3 * 1024 ** 2}
           accept={{ 'image/*': [] }}
-          className='mt-7 flex h-[180px] max-w-xs flex-col items-center justify-center border-[1px] text-center md:h-[216px] md:max-w-sm'
+          className='mt-[22px] flex h-[186px] max-w-xs flex-col items-center justify-center border-[1px] text-center xs:mt-7 md:h-[222px] md:max-w-sm'
         >
           <div>
             <IconPhoto size={40} stroke={1} color='#999999' />

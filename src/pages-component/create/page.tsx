@@ -22,8 +22,8 @@ export const Create = () => {
   const largerThanMd = useMediaQuery('md')
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  // フォームの入力状況からactiveの値を判断
-  const handleBlur = () => {
+  // フォームの入力箇所までactiveを進める
+  const updateActive = () => {
     const valList = [
       state.name,
       state.dateRange[0],
@@ -58,7 +58,7 @@ export const Create = () => {
           onChange={(e) =>
             dispatch({ type: 'name', payload: { name: e.currentTarget.value } })
           }
-          onBlur={handleBlur}
+          onBlur={updateActive}
           size={largerThanMd ? 'md' : 'sm'}
           classNames={{ input: 'max-w-xs md:max-w-sm' }}
         />
@@ -78,7 +78,7 @@ export const Create = () => {
               payload: { dateRange: [e[0], e[1]] },
             })
           }
-          onBlur={handleBlur}
+          onBlur={updateActive}
           firstDayOfWeek='sunday'
           inputFormat='YYYY/MM/DD'
           labelFormat='YYYY/MM'
@@ -116,7 +116,7 @@ export const Create = () => {
                 payload: { password2: e.currentTarget.value },
               })
             }
-            onBlur={handleBlur}
+            onBlur={updateActive}
             size={largerThanMd ? 'md' : 'sm'}
             classNames={{
               visibilityToggle: 'hidden',
@@ -141,7 +141,7 @@ export const Create = () => {
               payload: { email: e.currentTarget.value },
             })
           }
-          onBlur={handleBlur}
+          onBlur={updateActive}
           size={largerThanMd ? 'md' : 'sm'}
           classNames={{ input: 'max-w-xs md:max-w-sm' }}
         />

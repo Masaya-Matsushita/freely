@@ -41,7 +41,7 @@ export const Stepper: FC<Props> = (props) => {
           style={{ transition: 'all 0.2s' }}
           className={`${
             props.step.longer
-              ? 'h-96 xs:h-[450px] md:h-[550px]'
+              ? 'h-[500px] md:h-[550px]'
               : 'h-40 xs:h-48 md:h-52'
           } w-[2px] rounded-sm  md:w-[3px] ${
             props.active === 'filled' ? 'bg-main-400' : 'bg-main-300'

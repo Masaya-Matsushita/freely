@@ -5,7 +5,7 @@ import { Icon, Action } from './state'
 
 type Props = {
   largerThanMd: boolean
-  handleBlur: () => void
+  updateActive: () => void
   icon: Icon
   dispatch: Dispatch<Action>
 }
@@ -78,11 +78,11 @@ export const IconSelectBox: FC<Props> = (props) => {
       onChange={(e: Icon) =>
         props.dispatch({ type: 'icon', payload: { icon: e } })
       }
-      onBlur={props.handleBlur}
+      onBlur={props.updateActive}
       filter={(value, item) => item.id === value}
       maxDropdownHeight={400}
       size={props.largerThanMd ? 'md' : 'sm'}
-      classNames={{ input: 'max-w-xs md:max-w-sm' }}
+      classNames={{ input: 'max-w-xs md:max-w-sm mt-6' }}
       styles={(theme) => ({
         item: {
           '&[data-selected]': {

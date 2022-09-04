@@ -1,5 +1,5 @@
 import { TextInput } from '@mantine/core'
-import { IconCamera, IconMapPin, IconUnlink } from '@tabler/icons'
+import { IconCamera, IconMap, IconMapPin, IconUnlink } from '@tabler/icons'
 import { useRouter } from 'next/router'
 import { useEffect, useReducer } from 'react'
 import { IconSelectBox } from './IconSelectBox'
@@ -22,25 +22,20 @@ export const Spot = () => {
   const largerThanMd = useMediaQuery('md')
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  // フォームの入力状況からactiveの値を判断
-  const handleBlur = () => {
+  // フォームの入力箇所までactiveを進める
+  const updateActive = () => {
     const valList = [state.name, state.icon, state.image, state.url]
     const activeList: ('filled' | 'active' | 'blank')[] = [
       'active',
       'blank',
       'blank',
+      'blank',
     ]
     // 未入力のフォーム以降は全てblank
     for (let i = 0; i < valList.length; i++) {
-      if (!valList[i]) {
-        if (i === 1) {
-          if (valList[i + 1]) {
-          } else {
-            break
-          }
-        } else {
-          break
-        }
+      // 対象のステップ要素が空のとき(=要素が空 & image以外 & icon以外またはimageが無い)
+      if (!valList[i] && i !== 2 && (i !== 1 || !valList[2])) {
+        break
       }
       activeList[i] = 'filled'
       activeList[i + 1] = 'active'
@@ -48,11 +43,12 @@ export const Spot = () => {
     dispatch({ type: 'active', payload: { active: activeList } })
   }
 
-  // 更新の場合、入力箇所までactiveを進める
+  // 「mode=editの場合のマウント時」または「画像選択時」
   useEffect(() => {
-    handleBlur()
-  }, [])
+    updateActive()
+  }, [state.image])
 
+  // Stepperの要素
   const stepList: Step[] = [
     {
       id: 0,
@@ -62,7 +58,7 @@ export const Spot = () => {
           : '店名、観光地名、施設名など'
       }`,
       label: `${mode === 'create' ? '' : 'スポット名'}`,
-      icon: <IconMapPin size={30} color='#495057' />,
+      icon: <IconMap size={30} color='#495057' />,
       children: (
         <TextInput
           placeholder='(例) 東京スカイツリー'
@@ -70,7 +66,7 @@ export const Spot = () => {
           onChange={(e) =>
             dispatch({ type: 'name', payload: { name: e.currentTarget.value } })
           }
-          onBlur={handleBlur}
+          onBlur={updateActive}
           size={largerThanMd ? 'md' : 'sm'}
           classNames={{ input: 'max-w-xs md:max-w-sm' }}
         />
@@ -90,16 +86,23 @@ export const Spot = () => {
         <div>
           <IconSelectBox
             largerThanMd={largerThanMd}
-            handleBlur={handleBlur}
+            updateActive={updateActive}
             icon={state.icon}
             dispatch={dispatch}
           />
-          <ImageDropzone image={state.image} dispatch={dispatch} />
+          <div className='mt-8 mb-1 text-center text-dark-300 xs:text-lg'>
+            OR
+          </div>
+          <ImageDropzone
+            image={state.image}
+            dispatch={dispatch}
+            handleStep={updateActive}
+          />
         </div>
       ),
     },
     {
-      id: 2,
+      id: 3,
       text: 'スポットのURLを設定すると便利です(任意)',
       label: 'Option',
       icon: <IconUnlink size={28} color='#495057' />,
@@ -110,7 +113,7 @@ export const Spot = () => {
           onChange={(e) =>
             dispatch({ type: 'url', payload: { url: e.currentTarget.value } })
           }
-          onBlur={handleBlur}
+          onBlur={updateActive}
           size={largerThanMd ? 'md' : 'sm'}
           classNames={{ input: 'max-w-xs md:max-w-sm' }}
         />
