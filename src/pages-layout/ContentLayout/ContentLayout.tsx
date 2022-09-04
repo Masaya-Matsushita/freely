@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { ReactElement } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import { Header } from './Header'
 import { PrefSelectBox } from './PrefSelectBox'
 import { SideNav } from './SideNav'
@@ -16,6 +16,19 @@ export const ContentLayout = (page: ReactElement) => {
   const router = useRouter()
   const planId = router.query.plan
   const largerThanSm = useMediaQuery('sm')
+  const [isShow, setIsShow] = useState(true)
+
+  useEffect(() => {
+    if (
+      router.asPath.slice(0, 5) === '/edit' ||
+      router.asPath.slice(0, 5) === '/spot'
+    ) {
+      setIsShow(false)
+    }
+    return () => {
+      setIsShow(true)
+    }
+  }, [router])
 
   return (
     <ErrorBoundary>
@@ -24,7 +37,7 @@ export const ContentLayout = (page: ReactElement) => {
         <div>
           <Header router={router} planId={planId} largerThanSm={largerThanSm} />
           <div className='flex'>
-            <SideNav planId={planId} />
+            {isShow ? <SideNav planId={planId} /> : null}
             <main className='min-h-[calc(100vh-96px)] flex-1 bg-main-100 pt-16 pb-40'>
               {router.pathname.slice(0, 10) === getPath('PREF_NEWS') ? (
                 <PrefSelectBox router={router} planId={planId} />
@@ -32,7 +45,7 @@ export const ContentLayout = (page: ReactElement) => {
               <div>{page}</div>
             </main>
           </div>
-          {largerThanSm ? null : <Footer />}
+          {largerThanSm && isShow ? null : <Footer />}
         </div>
       ) : null}
     </ErrorBoundary>
