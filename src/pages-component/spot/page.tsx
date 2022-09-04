@@ -94,7 +94,7 @@ export const Spot = () => {
             icon={state.icon}
             dispatch={dispatch}
           />
-          <ImageDropzone />
+          <ImageDropzone image={state.image} dispatch={dispatch} />
         </div>
       ),
     },

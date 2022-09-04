@@ -1,15 +1,19 @@
 import { Button, CloseButton, Modal, Slider } from '@mantine/core'
 import { Dropzone } from '@mantine/dropzone'
-import {
-  useDisclosure,
-  useMediaQuery as useOriginalMediaQuery,
-} from '@mantine/hooks'
+import { useMediaQuery as useOriginalMediaQuery } from '@mantine/hooks'
 import { IconPhoto } from '@tabler/icons'
-import { useState } from 'react'
+import { Dispatch, FC, useReducer } from 'react'
 import type { Area, MediaSize } from 'react-easy-crop'
 import Cropper from 'react-easy-crop'
 import { useErrorHandler } from 'react-error-boundary'
+import { cropInitialState, cropReducer } from './cropState'
+import { Action } from './state'
 import { useMediaQuery } from 'src/lib/mantine'
+
+type Props = {
+  image: string
+  dispatch: Dispatch<Action>
+}
 
 // urlをもとにimage要素を作成
 const createImage = (url: string): Promise<HTMLImageElement> =>
@@ -56,14 +60,8 @@ const getCroppedImg = async (
 /**
  * @package
  */
-export const ImageDropzone = () => {
-  const [croppedImgSrc, setCroppedImgSrc] = useState('')
-  const [imgSrc, setImgSrc] = useState('')
-  const [crop, setCrop] = useState({ x: 0, y: 0 })
-  const [zoom, setZoom] = useState(1)
-  const [minZoom, setMinZoom] = useState(1)
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>()
-  const [opened, handler] = useDisclosure(false)
+export const ImageDropzone: FC<Props> = (props) => {
+  const [state, dispatch] = useReducer(cropReducer, cropInitialState)
   const handleError = useErrorHandler()
   const largerThanXxs = useMediaQuery('xxs')
   const largerThanXs = useMediaQuery('xs')
@@ -90,8 +88,10 @@ export const ImageDropzone = () => {
         const reader = new FileReader()
         reader.addEventListener('load', () => {
           if (reader.result) {
-            setImgSrc(reader.result.toString() || '')
-            handler.open()
+            dispatch({
+              type: 'imgSrc',
+              payload: { opened: true, imgSrc: reader.result.toString() || '' },
+            })
           }
         })
         // 画像をBase64エンコード
@@ -110,29 +110,33 @@ export const ImageDropzone = () => {
     if (mediaAspectRadio > ASPECT_RATIO) {
       // 縦幅に合わせてZoomのデフォルト値を指定
       const result = cropWidth / ASPECT_RATIO / height
-      setZoom(result)
-      setMinZoom(result)
+      dispatch({ type: 'minZoom', payload: { zoom: result, minZoom: result } })
       return
     }
     // 横幅に合わせてZoomのデフォルト値を指定
     const result = cropWidth / width
-    setZoom(result)
-    setMinZoom(result)
+    dispatch({ type: 'minZoom', payload: { zoom: result, minZoom: result } })
   }
 
   // 画像の切り取り情報を更新
   // ユーザーが画像の移動やZoomの操作をやめたときに呼ばれる
   const onCropComplete = (croppedArea: Area, croppedAreaPixels: Area) => {
-    setCroppedAreaPixels(croppedAreaPixels)
+    dispatch({
+      type: 'croppedAreaPixels',
+      payload: { croppedAreaPixels: croppedAreaPixels },
+    })
   }
 
   // 切り取った画像のプレビューを表示
   const showCroppedImage = async () => {
-    if (!croppedAreaPixels) return
+    if (!state.croppedAreaPixels) return
     try {
-      const croppedImage = await getCroppedImg(imgSrc, croppedAreaPixels)
-      setCroppedImgSrc(croppedImage)
-      handler.close()
+      const croppedImage = await getCroppedImg(
+        state.imgSrc,
+        state.croppedAreaPixels,
+      )
+      props.dispatch({ type: 'image', payload: { image: croppedImage } })
+      dispatch({ type: 'opened', payload: { opened: false } })
     } catch (error) {
       handleError(error)
     }
@@ -142,8 +146,8 @@ export const ImageDropzone = () => {
     <div>
       {/* 画像トリミング用モーダル */}
       <Modal
-        opened={opened}
-        onClose={() => handler.close()}
+        opened={state.opened}
+        onClose={() => dispatch({ type: 'opened', payload: { opened: false } })}
         closeOnClickOutside={false}
         closeOnEscape={false}
         withCloseButton={false}
@@ -154,15 +158,19 @@ export const ImageDropzone = () => {
       >
         <div className='relative mt-2 h-52 bg-dark-300 xs:mx-4 xs:mt-4 xs:h-[300px]'>
           <Cropper
-            image={imgSrc}
-            crop={crop}
-            zoom={zoom}
-            minZoom={minZoom}
-            maxZoom={minZoom + 3}
+            image={state.imgSrc}
+            crop={state.crop}
+            zoom={state.zoom}
+            minZoom={state.minZoom}
+            maxZoom={state.minZoom + 3}
             aspect={ASPECT_RATIO}
-            onCropChange={setCrop}
+            onCropChange={(e) =>
+              dispatch({ type: 'crop', payload: { crop: e } })
+            }
             onCropComplete={onCropComplete}
-            onZoomChange={setZoom}
+            onZoomChange={(e) =>
+              dispatch({ type: 'zoom', payload: { zoom: e } })
+            }
             cropSize={{
               width: cropWidth,
               height: cropWidth / ASPECT_RATIO,
@@ -175,16 +183,16 @@ export const ImageDropzone = () => {
           <div className='ml-1'>Zoom</div>
           <Slider
             size='lg'
-            value={zoom}
-            onChange={setZoom}
-            min={minZoom}
-            max={minZoom + 3}
+            value={state.zoom}
+            onChange={(e) => dispatch({ type: 'zoom', payload: { zoom: e } })}
+            min={state.minZoom}
+            max={state.minZoom + 3}
             step={0.1}
             label={null}
             marks={[
-              { value: minZoom, label: '×1' },
-              { value: minZoom + 1.5, label: '×2.5' },
-              { value: minZoom + 3, label: '×4' },
+              { value: state.minZoom, label: '×1' },
+              { value: state.minZoom + 1.5, label: '×2.5' },
+              { value: state.minZoom + 3, label: '×4' },
             ]}
           />
         </div>
@@ -192,7 +200,9 @@ export const ImageDropzone = () => {
           <Button
             color='red'
             variant='outline'
-            onClick={() => handler.close()}
+            onClick={() =>
+              dispatch({ type: 'opened', payload: { opened: false } })
+            }
             className='h-10 w-24 font-bold xs:h-11 xs:w-36'
           >
             Cancel
@@ -205,7 +215,8 @@ export const ImageDropzone = () => {
           </Button>
         </div>
       </Modal>
-      {croppedImgSrc ? (
+      {/* 画像のドロップゾーン */}
+      {props.image ? (
         <div className='max-w-xs md:max-w-sm'>
           <div className='flex items-end justify-between text-dark-500'>
             <div className='ml-1 text-xs text-dark-500 xxs:text-sm'>
@@ -214,13 +225,15 @@ export const ImageDropzone = () => {
             <CloseButton
               size={largerThan490 ? 'md' : 'sm'}
               iconSize={largerThan490 ? 22 : 20}
-              onClick={() => setCroppedImgSrc('')}
+              onClick={() =>
+                props.dispatch({ type: 'image', payload: { image: '' } })
+              }
             />
           </div>
           <div className='rounded-md border-solid border-slate-200 p-[3px] xs:p-1.5'>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={croppedImgSrc}
+              src={props.image}
               alt='画像の描画に失敗しました。'
               className='h-full w-full rounded-md'
             />
@@ -236,7 +249,9 @@ export const ImageDropzone = () => {
         >
           <div>
             <IconPhoto size={40} stroke={1} color='#999999' />
-            <div className='text-dark-300'>タップで写真を選択</div>
+            <div className='text-sm text-dark-300 md:text-base'>
+              タップで写真を選択
+            </div>
           </div>
         </Dropzone>
       )}
