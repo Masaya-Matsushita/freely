@@ -1,5 +1,5 @@
-import { Card } from '@mantine/core'
 import { FC, useEffect, useMemo, useState } from 'react'
+import { Card } from 'src/component/Card'
 import { prefList } from 'src/lib/const'
 import { WeatherObj } from 'src/type/WeatherObj'
 
@@ -32,7 +32,7 @@ export const Forecast: FC<{ data: WeatherObj; prefId: string }> = (props) => {
     <div>
       {weather ? (
         <div>
-          <Card mt='lg'>
+          <Card>
             <div>県庁所在地: {weather.city.name}</div>
             <div>タイムゾーン: {weather.list[3].dt_txt}</div>
             <div>天気アイコン: {weather.list[3].weather[0].icon}</div>

@@ -6,8 +6,9 @@ import { IconSelectBox } from './IconSelectBox'
 import { ImageDropzone } from './ImageDropzone'
 import { reducer, initialState } from './state'
 import { ButtonWithLinkArea } from 'src/component/ButtonWithLinkArea'
+import { Card } from 'src/component/Card'
 import { ContentLabel } from 'src/component/ContentLabel'
-import { StepperCard } from 'src/component/StepperCard'
+import { Stepper } from 'src/component/Stepper'
 import { useMediaQuery } from 'src/lib/mantine'
 import { Step } from 'src/type/Step'
 
@@ -134,7 +135,26 @@ export const Spot = () => {
             label={`スポット${mode === 'create' ? '登録' : '更新'}`}
             icon={<IconMapPin size={largerThanXs ? 44 : 36} color='#6466F1' />}
           />
-          <StepperCard active={state.active} stepList={stepList} />
+          <Card>
+            {stepList.map((step) => {
+              return (
+                <Stepper
+                  key={step.id}
+                  active={state.active[step.id]}
+                  step={{
+                    id: step.id,
+                    text: step.text,
+                    subText: step.subText,
+                    label: step.label,
+                    icon: step.icon,
+                    longer: step.longer,
+                  }}
+                >
+                  {step.children}
+                </Stepper>
+              )
+            })}
+          </Card>
           <div className='mt-20 text-center'>
             <ButtonWithLinkArea
               text={mode === 'create' ? '登録する' : '更新する'}

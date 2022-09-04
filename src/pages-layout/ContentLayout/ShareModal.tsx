@@ -1,7 +1,6 @@
-import { Button, CloseButton, CopyButton, Modal, Paper } from '@mantine/core'
+import { Button, CloseButton, CopyButton, Modal } from '@mantine/core'
 import { IconScan, IconUnlink } from '@tabler/icons'
 import { useQRCode } from 'next-qrcode'
-import { useRouter } from 'next/router'
 import { FC, ReactElement, ReactNode } from 'react'
 import { APP_DOMAIN, getPath } from 'src/lib/const'
 
@@ -55,15 +54,11 @@ export const ShareModal: FC<ShareModalProps> = (props) => {
           label='リンクを共有する'
           icon={<IconUnlink color='#6466F1' size={26} />}
         >
-          <Paper
-            radius='lg'
-            withBorder
-            className='mb-3 w-64 p-1 sm:mb-5 sm:w-80 sm:p-2'
-          >
+          <div className='mb-3 w-64 rounded-3xl border-[1px] border-solid border-slate-300 p-1 sm:mb-5 sm:w-80 sm:p-2'>
             <div className='mx-2 overflow-hidden text-clip whitespace-nowrap text-sm font-medium tracking-tight text-dark-500 sm:mx-4'>
               {planUrl}
             </div>
-          </Paper>
+          </div>
           <CopyButton value={planUrl} timeout={2000}>
             {({ copied, copy }) => (
               <Button
@@ -112,12 +107,7 @@ export const ShareModal: FC<ShareModalProps> = (props) => {
 
 const Wrapper: FC<WrapperProps> = (props) => {
   return (
-    <Paper
-      shadow='sm'
-      radius='lg'
-      withBorder
-      className='relative flex flex-col items-center px-4 pb-6 pt-4 sm:mx-8 sm:py-8'
-    >
+    <div className='relative flex flex-col items-center rounded-2xl bg-white px-4 pb-6 pt-4 shadow shadow-dark-100 sm:mx-8 sm:py-8'>
       <div className='absolute -top-6 left-6 flex h-12 w-12 items-center justify-center rounded-full border-[0.5px] border-solid border-dark-100 bg-main-300'>
         {props.icon}
       </div>
@@ -125,6 +115,6 @@ const Wrapper: FC<WrapperProps> = (props) => {
         {props.label}
       </div>
       {props.children}
-    </Paper>
+    </div>
   )
 }

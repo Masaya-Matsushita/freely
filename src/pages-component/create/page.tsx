@@ -5,9 +5,10 @@ import { useRouter } from 'next/router'
 import { useReducer } from 'react'
 import { Notes } from './Notes'
 import { reducer, initialState } from './state'
+import { Card } from 'src/component/Card'
 import { ContentLabel } from 'src/component/ContentLabel'
 import { SimpleButton } from 'src/component/SimpleButton'
-import { StepperCard } from 'src/component/StepperCard'
+import { Stepper } from 'src/component/Stepper'
 import { getPath } from 'src/lib/const'
 import { useMediaQuery } from 'src/lib/mantine'
 import 'dayjs/locale/ja'
@@ -157,11 +158,26 @@ export const Create = () => {
           <IconCalendarMinus size={largerThanXs ? 44 : 36} color='#6466F1' />
         }
       />
-      <StepperCard
-        label='簡単ステップで作成'
-        active={state.active}
-        stepList={stepList}
-      />
+      <Card label='簡単ステップで作成'>
+        {stepList.map((step) => {
+          return (
+            <Stepper
+              key={step.id}
+              active={state.active[step.id]}
+              step={{
+                id: step.id,
+                text: step.text,
+                subText: step.subText,
+                label: step.label,
+                icon: step.icon,
+                longer: step.longer,
+              }}
+            >
+              {step.children}
+            </Stepper>
+          )
+        })}
+      </Card>
       <div className='flex justify-center py-20'>
         <SimpleButton
           text='作成する'
