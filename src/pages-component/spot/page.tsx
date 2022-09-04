@@ -75,9 +75,14 @@ export const Spot = () => {
     {
       id: 1,
       text: `${
-        String(mode) === 'create'
-          ? 'アイコン or 写真を設定してください（両方を設定した場合は、写真が優先的に適用されます）'
+        mode === 'create'
+          ? 'アイコン or 写真を設定してください'
           : '両方を設定した場合は、写真が優先的に適用されます'
+      }`,
+      subText: `${
+        mode === 'create'
+          ? '(両方が設定された場合は、写真が優先的に適用されます)'
+          : ''
       }`,
       label: `${mode === 'create' ? '' : 'アイコン or 写真'}`,
       icon: <IconCamera size={28} color='#495057' />,

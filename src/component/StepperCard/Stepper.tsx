@@ -57,6 +57,11 @@ export const Stepper: FC<Props> = (props) => {
         <div className='mb-4 text-sm text-dark-300 md:mb-6 md:text-base'>
           {props.step.text}
         </div>
+        {props.step.subText ? (
+          <div className='-mt-4 mb-4 text-xs text-dark-300 md:mb-6 md:-mt-7 md:text-sm'>
+            {props.step.subText}
+          </div>
+        ) : null}
         {props.children}
       </div>
     </div>
