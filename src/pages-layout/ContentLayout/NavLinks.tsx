@@ -21,7 +21,11 @@ export const NavLinks: FC<{ planId: string }> = (props) => {
       href: getPath('WEATHER', props.planId),
       label: '旅先の情報',
       icon: <IconChartLine size={28} stroke={1.7} />,
-      activePathList: ['/weather/[pref]', '/covid19/[pref]', '/sake/[pref]'],
+      activePathList: [
+        '/weather/[prefId]',
+        '/covid19/[prefId]',
+        '/sake/[prefId]',
+      ],
     },
     {
       href: getPath('INDEX'),

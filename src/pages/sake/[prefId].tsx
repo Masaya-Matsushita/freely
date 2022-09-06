@@ -6,23 +6,27 @@ import { Sake } from 'src/pages-component/sake/pref'
 import { ContentLayout } from 'src/pages-layout/ContentLayout'
 import { SakeData } from 'src/type/SakeData'
 
-export const getStaticPaths: GetStaticPaths<{ id: string }> = () => {
-  const paths = prefList.map((pref) => ({ params: { id: pref.id } }))
+export const getStaticPaths: GetStaticPaths<{ prefId: string }> = () => {
+  const paths = prefList.map((pref) => ({ params: { prefId: pref.id } }))
   return {
     paths,
     fallback: false,
   }
 }
 
-export const getStaticProps: GetStaticProps<{}, { id: string }> = async (
-  ctx,
-) => {
+export const getStaticProps: GetStaticProps<
+  { sake: SakeData },
+  { prefId: string }
+> = async (ctx) => {
   if (!ctx.params) {
     return { notFound: true }
   }
-  const API_URL = `https://www.sakenote.com/api/v1/sakes?token=${process.env.SAKENOTE_TOKEN}&prefecture_code=${ctx.params.id}`
+
+  // データを取得
+  const API_URL = `https://www.sakenote.com/api/v1/sakes?token=${process.env.SAKENOTE_TOKEN}&prefecture_code=${ctx.params.prefId}`
   const res = await fetch(API_URL)
   const json = await res.json()
+
   // 取得したデータを整形
   const data = json.sakes.map((sake: any) => {
     return {
@@ -35,16 +39,16 @@ export const getStaticProps: GetStaticProps<{}, { id: string }> = async (
 
   return {
     props: {
-      data: data,
+      sake: data,
     },
   }
 }
 
-const SakePage: NextPageWithLayout<SakeData> = (props) => {
+const SakePage: NextPageWithLayout<{ sake: SakeData }> = (props) => {
   return (
     <>
       <PageTitle page='旅先の情報' />
-      <Sake data={props} />
+      <Sake data={props.sake} />
     </>
   )
 }

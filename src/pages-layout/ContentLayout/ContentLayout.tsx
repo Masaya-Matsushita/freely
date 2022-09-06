@@ -12,9 +12,17 @@ import { Seo } from 'src/pages-layout/Seo'
  */
 export const ContentLayout = (page: ReactElement) => {
   const router = useRouter()
-  const planId = localStorage.getItem('planId')
   const largerThanSm = useMediaQuery('sm')
+  const [planId, setPlanId] = useState('')
   const [isShow, setIsShow] = useState(true)
+
+  // planIdに初期値を代入
+  useEffect(() => {
+    const localPlanId = localStorage.getItem('planId')
+    if (localPlanId) {
+      setPlanId(localPlanId)
+    }
+  }, [])
 
   useEffect(() => {
     if (
