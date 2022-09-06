@@ -9,7 +9,6 @@ type Props = {
   onClick: () => void
   planId: string
   low?: true
-  narrow?: true
 }
 
 /**
@@ -25,7 +24,7 @@ export const ButtonWithLinkArea: FC<Props> = (props) => {
       <SimpleButton
         text={props.text}
         onClick={props.onClick}
-        narrow={props.narrow}
+        narrow={props.low}
       />
       <Link href={getPath('PLAN', props.planId)}>
         <a
