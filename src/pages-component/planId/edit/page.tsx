@@ -2,7 +2,6 @@ import { TextInput } from '@mantine/core'
 import type { DateRangePickerValue } from '@mantine/dates'
 import { DateRangePicker } from '@mantine/dates'
 import { IconCalendarMinus } from '@tabler/icons'
-import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { ButtonWithLinkArea } from 'src/component/ButtonWithLinkArea'
 import { ContentLabel } from 'src/component/ContentLabel'
@@ -12,15 +11,14 @@ import { useMediaQuery } from 'src/lib/mantine'
  * @package
  */
 export const Edit = () => {
-  const router = useRouter()
-  const planId = router.query.planId
+  const planId = localStorage.getItem('planId')
   const largerThanXs = useMediaQuery('xs')
   const [name, setName] = useState('')
   const [dateRange, setDateRange] = useState<DateRangePickerValue>([null, null])
 
   return (
     <>
-      {typeof planId === 'string' ? (
+      {planId ? (
         <div>
           <ContentLabel
             label='プランを更新'

@@ -12,7 +12,7 @@ import { Seo } from 'src/pages-layout/Seo'
  */
 export const ContentLayout = (page: ReactElement) => {
   const router = useRouter()
-  const planId = router.query.planId
+  const planId = localStorage.getItem('planId')
   const largerThanSm = useMediaQuery('sm')
   const [isShow, setIsShow] = useState(true)
 
@@ -31,9 +31,9 @@ export const ContentLayout = (page: ReactElement) => {
   return (
     <ErrorBoundary>
       <Seo invite />
-      {typeof planId === 'string' ? (
+      {planId ? (
         <div>
-          <Header router={router} planId={planId} largerThanSm={largerThanSm} />
+          <Header planId={planId} largerThanSm={largerThanSm} />
           <div className='flex'>
             {isShow ? <SideNav planId={planId} /> : null}
             <main className='min-h-[calc(100vh-96px)] flex-1 bg-main-100 pt-16 pb-40'>

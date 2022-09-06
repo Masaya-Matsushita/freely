@@ -1,14 +1,13 @@
 import { Burger, CloseButton, Drawer, UnstyledButton } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconShare } from '@tabler/icons'
-import { NextRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { FC, useEffect } from 'react'
 import { NavLinks } from './NavLinks'
 import { ShareModal } from './ShareModal'
 import { HeaderWrapper } from 'src/pages-layout/HeaderWrapper'
 
 type Props = {
-  router: NextRouter
   planId: string
   largerThanSm: boolean
 }
@@ -17,16 +16,17 @@ type Props = {
  * @package
  */
 export const Header: FC<Props> = (props) => {
+  const router = useRouter()
   const [drawerOpened, drawerHandlers] = useDisclosure(false)
   const [modalOpened, modalHandlers] = useDisclosure(false)
 
   // パスの変更を検知して Drawer を閉じる処理
   useEffect(() => {
-    props.router.events.on('routeChangeStart', drawerHandlers.close)
+    router.events.on('routeChangeStart', drawerHandlers.close)
     return () => {
-      props.router.events.off('routeChangeStart', drawerHandlers.close)
+      router.events.off('routeChangeStart', drawerHandlers.close)
     }
-  }, [drawerHandlers, props.router.events])
+  }, [drawerHandlers, router.events])
 
   return (
     <HeaderWrapper>

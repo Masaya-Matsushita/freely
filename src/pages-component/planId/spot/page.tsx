@@ -18,7 +18,7 @@ import { Step } from 'src/type/Step'
 export const Spot = () => {
   const router = useRouter()
   const mode = router.query.mode
-  const planId = router.query.planId
+  const planId = localStorage.getItem('planId')
   const largerThanXs = useMediaQuery('xs')
   const largerThanMd = useMediaQuery('md')
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -129,7 +129,7 @@ export const Spot = () => {
 
   return (
     <>
-      {typeof mode === 'string' && typeof planId === 'string' ? (
+      {planId && typeof mode === 'string' ? (
         <div>
           <ContentLabel
             label={`スポット${mode === 'create' ? '登録' : '更新'}`}

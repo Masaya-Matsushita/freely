@@ -15,7 +15,7 @@ import { Spot } from 'src/type/Spot'
  */
 export const Plan = () => {
   // const router = useRouter()
-  // const planId = router.query.planId
+  // const planId = localStorage.getItem('planId')
   // const { data: planData, error: planError } = useSWR(
   //   `/api/plan?planId=${planId}`,
   // )
@@ -25,7 +25,7 @@ export const Plan = () => {
 
   return (
     // <>
-    //   {planData && spotData && typeof planId === 'string' ? (
+    //   {planData && spotData && planId ? (
     //   <div>
     //     <Link href={getPath('EDIT', planId)} passHref>
     //       <UnstyledButton
