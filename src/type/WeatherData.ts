@@ -1,8 +1,6 @@
-/**
- * @package
- */
 export type WeatherData = {
   name: string
+  time: string
   daily: Daily[]
   weekly: Weekly[]
 }

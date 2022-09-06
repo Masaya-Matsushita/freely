@@ -1,48 +1,28 @@
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC } from 'react'
 import { Card } from 'src/component/Card'
-import { prefList } from 'src/lib/const'
+import { WeatherData } from 'src/type/WeatherData'
 
 /**
  * @package
  */
-export const Forecast: FC<{ data: any; prefId: string }> = (props) => {
-  const [weather, setWeather] = useState<any>()
-
-  const dataList = useMemo(
-    () => [
-      { city: 'Sapporo', weather: props.data.weatherSapporo },
-      { city: 'Aomori', weather: props.data.weatherAomori },
-    ],
-    [props.data],
-  )
-
-  useEffect(() => {
-    const city = prefList.find((pref) => pref.id === props.prefId)?.city
-    if (city) {
-      const weather = dataList.find((data) => data.city === city)?.weather
-      if (weather) {
-        setWeather(weather)
-      }
-    }
-  }, [props.prefId, dataList])
-
+export const Forecast: FC<{ data: WeatherData }> = (props) => {
   return (
     <div>
-      {weather ? (
+      {props.data ? (
         <div>
           <Card>
-            <div>県庁所在地: {weather.city.name}</div>
-            <div>タイムゾーン: {weather.list[3].dt_txt}</div>
-            <div>天気アイコン: {weather.list[3].weather[0].icon}</div>
-            <div>天気ひとこと: {weather.list[3].weather[0].description}</div>
-            <div>風速: {weather.list[3].wind.speed}</div>
-            <div>風向: {weather.list[3].wind.deg}</div>
-            <div>気温: {weather.list[3].main.feels_like}</div>
-            <div>最高気温: {weather.list[3].main.temp_max}</div>
-            <div>最低気温: {weather.list[3].main.temp_min}</div>
-            <div>湿度: {weather.list[3].main.humidity}</div>
+            <div>県庁所在地: {props.data.name}</div>
+            <div>タイムゾーン: {props.data.daily[3].datetime}</div>
+            <div>天気アイコン:{props.data.daily[3].icon}</div>
+            <div>天気ひとこと: {props.data.daily[3].description}</div>
+            <div>風速: {props.data.daily[3].windSpeed}</div>
+            <div>風向: {props.data.daily[3].windDeg}</div>
+            <div>気温: {props.data.daily[3].tempFeels}</div>
+            <div>最高気温: {props.data.daily[3].tempMax}</div>
+            <div>最低気温: {props.data.daily[3].tempMin}</div>
+            <div>湿度: {props.data.daily[3].humidity}</div>
           </Card>
-          <div className='mt-4'>{weather.list[2].dt_txt}発表</div>
+          <div className='mt-4'>{props.data.time}発表</div>
         </div>
       ) : null}
     </div>

@@ -29,20 +29,53 @@ export const getStaticProps: GetStaticProps<
   const res = await fetch(API_URL)
   const json = await res.json()
 
+  // 取得したデータを整形
+  const daily = []
+  for (let i = 0; i < 19; i++) {
+    daily.push({
+      datetime: json.list[i].dt_txt,
+      icon: json.list[i].weather[0].icon,
+      description: json.list[i].weather[0].description,
+      windSpeed: json.list[i].wind.speed,
+      windDeg: json.list[i].wind.deg,
+      tempFeels: json.list[i].main.feels_like,
+      tempMax: json.list[i].main.temp_max,
+      tempMin: json.list[i].main.temp_min,
+      humidity: json.list[i].main.humidity,
+    })
+  }
+
+  const weekly = []
+  for (let i = 19; i < 40; i++) {
+    weekly.push({
+      datetime: json.list[i].dt_txt,
+      icon: json.list[i].weather[0].icon,
+      tempMax: json.list[i].main.temp_max,
+      tempMin: json.list[i].main.temp_min,
+      humidity: json.list[i].main.humidity,
+    })
+  }
+
+  const data = {
+    name: json.city.name,
+    time: json.list[2].dt_txt,
+    daily: daily,
+    weekly: weekly,
+  }
+
   return {
     props: {
-      weather: json,
+      weather: data,
     },
     revalidate: 10800,
   }
 }
 
 const WeatherPage: NextPageWithLayout<{ weather: WeatherData }> = (props) => {
-
   return (
     <>
       <PageTitle page='旅先の情報' />
-      {/* <Weather data={props.weather} /> */}
+      <Weather data={props.weather} />
     </>
   )
 }
