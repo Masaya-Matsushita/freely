@@ -1,7 +1,7 @@
 import { GetStaticProps } from 'next'
 import { PageTitle } from 'src/component/PageTitle'
 import { NextPageWithLayout } from 'src/lib/next'
-import { Sake } from 'src/pages-component/pref-news/sake'
+import { Sake } from 'src/pages-component/sake/pref'
 import { ContentLayout } from 'src/pages-layout/ContentLayout'
 import { SakeObj } from 'src/type/SakeObj'
 

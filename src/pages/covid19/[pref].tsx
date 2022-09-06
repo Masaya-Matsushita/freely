@@ -1,7 +1,7 @@
 import { GetStaticProps } from 'next'
 import { PageTitle } from 'src/component/PageTitle'
 import { NextPageWithLayout } from 'src/lib/next'
-import { Covid19 } from 'src/pages-component/pref-news/covid19'
+import { Covid19 } from 'src/pages-component/covid19/pref'
 import { ContentLayout } from 'src/pages-layout/ContentLayout'
 import { Covid19Obj } from 'src/type/Covid19Obj'
 

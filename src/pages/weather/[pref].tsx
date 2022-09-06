@@ -1,7 +1,7 @@
 import { GetStaticProps } from 'next'
 import { PageTitle } from 'src/component/PageTitle'
 import { NextPageWithLayout } from 'src/lib/next'
-import { Weather } from 'src/pages-component/pref-news/weather'
+import { Weather } from 'src/pages-component/weather/pref'
 import { ContentLayout } from 'src/pages-layout/ContentLayout'
 import { WeatherObj } from 'src/type/WeatherObj'
 
