@@ -18,7 +18,7 @@ import { Step } from 'src/type/Step'
 export const Spot = () => {
   const router = useRouter()
   const mode = router.query.mode
-  const planId = router.query.plan
+  const planId = router.query.planId
   const largerThanXs = useMediaQuery('xs')
   const largerThanMd = useMediaQuery('md')
   const [state, dispatch] = useReducer(reducer, initialState)

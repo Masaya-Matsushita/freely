@@ -1,11 +1,11 @@
 import { FC, useEffect, useState } from 'react'
 import { PrefSelectBox } from 'src/component/PrefSelectBox'
-import { SakeObj } from 'src/type/SakeObj'
+import { SakeData } from 'src/type/SakeData'
 
 /**
  * @package
  */
-export const Sake: FC<{ data: SakeObj }> = (props) => {
+export const Sake: FC<{ data: SakeData }> = (props) => {
   const [prefId, setPrefId] = useState('13')
 
   // prefIdに初期値を代入
@@ -20,7 +20,7 @@ export const Sake: FC<{ data: SakeObj }> = (props) => {
     <>
       <PrefSelectBox prefId={prefId} setPrefId={setPrefId} />
       <div className='space-y-4'>
-        {props.data.sakeHokkaido.map((sake) => {
+        {props.data.map((sake) => {
           return (
             <div key={sake.name}>
               <div>{sake.name}</div>

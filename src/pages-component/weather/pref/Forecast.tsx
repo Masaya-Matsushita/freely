@@ -1,12 +1,11 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 import { Card } from 'src/component/Card'
 import { prefList } from 'src/lib/const'
-import { WeatherObj } from 'src/type/WeatherObj'
 
 /**
  * @package
  */
-export const Forecast: FC<{ data: WeatherObj; prefId: string }> = (props) => {
+export const Forecast: FC<{ data: any; prefId: string }> = (props) => {
   const [weather, setWeather] = useState<any>()
 
   const dataList = useMemo(

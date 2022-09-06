@@ -13,7 +13,7 @@ import { useMediaQuery } from 'src/lib/mantine'
  */
 export const Edit = () => {
   const router = useRouter()
-  const planId = router.query.plan
+  const planId = router.query.planId
   const largerThanXs = useMediaQuery('xs')
   const [name, setName] = useState('')
   const [dateRange, setDateRange] = useState<DateRangePickerValue>([null, null])
@@ -58,7 +58,6 @@ export const Edit = () => {
                   onClick={() => console.log('click')}
                   planId={planId}
                   low
-                  narrow
                 />
               </div>
             </div>

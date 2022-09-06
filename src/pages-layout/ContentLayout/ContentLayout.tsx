@@ -12,7 +12,7 @@ import { Seo } from 'src/pages-layout/Seo'
  */
 export const ContentLayout = (page: ReactElement) => {
   const router = useRouter()
-  const planId = router.query.plan
+  const planId = router.query.planId
   const largerThanSm = useMediaQuery('sm')
   const [isShow, setIsShow] = useState(true)
 

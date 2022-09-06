@@ -1,13 +1,13 @@
 import { FC, useEffect, useState } from 'react'
 import { PrefSelectBox } from 'src/component/PrefSelectBox'
-import { Covid19Obj } from 'src/type/Covid19Obj'
+import { Covid19Data } from 'src/type/Covid19Data'
 
 /**
  * @package
  */
-export const Covid19: FC<{ data: Covid19Obj }> = (props) => {
-  const hokkaido = props.data.covid19Hokkaido
+export const Covid19: FC<{ data: Covid19Data }> = (props) => {
   const japan = props.data.covid19Japan
+  const pref = props.data.covid19Pref
   const [prefId, setPrefId] = useState('13')
 
   // prefIdに初期値を代入
@@ -34,9 +34,9 @@ export const Covid19: FC<{ data: Covid19Obj }> = (props) => {
             })}
           </div>
         ) : null}
-        {hokkaido.errorInfo.errorFlag === '0' ? (
+        {pref.errorInfo.errorFlag === '0' ? (
           <div>
-            {hokkaido.itemList.map(({ date, infectedNum }) => {
+            {pref.itemList.map(({ date, infectedNum }) => {
               return (
                 <div key={date}>
                   <div>{date}</div>
