@@ -182,10 +182,7 @@ export const Create = () => {
         <SimpleButton
           text='作成する'
           onClick={() => {
-            router.push({
-              pathname: getPath('PLAN'),
-              query: { plan: 'sample_id1' },
-            })
+            router.push(getPath('PLAN', 'sample_id1'))
           }}
         />
       </div>

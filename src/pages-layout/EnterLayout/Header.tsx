@@ -11,10 +11,6 @@ const LINKS = [
     path: 'CREATE',
     text: '作成する',
   },
-  {
-    path: 'HISTORY',
-    text: '履歴',
-  },
 ] as const
 
 /**

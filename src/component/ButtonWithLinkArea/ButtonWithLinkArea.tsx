@@ -27,7 +27,7 @@ export const ButtonWithLinkArea: FC<Props> = (props) => {
         onClick={props.onClick}
         narrow={props.narrow}
       />
-      <Link href={{ pathname: getPath('PLAN'), query: { plan: props.planId } }}>
+      <Link href={getPath('PLAN', props.planId)}>
         <a
           className={`flex items-center gap-1 rounded-md px-6 py-2 tracking-wider text-dark-300 no-underline hover:bg-slate-100 xs:gap-2 xs:px-12 xs:py-3  ${
             props.low ? null : 'md:text-lg'

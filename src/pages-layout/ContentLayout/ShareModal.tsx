@@ -2,7 +2,7 @@ import { Button, CloseButton, CopyButton, Modal } from '@mantine/core'
 import { IconScan, IconUnlink } from '@tabler/icons'
 import { useQRCode } from 'next-qrcode'
 import { FC, ReactElement, ReactNode } from 'react'
-import { APP_DOMAIN, getPath } from 'src/lib/const'
+import { APP_LINK, getPath } from 'src/lib/const'
 
 type ShareModalProps = {
   planId: string
@@ -21,7 +21,7 @@ type WrapperProps = {
  */
 export const ShareModal: FC<ShareModalProps> = (props) => {
   const { Canvas } = useQRCode()
-  const planUrl = APP_DOMAIN + getPath('PLAN', props.planId)
+  const planUrl = APP_LINK + getPath('PLAN', props.planId)
 
   return (
     <Modal

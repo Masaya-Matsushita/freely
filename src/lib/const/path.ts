@@ -1,39 +1,40 @@
 const PATH = {
   INDEX: '/',
   CREATE: '/create',
-  HISTORY: '/history',
-  PLAN: '/plan',
-  EDIT: '/edit',
-  SPOT: '/spot',
-  PREF_NEWS: '/pref-news',
-  WEATHER: '/pref-news/weather',
-  COVID19: '/pref-news/covid19',
-  SAKE: '/pref-news/sake',
-  FORGOT_PASSWORD: '/forgot-password',
+  PLAN: '/[planId]/plan',
+  EDIT: '/[planId]/edit',
+  SPOT: '/[planId]/spot',
+  WEATHER: '/weather/[pref]',
+  COVID19: '/covid19/[pref]',
+  SAKE: '/sake/[pref]',
 } as const
 
 /**
  * @package
  */
-export const getPath = (
-  pathKey: keyof typeof PATH,
-  planId?: string,
-  spotId?: string,
-) => {
-  const path = PATH[pathKey]
+export const getPath = (pathKey: keyof typeof PATH, ...args: string[]) => {
+  const val = PATH[pathKey]
 
-  if (spotId) {
-    return path + '?plan=' + planId + '&spot=' + spotId
+  if (!args) {
+    return val
   }
 
-  if (planId) {
-    return path + '?plan=' + planId
-  }
+  // パスの動的部分を置き換え
+  const dirs = val.slice(1).split('/')
 
-  return path
+  const newPath = dirs.map((dir) => {
+    if (dir.startsWith('[')) {
+      const replaceDir = args[0]
+      args.shift()
+      return replaceDir
+    }
+    return dir
+  })
+
+  return '/' + newPath.join('/')
 }
 
 /**
  * @package
  */
-export const APP_DOMAIN = 'https://freely-azure.vercel.app'
+export const APP_LINK = 'https://freely-azure.vercel.app'

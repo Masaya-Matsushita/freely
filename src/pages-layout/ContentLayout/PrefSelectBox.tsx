@@ -53,13 +53,11 @@ export const PrefSelectBox: FC<{ router: NextRouter; planId: string }> = (
       />
       {prefId && prefId !== 'null' ? (
         <Tabs
+          // TODO:defaultValue修正
           defaultValue='WEATHER'
           value={props.router.query.activeTab as string}
           onTabChange={(value: 'WEATHER' | 'COVID19' | 'SAKE') =>
-            props.router.push({
-              pathname: getPath(value),
-              query: { plan: props.planId },
-            })
+            props.router.push(getPath(value))
           }
           className='mx-2 mt-12'
         >

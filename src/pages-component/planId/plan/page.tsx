@@ -31,12 +31,9 @@ export const Plan = () => {
 
   return (
     <>
-      {/* {planData && spotData ? ( */}
+      {/* {planData && spotData && typeof planId === 'string' ? ( */}
       <div>
-        <Link
-          href={{ pathname: getPath('EDIT'), query: { plan: planId } }}
-          passHref
-        >
+        <Link href={getPath('EDIT', planId)} passHref>
           <UnstyledButton
             component='a'
             className='mx-4 mt-8 rounded-md p-2 text-3xl font-bold text-dark-500 xs:mx-6 xs:text-4xl sm:mx-10'
@@ -45,13 +42,11 @@ export const Plan = () => {
             東京観光
           </UnstyledButton>
         </Link>
-        {typeof planId === 'string' ? (
-          <Link href={{ pathname: getPath('EDIT'), query: { plan: planId } }}>
-            <a className='ml-4 mt-2 xs:ml-6 sm:ml-12'>
-              {/* <DateRange dateList=[planData.start_date, planData.end_date] /> */}
-            </a>
-          </Link>
-        ) : null}
+        <Link href={getPath('EDIT', planId)} passHref>
+          <a className='ml-4 mt-2 xs:ml-6 sm:ml-12'>
+            {/* <DateRange dateList=[planData.start_date, planData.end_date] /> */}
+          </a>
+        </Link>
         {/* 世界地図背景
         <div className='absolute right-2 ml-16 hidden max-w-xs xxs:top-[106px] xxs:block xs:top-24 xs:max-w-md sm:right-12 md:max-w-xl lg:max-w-3xl'>
           <Image
@@ -79,8 +74,8 @@ export const Plan = () => {
           </div> */}
           <Link
             href={{
-              pathname: getPath('SPOT'),
-              query: { plan: planId, mode: 'create' },
+              pathname: getPath('SPOT', planId),
+              query: { mode: 'create' },
             }}
             passHref
           >

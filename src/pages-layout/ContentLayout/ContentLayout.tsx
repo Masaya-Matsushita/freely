@@ -20,8 +20,8 @@ export const ContentLayout = (page: ReactElement) => {
 
   useEffect(() => {
     if (
-      router.asPath.slice(0, 5) === '/edit' ||
-      router.asPath.slice(0, 5) === '/spot'
+      router.pathname === '/[planId]/edit' ||
+      router.pathname === '/[planId]/spot'
     ) {
       setIsShow(false)
     }
@@ -39,10 +39,11 @@ export const ContentLayout = (page: ReactElement) => {
           <div className='flex'>
             {isShow ? <SideNav planId={planId} /> : null}
             <main className='min-h-[calc(100vh-96px)] flex-1 bg-main-100 pt-16 pb-40'>
-              {router.pathname.slice(0, 10) === getPath('PREF_NEWS') ? (
+              {/* TODO: コンポーネント化する */}
+              {/* {router.pathname.slice(0, 10) === getPath('PREF_NEWS') ? (
                 <PrefSelectBox router={router} planId={planId} />
-              ) : null}
-              <div>{page}</div>
+              ) : null} */}
+              {page}
             </main>
           </div>
           {largerThanSm && isShow ? null : <Footer />}
