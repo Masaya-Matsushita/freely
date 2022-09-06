@@ -7,7 +7,7 @@ import { WeatherData } from 'src/type/WeatherData'
  * @package
  */
 export const Weather: FC<{ data: WeatherData }> = (props) => {
-  const [prefId, setPrefId] = useState('13')
+  const [prefId, setPrefId] = useState('')
 
   // prefIdに初期値を代入
   useEffect(() => {
@@ -19,8 +19,12 @@ export const Weather: FC<{ data: WeatherData }> = (props) => {
 
   return (
     <>
-      <PrefSelectBox prefId={prefId} setPrefId={setPrefId} />
-      <Forecast data={props.data} />
+      {prefId ? (
+        <div>
+          <PrefSelectBox prefId={prefId} setPrefId={setPrefId} />
+          <Forecast data={props.data} />
+        </div>
+      ) : null}
     </>
   )
 }

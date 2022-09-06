@@ -1,7 +1,7 @@
 import { IconArrowBackUp, IconChartLine, IconNotes } from '@tabler/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { getPath } from 'src/lib/const'
 
 /**
@@ -9,6 +9,17 @@ import { getPath } from 'src/lib/const'
  */
 export const NavLinks: FC<{ planId: string }> = (props) => {
   const { pathname } = useRouter()
+  const [prefId, setPrefId] = useState('13')
+
+  // LocalStorageにprefIdが無ければ13(東京)を初期値に設定
+  useEffect(() => {
+    const localPrefId = localStorage.getItem('prefId')
+    if (localPrefId) {
+      setPrefId(localPrefId)
+    } else {
+      localStorage.setItem('prefId', '13')
+    }
+  }, [])
 
   const LINKS = [
     {
@@ -18,7 +29,7 @@ export const NavLinks: FC<{ planId: string }> = (props) => {
       activePathList: ['/[planId]/plan', '/[planId]/edit', '/[planId]/spot'],
     },
     {
-      href: getPath('WEATHER', props.planId),
+      href: getPath('WEATHER', prefId),
       label: '旅先の情報',
       icon: <IconChartLine size={28} stroke={1.7} />,
       activePathList: [

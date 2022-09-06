@@ -8,7 +8,7 @@ import { Covid19Data } from 'src/type/Covid19Data'
 export const Covid19: FC<{ data: Covid19Data }> = (props) => {
   const japan = props.data.covid19Japan
   const pref = props.data.covid19Pref
-  const [prefId, setPrefId] = useState('13')
+  const [prefId, setPrefId] = useState('')
 
   // prefIdに初期値を代入
   useEffect(() => {
@@ -20,33 +20,37 @@ export const Covid19: FC<{ data: Covid19Data }> = (props) => {
 
   return (
     <>
-      <PrefSelectBox prefId={prefId} setPrefId={setPrefId} />
-      <div className='space-y-4'>
-        {japan.errorInfo.errorFlag === '0' ? (
-          <div>
-            {japan.itemList.map(({ date, infectedNum }) => {
-              return (
-                <div key={date}>
-                  <div>{date}</div>
-                  <div>{infectedNum}</div>
-                </div>
-              )
-            })}
+      {prefId ? (
+        <div>
+          <PrefSelectBox prefId={prefId} setPrefId={setPrefId} />
+          <div className='space-y-4'>
+            {japan.errorInfo.errorFlag === '0' ? (
+              <div>
+                {japan.itemList.map(({ date, infectedNum }) => {
+                  return (
+                    <div key={date}>
+                      <div>{date}</div>
+                      <div>{infectedNum}</div>
+                    </div>
+                  )
+                })}
+              </div>
+            ) : null}
+            {pref.errorInfo.errorFlag === '0' ? (
+              <div>
+                {pref.itemList.map(({ date, infectedNum }) => {
+                  return (
+                    <div key={date}>
+                      <div>{date}</div>
+                      <div>{infectedNum}</div>
+                    </div>
+                  )
+                })}
+              </div>
+            ) : null}
           </div>
-        ) : null}
-        {pref.errorInfo.errorFlag === '0' ? (
-          <div>
-            {pref.itemList.map(({ date, infectedNum }) => {
-              return (
-                <div key={date}>
-                  <div>{date}</div>
-                  <div>{infectedNum}</div>
-                </div>
-              )
-            })}
-          </div>
-        ) : null}
-      </div>
+        </div>
+      ) : null}
     </>
   )
 }

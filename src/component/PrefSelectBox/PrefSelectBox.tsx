@@ -1,9 +1,10 @@
 import { Select } from '@mantine/core'
 import { IconMapPin } from '@tabler/icons'
+import { useRouter } from 'next/router'
 import { Dispatch, FC, SetStateAction } from 'react'
 import { LinkTab } from './LinkTab'
 import { ContentLabel } from 'src/component/ContentLabel'
-import { prefList } from 'src/lib/const'
+import { getPath, prefList } from 'src/lib/const'
 import { useMediaQuery } from 'src/lib/mantine'
 
 type Props = {
@@ -15,6 +16,7 @@ type Props = {
  * @package
  */
 export const PrefSelectBox: FC<Props> = (props) => {
+  const router = useRouter()
   const largerThanXs = useMediaQuery('xs')
 
   // セレクトボックス用に加工した都道府県データ
@@ -26,6 +28,7 @@ export const PrefSelectBox: FC<Props> = (props) => {
   const handleChange = (value: string) => {
     props.setPrefId(value)
     localStorage.setItem('prefId', value)
+    router.push(getPath('WEATHER', value))
   }
 
   return (
@@ -46,7 +49,7 @@ export const PrefSelectBox: FC<Props> = (props) => {
           root: 'max-w-md xs:mx-auto mx-8 xxs:mx-12 mt-12 xxs:mt-8',
         }}
       />
-      <LinkTab />
+      <LinkTab prefId={props.prefId} />
     </div>
   )
 }

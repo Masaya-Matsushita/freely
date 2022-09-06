@@ -4,9 +4,9 @@ const PATH = {
   PLAN: '/[planId]/plan',
   EDIT: '/[planId]/edit',
   SPOT: '/[planId]/spot',
-  WEATHER: '/weather/[pref]',
-  COVID19: '/covid19/[pref]',
-  SAKE: '/sake/[pref]',
+  WEATHER: '/weather/[prefId]',
+  COVID19: '/covid19/[prefId]',
+  SAKE: '/sake/[prefId]',
 } as const
 
 /**

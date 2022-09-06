@@ -6,7 +6,7 @@ import { SakeData } from 'src/type/SakeData'
  * @package
  */
 export const Sake: FC<{ data: SakeData }> = (props) => {
-  const [prefId, setPrefId] = useState('13')
+  const [prefId, setPrefId] = useState('')
 
   // prefIdに初期値を代入
   useEffect(() => {
@@ -18,28 +18,32 @@ export const Sake: FC<{ data: SakeData }> = (props) => {
 
   return (
     <>
-      <PrefSelectBox prefId={prefId} setPrefId={setPrefId} />
-      <div className='space-y-4'>
-        {props.data.map((sake) => {
-          return (
-            <div key={sake.name}>
-              <div>{sake.name}</div>
-              <div>{sake.en}</div>
-              {sake.makerUrl ? (
-                <a
-                  href={sake.makerUrl}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                >
-                  {sake.makerName}
-                </a>
-              ) : (
-                <div>{sake.makerName}</div>
-              )}
-            </div>
-          )
-        })}
-      </div>
+      {prefId ? (
+        <div>
+          <PrefSelectBox prefId={prefId} setPrefId={setPrefId} />
+          <div className='space-y-4'>
+            {props.data.map((sake) => {
+              return (
+                <div key={sake.name}>
+                  <div>{sake.name}</div>
+                  <div>{sake.en}</div>
+                  {sake.makerUrl ? (
+                    <a
+                      href={sake.makerUrl}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                    >
+                      {sake.makerName}
+                    </a>
+                  ) : (
+                    <div>{sake.makerName}</div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      ) : null}
     </>
   )
 }
