@@ -23,9 +23,7 @@ export const SideNav: FC<{ planId: string }> = (props) => {
         <div className='mb-8 flex flex-col'>
           <hr
             style={{ transition: 'all 0.3s' }}
-            className={`mx-2 h-[1px] ${
-              opened ? 'w-64' : 'w-[72px]'
-            } border-0 bg-slate-300`}
+            className='mx-2 h-[1px] border-0 bg-slate-300'
           />
           <UnstyledButton
             onClick={() => handlers.toggle()}

@@ -1,13 +1,28 @@
+import { Button } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 import { useRouter } from 'next/router'
+import { PasswordModal } from 'src/component/PasswordModal'
 
 /**
  * @package
  */
 export const ForgotPassword = () => {
-  const { asPath } = useRouter()
+  const router = useRouter()
+  const planId = router.query.plan
+  const [opened, handlers] = useDisclosure(false)
   return (
-    <div>
-      <div className='text-lg text-blue-500'>{asPath}</div>
-    </div>
+    <>
+      {typeof planId === 'string' ? (
+        <div>
+          <PasswordModal
+            opened={opened}
+            closeModal={handlers.close}
+            planId={planId}
+          />
+
+          <Button onClick={() => handlers.open()}>password-modal</Button>
+        </div>
+      ) : null}
+    </>
   )
 }

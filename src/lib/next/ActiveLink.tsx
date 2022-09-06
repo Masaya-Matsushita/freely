@@ -13,11 +13,19 @@ type Props = Omit<LinkProps, 'children'> & {
 export const ActiveLink: FC<Props> = ({ children, ...linkProps }) => {
   const { asPath } = useRouter()
 
-  // 現在のパス(=asPath)と、propsのhrefが一致すればtrue
-  // pref-newsページには下層ページがあるため、それぞれ先頭10字を比較
+  // edit, spotページのとき、planリンクをアクティブにする
+  if (asPath.slice(0, 5) === '/edit' || asPath.slice(0, 5) === '/spot') {
+    return (
+      <Link {...linkProps}>
+        {children('/plan' === linkProps.href.toString().slice(0, 5))}
+      </Link>
+    )
+  }
+
+  // 現在のパス(=asPath)と、propsのhrefが一致すればtrue（先頭5字)
   return (
     <Link {...linkProps}>
-      {children(asPath.slice(0, 10) === linkProps.href.toString().slice(0, 10))}
+      {children(asPath.slice(0, 5) === linkProps.href.toString().slice(0, 5))}
     </Link>
   )
 }

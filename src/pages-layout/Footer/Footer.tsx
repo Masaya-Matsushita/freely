@@ -27,7 +27,7 @@ export const FooterLabel = () => {
  */
 export const SystemRequirement = () => {
   return (
-    <div className='mx-6 max-w-[440px] text-xs'>
+    <div className='mx-6 text-xs sm:max-w-[440px]'>
       <div>推奨環境</div>
       <div>PC版 Google Chrome 最新版</div>
       <div>

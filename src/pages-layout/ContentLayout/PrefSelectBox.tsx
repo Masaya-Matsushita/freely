@@ -4,7 +4,9 @@ import Image from 'next/image'
 import { NextRouter } from 'next/router'
 import { FC, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
-import { prefList } from 'src/lib/const'
+import { ContentLabel } from 'src/component/ContentLabel'
+import { getPath, prefList } from 'src/lib/const'
+import { useMediaQuery } from 'src/lib/mantine'
 import { prefIdState } from 'src/state/prefId'
 
 /**
@@ -14,6 +16,7 @@ export const PrefSelectBox: FC<{ router: NextRouter; planId: string }> = (
   props,
 ) => {
   const [prefId, setPrefId] = useRecoilState(prefIdState)
+  const largerThanXs = useMediaQuery('xs')
 
   const selectboxList = prefList.map((pref) => {
     return { value: pref.id, label: pref.name }
@@ -30,13 +33,10 @@ export const PrefSelectBox: FC<{ router: NextRouter; planId: string }> = (
 
   return (
     <div>
-      <div className='mt-16 flex items-center justify-center gap-2'>
-        <IconMapPin size={24} color='#6466F1' />
-        <div className='text-xl font-bold tracking-wider text-dark-600 xxs:text-2xl'>
-          旅先の情報
-        </div>
-      </div>
-      <hr className='mt-3 h-[2px] w-24 rounded-sm border-0 bg-main-400 xxs:mt-5 xxs:h-[3px] xxs:w-28' />
+      <ContentLabel
+        label='旅先の情報'
+        icon={<IconMapPin size={largerThanXs ? 44 : 36} color='#6466F1' />}
+      />
       <Select
         data={selectboxList}
         placeholder='選択する'
@@ -53,24 +53,24 @@ export const PrefSelectBox: FC<{ router: NextRouter; planId: string }> = (
       />
       {prefId && prefId !== 'null' ? (
         <Tabs
-          defaultValue='weather'
+          defaultValue='WEATHER'
           value={props.router.query.activeTab as string}
-          onTabChange={(value) =>
+          onTabChange={(value: 'WEATHER' | 'COVID19' | 'SAKE') =>
             props.router.push({
-              pathname: `/pref-news/${value}`,
+              pathname: getPath(value),
               query: { plan: props.planId },
             })
           }
           className='mx-2 mt-12'
         >
           <Tabs.List>
-            <Tabs.Tab value='weather' icon={<IconCloud />}>
+            <Tabs.Tab value='WEATHER' icon={<IconCloud />}>
               天気
             </Tabs.Tab>
-            <Tabs.Tab value='covid19' icon={<IconVirus />}>
+            <Tabs.Tab value='COVID19' icon={<IconVirus />}>
               コロナ
             </Tabs.Tab>
-            <Tabs.Tab value='sake' icon={<IconBottle />}>
+            <Tabs.Tab value='SAKE' icon={<IconBottle />}>
               地酒
             </Tabs.Tab>
           </Tabs.List>

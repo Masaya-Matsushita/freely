@@ -1,4 +1,4 @@
-import { Button, Paper } from '@mantine/core'
+import { Button } from '@mantine/core'
 import Image from 'next/image'
 import type { FallbackProps } from 'react-error-boundary'
 import { useMediaQuery } from 'src/lib/mantine'
@@ -8,17 +8,9 @@ import { useMediaQuery } from 'src/lib/mantine'
  */
 export const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
   const largerThanLg = useMediaQuery('lg')
-  const errorMsg = error.message
-
-  console.log(errorMsg)
 
   return (
-    <Paper
-      shadow='sm'
-      radius='lg'
-      withBorder
-      className='mt-16 flex max-w-2xl flex-col items-center px-8 py-16 xxs:mx-4 xs:mx-12 sm:mx-auto'
-    >
+    <div className='mt-16 flex max-w-2xl flex-col items-center rounded-lg px-8 py-16 shadow shadow-dark-100 xxs:mx-4 xs:mx-12 sm:mx-auto'>
       <Image
         alt=''
         src='/ErrorIcon.svg'
@@ -31,7 +23,9 @@ export const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
         <div className='flex items-start'>
           <div className='mt-4 whitespace-nowrap text-gray-400'>詳細：</div>
           <div className='mt-4 text-gray-400'>
-            {errorMsg.length < 100 ? errorMsg : errorMsg.slice(0, 80) + '...'}
+            {error.message.length < 100
+              ? error.message
+              : error.message.slice(0, 80) + '...'}
           </div>
         </div>
         <Button
@@ -42,6 +36,6 @@ export const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
           再読み込み
         </Button>
       </div>
-    </Paper>
+    </div>
   )
 }
