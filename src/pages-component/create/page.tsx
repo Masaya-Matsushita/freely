@@ -1,5 +1,7 @@
 import { PasswordInput, TextInput } from '@mantine/core'
 import { DateRangePicker } from '@mantine/dates'
+import type { DateRangePickerValue } from '@mantine/dates'
+import { useForm } from '@mantine/form'
 import {
   IconCalendar,
   IconCalendarMinus,
@@ -7,17 +9,22 @@ import {
   IconMap,
 } from '@tabler/icons'
 import { useRouter } from 'next/router'
-import { useReducer } from 'react'
+import { useState } from 'react'
 import { Notes } from './Notes'
-import { reducer, initialState } from './state'
 import { Card } from 'src/component/Card'
 import { ContentLabel } from 'src/component/ContentLabel'
 import { SimpleButton } from 'src/component/SimpleButton'
 import { Stepper } from 'src/component/Stepper'
-import { getPath } from 'src/lib/const'
 import { useMediaQuery } from 'src/lib/mantine'
 import 'dayjs/locale/ja'
 import { Step } from 'src/type/Step'
+
+type FormValues = {
+  name: string
+  dateRange: DateRangePickerValue
+  password: string
+  confirmPassword: string
+}
 
 /**
  * @package
@@ -26,16 +33,52 @@ export const Create = () => {
   const router = useRouter()
   const largerThanXs = useMediaQuery('xs')
   const largerThanMd = useMediaQuery('md')
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const [active, setActive] = useState<('filled' | 'active' | 'blank')[]>([
+    'active',
+    'blank',
+    'blank',
+  ])
+
+  // フォームの初期値、バリデーション
+  const form = useForm<FormValues>({
+    initialValues: {
+      name: '',
+      dateRange: [null, null],
+      password: '',
+      confirmPassword: '',
+    },
+
+    validate: {
+      name: (value) =>
+        !value.length
+          ? 'プラン名を入力してください'
+          : value.length > 40
+          ? 'プラン名は40字以内でご設定ください'
+          : null,
+      dateRange: (value) =>
+        !value[0] || !value[1] ? '日程を選択してください' : null,
+      password: (value) =>
+        !value || /^([a-zA-Z0-9]{6,})$/.test(value)
+          ? null
+          : 'パスワードは半角英数6~20文字でご設定ください',
+      confirmPassword: (value, values) =>
+        value !== values.password ? 'パスワードの値が一致しません' : null,
+    },
+  })
 
   // フォームの入力箇所までactiveを進める
   const updateActive = () => {
-    const valList = [state.name, state.dateRange[0], state.password2]
+    const valList = [
+      form.values.name,
+      form.values.dateRange[1],
+      form.values.confirmPassword,
+    ]
     const activeList: ('filled' | 'active' | 'blank')[] = [
       'active',
       'blank',
       'blank',
     ]
+
     // 未入力のフォーム以降は全てblank
     for (let i = 0; i < valList.length; i++) {
       if (!valList[i]) {
@@ -44,7 +87,7 @@ export const Create = () => {
       activeList[i] = 'filled'
       activeList[i + 1] = 'active'
     }
-    dispatch({ type: 'active', payload: { active: activeList } })
+    setActive(activeList)
   }
 
   // Stepperの要素
@@ -57,13 +100,10 @@ export const Create = () => {
       children: (
         <TextInput
           placeholder='(例) 3泊4日で東京観光！'
-          value={state.name}
-          onChange={(e) =>
-            dispatch({ type: 'name', payload: { name: e.currentTarget.value } })
-          }
           onBlur={updateActive}
           size={largerThanMd ? 'md' : 'sm'}
           classNames={{ input: 'max-w-xs md:max-w-sm' }}
+          {...form.getInputProps('name')}
         />
       ),
     },
@@ -76,19 +116,13 @@ export const Create = () => {
         <DateRangePicker
           locale='ja'
           placeholder='日付を選択'
-          value={state.dateRange}
-          onChange={(e) =>
-            dispatch({
-              type: 'dateRange',
-              payload: { dateRange: [e[0], e[1]] },
-            })
-          }
           onBlur={updateActive}
           firstDayOfWeek='sunday'
           inputFormat='YYYY/MM/DD'
           labelFormat='YYYY/MM'
           size={largerThanMd ? 'md' : 'sm'}
           classNames={{ input: 'max-w-xs md:max-w-sm' }}
+          {...form.getInputProps('dateRange')}
         />
       ),
     },
@@ -101,39 +135,35 @@ export const Create = () => {
         <div>
           <PasswordInput
             placeholder='半角英数6~20文字'
-            value={state.password1}
-            onChange={(e) =>
-              dispatch({
-                type: 'password1',
-                payload: { password1: e.currentTarget.value },
-              })
-            }
             size={largerThanMd ? 'md' : 'sm'}
             classNames={{
               visibilityToggle: 'hidden',
               input: 'max-w-xs md:max-w-sm',
             }}
+            {...form.getInputProps('password')}
           />
           <PasswordInput
             placeholder='再度入力してください'
-            value={state.password2}
-            onChange={(e) =>
-              dispatch({
-                type: 'password2',
-                payload: { password2: e.currentTarget.value },
-              })
-            }
             onBlur={updateActive}
             size={largerThanMd ? 'md' : 'sm'}
             classNames={{
               visibilityToggle: 'hidden',
               input: 'mt-2 max-w-xs md:max-w-sm md:mt-3',
             }}
+            {...form.getInputProps('confirmPassword')}
           />
         </div>
       ),
     },
   ]
+
+  const handleError = () => {
+    console.log('失敗しました。入力値をご確認ください。')
+  }
+
+  const handleSubmit = (values: typeof form.values) => {
+    console.log(values)
+  }
 
   return (
     <>
@@ -143,33 +173,30 @@ export const Create = () => {
           <IconCalendarMinus size={largerThanXs ? 44 : 36} color='#6466F1' />
         }
       />
-      <Card>
-        {stepList.map((step) => {
-          return (
-            <Stepper
-              key={step.id}
-              active={state.active[step.id]}
-              step={{
-                id: step.id,
-                icon: step.icon,
-                label: step.label,
-                text: step.text,
-                longer: step.longer,
-              }}
-            >
-              {step.children}
-            </Stepper>
-          )
-        })}
-      </Card>
-      <div className='flex justify-center py-20'>
-        <SimpleButton
-          text='作成する'
-          onClick={() => {
-            router.push(getPath('PLAN', 'sample_id1'))
-          }}
-        />
-      </div>
+      <form onSubmit={form.onSubmit(handleSubmit, handleError)}>
+        <Card>
+          {stepList.map((step) => {
+            return (
+              <Stepper
+                key={step.id}
+                active={active[step.id]}
+                step={{
+                  id: step.id,
+                  icon: step.icon,
+                  label: step.label,
+                  text: step.text,
+                  longer: step.longer,
+                }}
+              >
+                {step.children}
+              </Stepper>
+            )
+          })}
+        </Card>
+        <div className='flex justify-center py-20'>
+          <SimpleButton text='作成する' submit />
+        </div>
+      </form>
       <Notes />
     </>
   )
