@@ -1,14 +1,13 @@
 import { UnstyledButton } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons'
-import { FC } from 'react'
 import { NavLinks } from './NavLinks'
 import { FooterLabel, SystemRequirement } from 'src/pages-layout/Footer'
 
 /**
  * @package
  */
-export const SideNav: FC<{ planId: string }> = (props) => {
+export const SideNav = () => {
   const [opened, { toggle }] = useDisclosure(true)
 
   return (
@@ -19,7 +18,7 @@ export const SideNav: FC<{ planId: string }> = (props) => {
       }`}
     >
       <div className='flex min-h-[calc(100vh-96px)] flex-col justify-between'>
-        <NavLinks planId={props.planId} />
+        <NavLinks />
         <div className='mb-8 flex flex-col'>
           <hr
             style={{ transition: 'all 0.3s' }}

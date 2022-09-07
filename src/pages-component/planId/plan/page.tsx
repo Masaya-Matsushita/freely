@@ -5,9 +5,11 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai'
+import { useRecoilValue } from 'recoil'
 import useSWR from 'swr'
 import { DateRange } from 'src/component/DateRange'
 import { getPath } from 'src/lib/const'
+import { planIdState } from 'src/state/planId'
 import { Spot } from 'src/type/Spot'
 
 /**
@@ -15,13 +17,15 @@ import { Spot } from 'src/type/Spot'
  */
 export const Plan = () => {
   // const router = useRouter()
-  // const planId = localStorage.getItem('planId')
+  // const planId = useRecoilValue(planIdState)
+  // if(planId){
   // const { data: planData, error: planError } = useSWR(
   //   `/api/plan?planId=${planId}`,
   // )
   // const { data: spotData, error: spotError } = useSWR(
   //   `/api/spot?planId=${planId}`,
   // )
+  // }
 
   return (
     // <>

@@ -9,12 +9,10 @@ import { useDisclosure } from '@mantine/hooks'
 import { IconScan, IconShare, IconUnlink } from '@tabler/icons'
 import { useQRCode } from 'next-qrcode'
 import { FC, ReactElement, ReactNode } from 'react'
+import { useRecoilValue } from 'recoil'
 import { APP_LINK, getPath } from 'src/lib/const'
 import { useMediaQuery } from 'src/lib/mantine'
-
-type ShareModalProps = {
-  planId: string
-}
+import { planIdState } from 'src/state/planId'
 
 type WrapperProps = {
   label: string
@@ -25,9 +23,10 @@ type WrapperProps = {
 /**
  * @package
  */
-export const ShareModal: FC<ShareModalProps> = (props) => {
+export const ShareModal = () => {
   const { Canvas } = useQRCode()
-  const planUrl = APP_LINK + getPath('PLAN', props.planId)
+  const planId = useRecoilValue(planIdState)
+  const planUrl = APP_LINK + getPath('PLAN', planId)
   const largerThanSm = useMediaQuery('sm')
   const [opened, { open, close }] = useDisclosure(false)
 

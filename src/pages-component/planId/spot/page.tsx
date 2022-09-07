@@ -2,6 +2,7 @@ import { TextInput } from '@mantine/core'
 import { IconCamera, IconMap, IconMapPin, IconUnlink } from '@tabler/icons'
 import { useRouter } from 'next/router'
 import { useEffect, useReducer } from 'react'
+import { useRecoilValue } from 'recoil'
 import { IconSelectBox } from './IconSelectBox'
 import { ImageDropzone } from './ImageDropzone'
 import { reducer, initialState } from './state'
@@ -10,6 +11,7 @@ import { Card } from 'src/component/Card'
 import { ContentLabel } from 'src/component/ContentLabel'
 import { Stepper } from 'src/component/Stepper'
 import { useMediaQuery } from 'src/lib/mantine'
+import { planIdState } from 'src/state/planId'
 import { Step } from 'src/type/Step'
 
 /**
@@ -18,7 +20,7 @@ import { Step } from 'src/type/Step'
 export const Spot = () => {
   const router = useRouter()
   const mode = router.query.mode
-  const planId = localStorage.getItem('planId')
+  const planId = useRecoilValue(planIdState)
   const largerThanXs = useMediaQuery('xs')
   const largerThanMd = useMediaQuery('md')
   const [state, dispatch] = useReducer(reducer, initialState)

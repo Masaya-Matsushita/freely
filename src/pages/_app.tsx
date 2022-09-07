@@ -14,7 +14,7 @@ const fetcher = async (input: RequestInfo, init?: RequestInit) => {
 }
 
 const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
-  const getLayout = Component.getLayout ?? ((page) => page)
+  const getLayout = Component.getLayout || ((page) => page)
 
   return (
     <>

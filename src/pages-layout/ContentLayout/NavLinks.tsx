@@ -1,30 +1,28 @@
 import { IconArrowBackUp, IconNotes } from '@tabler/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { FC, useEffect, useState } from 'react'
 import { WiDayCloudy } from 'react-icons/wi'
+import { useRecoilValue } from 'recoil'
 import { getPath } from 'src/lib/const'
+import { planIdState } from 'src/state/planId'
+import { prefIdState } from 'src/state/prefId'
 
 /**
  * @package
  */
-export const NavLinks: FC<{ planId: string }> = (props) => {
+export const NavLinks = () => {
   const { pathname } = useRouter()
-  const [prefId, setPrefId] = useState('13')
+  const planId = useRecoilValue(planIdState)
+  const prefId = useRecoilValue(prefIdState)
 
-  // LocalStorageにprefIdが無ければ13(東京)を初期値に設定
-  useEffect(() => {
-    const localPrefId = localStorage.getItem('prefId')
-    if (localPrefId) {
-      setPrefId(localPrefId)
-    } else {
-      localStorage.setItem('prefId', '13')
-    }
-  }, [])
+  // href属性に''(空文字)が渡るとエラーになるため
+  if (!planId || !prefId) {
+    return
+  }
 
   const LINKS = [
     {
-      href: getPath('PLAN', props.planId),
+      href: getPath('PLAN', planId),
       label: '計画表',
       icon: <IconNotes size={30} stroke={1.5} />,
       activePathList: ['/[planId]/plan', '/[planId]/edit', '/[planId]/spot'],

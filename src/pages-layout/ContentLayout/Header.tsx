@@ -1,17 +1,15 @@
 import { Burger, CloseButton, Drawer } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useRouter } from 'next/router'
-import { FC, useEffect } from 'react'
+import { useEffect } from 'react'
 import { NavLinks } from './NavLinks'
 import { ShareModal } from './ShareModal'
 import { HeaderWrapper } from 'src/pages-layout/HeaderWrapper'
 
-type Props = { planId: string }
-
 /**
  * @package
  */
-export const Header: FC<Props> = (props) => {
+export const Header = () => {
   const router = useRouter()
   const [opened, { open, close }] = useDisclosure(false)
 
@@ -42,7 +40,7 @@ export const Header: FC<Props> = (props) => {
           Freely
         </div>
         <hr className='mx-2 h-[1px] border-0 bg-dark-100' />
-        <NavLinks planId={props.planId} />
+        <NavLinks />
       </Drawer>
       <div className='flex items-center gap-8 xs:ml-4'>
         <Burger
@@ -56,7 +54,7 @@ export const Header: FC<Props> = (props) => {
           Freely
         </div>
       </div>
-      <ShareModal planId={props.planId} />
+      <ShareModal />
     </HeaderWrapper>
   )
 }

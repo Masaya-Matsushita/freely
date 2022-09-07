@@ -3,15 +3,17 @@ import type { DateRangePickerValue } from '@mantine/dates'
 import { DateRangePicker } from '@mantine/dates'
 import { IconCalendarMinus } from '@tabler/icons'
 import { useState } from 'react'
+import { useRecoilValue } from 'recoil'
 import { ButtonWithLinkArea } from 'src/component/ButtonWithLinkArea'
 import { ContentLabel } from 'src/component/ContentLabel'
 import { useMediaQuery } from 'src/lib/mantine'
+import { planIdState } from 'src/state/planId'
 
 /**
  * @package
  */
 export const Edit = () => {
-  const planId = localStorage.getItem('planId')
+  const planId = useRecoilValue(planIdState)
   const largerThanXs = useMediaQuery('xs')
   const [name, setName] = useState('')
   const [dateRange, setDateRange] = useState<DateRangePickerValue>([null, null])

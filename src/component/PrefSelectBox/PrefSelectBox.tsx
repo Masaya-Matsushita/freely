@@ -1,23 +1,20 @@
 import { Select } from '@mantine/core'
 import { IconMapPin } from '@tabler/icons'
 import { useRouter } from 'next/router'
-import { Dispatch, FC, SetStateAction } from 'react'
+import { useRecoilState } from 'recoil'
 import { LinkTab } from './LinkTab'
 import { ContentLabel } from 'src/component/ContentLabel'
 import { getPath, prefList } from 'src/lib/const'
 import { useMediaQuery } from 'src/lib/mantine'
-
-type Props = {
-  prefId: string
-  setPrefId: Dispatch<SetStateAction<string>>
-}
+import { prefIdState } from 'src/state/prefId'
 
 /**
  * @package
  */
-export const PrefSelectBox: FC<Props> = (props) => {
+export const PrefSelectBox = () => {
   const router = useRouter()
   const largerThanXs = useMediaQuery('xs')
+  const [prefId, setPrefId] = useRecoilState(prefIdState)
 
   // セレクトボックス用に加工した都道府県データ
   const selectPrefList = prefList.map((pref) => {
@@ -26,7 +23,7 @@ export const PrefSelectBox: FC<Props> = (props) => {
 
   // 都道府県を選択
   const handleChange = (value: string) => {
-    props.setPrefId(value)
+    setPrefId(value)
     localStorage.setItem('prefId', value)
     router.push(getPath('WEATHER', value))
   }
@@ -40,7 +37,7 @@ export const PrefSelectBox: FC<Props> = (props) => {
       <Select
         data={selectPrefList}
         label='都道府県名'
-        value={props.prefId}
+        value={prefId}
         onChange={handleChange}
         transition='pop-top-left'
         transitionDuration={80}
@@ -49,7 +46,7 @@ export const PrefSelectBox: FC<Props> = (props) => {
           root: 'max-w-md xs:mx-auto mx-8 xxs:mx-12 mt-12 xxs:mt-8',
         }}
       />
-      <LinkTab prefId={props.prefId} />
+      <LinkTab prefId={prefId} />
     </div>
   )
 }
