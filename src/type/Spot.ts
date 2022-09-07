@@ -4,7 +4,6 @@ export type Spot = {
   spot_name: string
   image: string
   icon: number
-  url: string
   priority: boolean
   visited: boolean
 }
