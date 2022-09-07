@@ -95,8 +95,8 @@ export const Create = () => {
     {
       id: 2,
       icon: <IconKey size={largerThanMd ? 30 : 24} color='#495057' />,
-      label: 'パスワード(任意)',
-      text: '他のメンバーと共同で編集する場合のみ設定してください',
+      label: '共有パスワード',
+      text: '他のメンバーと共同で編集する場合のみ設定してください(任意)',
       children: (
         <div>
           <PasswordInput
