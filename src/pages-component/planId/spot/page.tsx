@@ -2,7 +2,7 @@ import { TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { IconCamera, IconMap, IconMapPin } from '@tabler/icons'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { IconSelectBox } from './IconSelectBox'
 import { ImageDropzone } from './ImageDropzone'
@@ -19,8 +19,8 @@ type Icon = 'Spot' | 'Restaurant' | 'Souvenir' | 'Hotel' | null
 /**
  * @package
  */
-export type FormValues = {
-  name: string
+export type SpotValues = {
+  spot_name: string
   icon: Icon
   image: string
 }
@@ -30,10 +30,11 @@ export type FormValues = {
  */
 export const Spot = () => {
   const router = useRouter()
-  const mode = router.query.mode
   const planId = useRecoilValue(planIdState)
+  const spotId = router.query.spotId
   const largerThanXs = useMediaQuery('xs')
   const largerThanMd = useMediaQuery('md')
+  const [initValue, setInitValue] = useState(false)
   const [active, setAcitive] = useState<('filled' | 'active' | 'blank')[]>([
     'active',
     'blank',
@@ -41,35 +42,31 @@ export const Spot = () => {
   ])
 
   // フォームの初期値、バリデーション
-  const form = useForm<FormValues>({
+  const form = useForm<SpotValues>({
     initialValues: {
-      name: '',
+      spot_name: '',
       icon: null,
       image: '',
     },
 
     validate: {
-      name: (value) =>
+      spot_name: (value) =>
         !value.length
           ? 'スポット名をご入力ください'
           : value.length > 40
           ? '40字以内でご設定ください'
           : null,
 
-      icon: (value: Icon, values: FormValues) =>
-        !value && !values.image
-          ? 'アイコンか写真のどちらか一方を設定してください'
-          : null,
+      icon: (value: Icon, values: SpotValues) =>
+        !value && !values.image ? 'どちらか一方を設定してください' : null,
       image: (value, values) =>
-        !value && !values.icon
-          ? 'アイコンか写真のどちらか一方を設定してください'
-          : null,
+        !value && !values.icon ? 'どちらか一方を設定してください' : null,
     },
   })
 
   // フォームの入力箇所までactiveを進める
   const updateActive = () => {
-    const valList = [form.values.name, form.values.icon, form.values.image]
+    const valList = [form.values.spot_name, form.values.icon, form.values.image]
     const activeList: ('filled' | 'active' | 'blank')[] = [
       'active',
       'blank',
@@ -87,10 +84,25 @@ export const Spot = () => {
     setAcitive(activeList)
   }
 
-  // 「mode=editの場合のマウント時」または「画像選択時」
+  // spotIdがあるとき、データを取得しフォームの初期値へ代入
+  const fetchSpotData = useCallback(async () => {
+    if (planId && spotId) {
+      const res = await fetch(`/api/spot?planId=${planId}&spotId=${spotId}`)
+      form.setValues(await res.json())
+      setInitValue(true)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planId, spotId])
+
+  useEffect(() => {
+    fetchSpotData()
+  }, [fetchSpotData])
+
+  // 取得したspotのデータを初期値に設定時 & 画像選択時
   useEffect(() => {
     updateActive()
-  }, [form.values.image])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initValue, form.values.image])
 
   // Stepperの要素
   const stepList: Step[] = [
@@ -101,11 +113,11 @@ export const Spot = () => {
       text: '店名、観光地名、施設名など',
       children: (
         <TextInput
-          placeholder='(例) 東京スカイツリー'
+          placeholder={`${spotId ? '' : '(例) 東京スカイツリー'}`}
           onBlur={updateActive}
           size={largerThanMd ? 'md' : 'sm'}
           classNames={{ input: 'max-w-xs md:max-w-sm' }}
-          {...form.getInputProps('name')}
+          {...form.getInputProps('spot_name')}
         />
       ),
     },
@@ -125,11 +137,7 @@ export const Spot = () => {
           <div className='mt-8 mb-1 text-center text-dark-300 xs:text-lg'>
             OR
           </div>
-          <ImageDropzone
-            form={form}
-            handleStep={updateActive}
-            error={form.errors.image}
-          />
+          <ImageDropzone form={form} error={form.errors.image} />
         </div>
       ),
     },
@@ -145,10 +153,10 @@ export const Spot = () => {
 
   return (
     <>
-      {planId && typeof mode === 'string' ? (
+      {planId ? (
         <div>
           <ContentLabel
-            label={`スポット${mode === 'create' ? '登録' : '更新'}`}
+            label={`スポット${spotId ? '更新' : '登録'}`}
             icon={<IconMapPin size={largerThanXs ? 44 : 36} color='#6466F1' />}
           />
           <form onSubmit={form.onSubmit(handleSubmit, handleError)}>
@@ -174,7 +182,7 @@ export const Spot = () => {
             <div className='mt-20 text-center'>
               <ButtonWithLinkArea
                 planId={planId}
-                text={mode === 'create' ? '登録する' : '更新する'}
+                text={spotId ? '更新する' : '登録する'}
                 type='submit'
               />
             </div>

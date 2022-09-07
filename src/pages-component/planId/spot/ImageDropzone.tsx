@@ -8,12 +8,11 @@ import type { Area, MediaSize } from 'react-easy-crop'
 import Cropper from 'react-easy-crop'
 import { useErrorHandler } from 'react-error-boundary'
 import { cropInitialState, cropReducer } from './cropState'
-import { FormValues } from './page'
+import { SpotValues } from './page'
 import { useMediaQuery } from 'src/lib/mantine'
 
 type Props = {
-  form: UseFormReturnType<FormValues>
-  handleStep: () => void
+  form: UseFormReturnType<SpotValues>
   error: ReactNode | null
 }
 

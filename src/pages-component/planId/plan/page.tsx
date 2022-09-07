@@ -22,7 +22,7 @@ export const Plan = () => {
     `/api/plan?planId=${planId}`,
   )
   const { data: spotData, error: spotError } = useSWR(
-    `/api/spot?planId=${planId}`,
+    `/api/spotList?planId=${planId}`,
   )
 
   return (
@@ -66,13 +66,7 @@ export const Plan = () => {
                 <IconPlus size={44} color='#495057' />
               </Button>
             </div> */}
-            <Link
-              href={{
-                pathname: getPath('SPOT', planId),
-                query: { mode: 'create' },
-              }}
-              passHref
-            >
+            <Link href={getPath('SPOT', planId)} passHref>
               <UnstyledButton
                 component='a'
                 className='flex h-[calc(55vw+25px)] w-full items-center justify-center rounded-xl  bg-slate-100 shadow shadow-dark-200 xxs:h-[calc(28vw+30px)] xxs:w-[calc(50vw-22px)] xs:h-[calc(28vw+35px)] xs:w-[calc(50vw-32px)] sm:h-[calc(28vw-50px)] sm:w-[calc(50vw-186px)] md:h-[217px] md:w-[292px]'
