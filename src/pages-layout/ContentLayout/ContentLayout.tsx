@@ -14,7 +14,7 @@ export const ContentLayout = (page: ReactElement) => {
   const router = useRouter()
   const largerThanSm = useMediaQuery('sm')
   const [planId, setPlanId] = useState('')
-  const [isShow, setIsShow] = useState(true)
+  const [isShowSideNav, setIsShowSideNav] = useState(true)
 
   // planIdに初期値を代入
   useEffect(() => {
@@ -24,15 +24,16 @@ export const ContentLayout = (page: ReactElement) => {
     }
   }, [])
 
+  // edit, spotページではSideNavを非表示
   useEffect(() => {
     if (
-      router.pathname === '/[planId]/edit' ||
-      router.pathname === '/[planId]/spot'
+      router.pathname === '/[planId]/[spotId]/edit' ||
+      router.pathname === '/[planId]/[spotId]/spot'
     ) {
-      setIsShow(false)
+      setIsShowSideNav(false)
     }
     return () => {
-      setIsShow(true)
+      setIsShowSideNav(true)
     }
   }, [router])
 
@@ -41,14 +42,14 @@ export const ContentLayout = (page: ReactElement) => {
       <Seo invite />
       {planId ? (
         <div>
-          <Header planId={planId} largerThanSm={largerThanSm} />
+          <Header planId={planId} />
           <div className='flex'>
-            {isShow ? <SideNav planId={planId} /> : null}
+            {isShowSideNav ? <SideNav planId={planId} /> : null}
             <main className='min-h-[calc(100vh-96px)] flex-1 bg-main-100 pt-16 pb-40'>
               {page}
             </main>
           </div>
-          {largerThanSm && isShow ? null : <Footer />}
+          {largerThanSm && isShowSideNav ? null : <Footer />}
         </div>
       ) : null}
     </ErrorBoundary>

@@ -9,7 +9,7 @@ import { FooterLabel, SystemRequirement } from 'src/pages-layout/Footer'
  * @package
  */
 export const SideNav: FC<{ planId: string }> = (props) => {
-  const [opened, handlers] = useDisclosure(true)
+  const [opened, { toggle }] = useDisclosure(true)
 
   return (
     <nav
@@ -26,7 +26,7 @@ export const SideNav: FC<{ planId: string }> = (props) => {
             className='mx-2 h-[1px] border-0 bg-slate-300'
           />
           <UnstyledButton
-            onClick={() => handlers.toggle()}
+            onClick={toggle}
             className='mx-6 mt-2 rounded-md py-1 px-2 hover:bg-slate-100'
           >
             {opened ? (

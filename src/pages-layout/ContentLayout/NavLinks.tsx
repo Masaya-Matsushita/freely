@@ -1,7 +1,8 @@
-import { IconArrowBackUp, IconChartLine, IconNotes } from '@tabler/icons'
+import { IconArrowBackUp, IconNotes } from '@tabler/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FC, useEffect, useState } from 'react'
+import { WiDayCloudy } from 'react-icons/wi'
 import { getPath } from 'src/lib/const'
 
 /**
@@ -25,13 +26,13 @@ export const NavLinks: FC<{ planId: string }> = (props) => {
     {
       href: getPath('PLAN', props.planId),
       label: '計画表',
-      icon: <IconNotes size={28} stroke={1.7} />,
+      icon: <IconNotes size={30} stroke={1.5} />,
       activePathList: ['/[planId]/plan', '/[planId]/edit', '/[planId]/spot'],
     },
     {
       href: getPath('WEATHER', prefId),
       label: '旅先の情報',
-      icon: <IconChartLine size={28} stroke={1.7} />,
+      icon: <WiDayCloudy size={30} />,
       activePathList: [
         '/weather/[prefId]',
         '/covid19/[prefId]',
@@ -41,16 +42,16 @@ export const NavLinks: FC<{ planId: string }> = (props) => {
     {
       href: getPath('INDEX'),
       label: 'トップへ戻る',
-      icon: <IconArrowBackUp size={28} stroke={1.7} />,
+      icon: <IconArrowBackUp size={30} stroke={1.5} />,
       activePathList: ['/'],
     },
   ] as const
 
   return (
-    <div className='mx-4 mt-10 space-y-4'>
+    <div className='mx-4 mt-10 space-y-5'>
       {LINKS.map((link) => {
         return (
-          <Link href={link.href} key={link.href}>
+          <Link href={link.href} key={link.href} passHref>
             <a
               className={`flex items-center rounded-sm no-underline hover:bg-main-300 ${
                 link.activePathList.some((path) => path === pathname)
@@ -66,7 +67,7 @@ export const NavLinks: FC<{ planId: string }> = (props) => {
                 }`}
               ></div>
               <div className='flex'>{link.icon}</div>
-              <div className='ml-2 overflow-hidden text-clip xxs:whitespace-nowrap'>
+              <div className='ml-[10px] overflow-hidden text-clip xxs:whitespace-nowrap'>
                 {link.label}
               </div>
             </a>
