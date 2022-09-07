@@ -7,7 +7,6 @@ type State = {
   dateRange: DateRangePickerValue
   password1: string
   password2: string
-  email: string
 }
 
 type Action = {
@@ -21,12 +20,11 @@ type Action = {
  * @package
  */
 export const initialState: { [K in keyof State]: State[K] } = {
-  active: ['active', 'blank', 'blank', 'blank'],
+  active: ['active', 'blank', 'blank'],
   name: '',
   dateRange: [null, null],
   password1: '',
   password2: '',
-  email: '',
 }
 
 /**
@@ -62,12 +60,6 @@ export const reducer: Reducer<State, Action> = (state, action) => {
       return {
         ...state,
         password2: action.payload.password2 ?? initialState['password2'],
-      }
-    }
-    case 'email': {
-      return {
-        ...state,
-        email: action.payload.email ?? initialState['email'],
       }
     }
   }

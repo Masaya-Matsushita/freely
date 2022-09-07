@@ -1,5 +1,5 @@
 import { TextInput } from '@mantine/core'
-import { IconCamera, IconMap, IconMapPin, IconUnlink } from '@tabler/icons'
+import { IconCamera, IconMap, IconMapPin } from '@tabler/icons'
 import { useRouter } from 'next/router'
 import { useEffect, useReducer } from 'react'
 import { useRecoilValue } from 'recoil'
@@ -27,10 +27,9 @@ export const Spot = () => {
 
   // フォームの入力箇所までactiveを進める
   const updateActive = () => {
-    const valList = [state.name, state.icon, state.image, state.url]
+    const valList = [state.name, state.icon, state.image]
     const activeList: ('filled' | 'active' | 'blank')[] = [
       'active',
-      'blank',
       'blank',
       'blank',
     ]
@@ -55,13 +54,9 @@ export const Spot = () => {
   const stepList: Step[] = [
     {
       id: 0,
-      text: `${
-        mode === 'create'
-          ? 'スポット名を入力してください'
-          : '店名、観光地名、施設名など'
-      }`,
-      label: `${mode === 'create' ? '' : 'スポット名'}`,
-      icon: <IconMap size={30} color='#495057' />,
+      icon: <IconMap size={largerThanMd ? 30 : 24} color='#495057' />,
+      label: 'スポット名',
+      text: '店名、観光地名、施設名など',
       children: (
         <TextInput
           placeholder='(例) 東京スカイツリー'
@@ -77,18 +72,9 @@ export const Spot = () => {
     },
     {
       id: 1,
-      text: `${
-        mode === 'create'
-          ? 'アイコン or 写真を設定してください'
-          : '両方を設定した場合は、写真が優先的に適用されます'
-      }`,
-      subText: `${
-        mode === 'create'
-          ? '(両方が設定された場合は、写真が優先的に適用されます)'
-          : ''
-      }`,
-      label: `${mode === 'create' ? '' : 'アイコン or 写真'}`,
-      icon: <IconCamera size={28} color='#495057' />,
+      icon: <IconCamera size={largerThanMd ? 30 : 24} color='#495057' />,
+      label: 'アイコン or 写真',
+      text: '両方を設定した場合は、写真が優先的に適用されます',
       longer: true,
       children: (
         <div>
@@ -109,24 +95,6 @@ export const Spot = () => {
         </div>
       ),
     },
-    {
-      id: 3,
-      text: 'スポットのURLを設定すると便利です(任意)',
-      label: 'Option',
-      icon: <IconUnlink size={28} color='#495057' />,
-      children: (
-        <TextInput
-          placeholder='(例) https://www.tokyo-skytree.jp'
-          value={state.url}
-          onChange={(e) =>
-            dispatch({ type: 'url', payload: { url: e.currentTarget.value } })
-          }
-          onBlur={updateActive}
-          size={largerThanMd ? 'md' : 'sm'}
-          classNames={{ input: 'max-w-xs md:max-w-sm' }}
-        />
-      ),
-    },
   ]
 
   return (
@@ -137,7 +105,7 @@ export const Spot = () => {
             label={`スポット${mode === 'create' ? '登録' : '更新'}`}
             icon={<IconMapPin size={largerThanXs ? 44 : 36} color='#6466F1' />}
           />
-          <Card>
+          <Card fit>
             {stepList.map((step) => {
               return (
                 <Stepper
@@ -145,10 +113,9 @@ export const Spot = () => {
                   active={state.active[step.id]}
                   step={{
                     id: step.id,
-                    text: step.text,
-                    subText: step.subText,
-                    label: step.label,
                     icon: step.icon,
+                    label: step.label,
+                    text: step.text,
                     longer: step.longer,
                   }}
                 >

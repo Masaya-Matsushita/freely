@@ -1,6 +1,11 @@
 import { PasswordInput, TextInput } from '@mantine/core'
 import { DateRangePicker } from '@mantine/dates'
-import { IconCalendarMinus, IconMail } from '@tabler/icons'
+import {
+  IconCalendar,
+  IconCalendarMinus,
+  IconKey,
+  IconMap,
+} from '@tabler/icons'
 import { useRouter } from 'next/router'
 import { useReducer } from 'react'
 import { Notes } from './Notes'
@@ -25,15 +30,9 @@ export const Create = () => {
 
   // フォームの入力箇所までactiveを進める
   const updateActive = () => {
-    const valList = [
-      state.name,
-      state.dateRange[0],
-      state.password2,
-      state.email,
-    ]
+    const valList = [state.name, state.dateRange[0], state.password2]
     const activeList: ('filled' | 'active' | 'blank')[] = [
       'active',
-      'blank',
       'blank',
       'blank',
     ]
@@ -48,10 +47,13 @@ export const Create = () => {
     dispatch({ type: 'active', payload: { active: activeList } })
   }
 
+  // Stepperの要素
   const stepList: Step[] = [
     {
       id: 0,
-      text: '旅行のテーマを入力してください',
+      icon: <IconMap size={largerThanMd ? 30 : 24} color='#495057' />,
+      label: 'プラン名',
+      text: '後から変更も可能です',
       children: (
         <TextInput
           placeholder='(例) 3泊4日で東京観光！'
@@ -67,7 +69,9 @@ export const Create = () => {
     },
     {
       id: 1,
-      text: '日程を選択してください',
+      icon: <IconCalendar size={largerThanMd ? 30 : 24} color='#495057' />,
+      label: '日程を選択',
+      text: '後から変更も可能です',
       children: (
         <DateRangePicker
           locale='ja'
@@ -90,7 +94,9 @@ export const Create = () => {
     },
     {
       id: 2,
-      text: '共有パスワードを設定してください',
+      icon: <IconKey size={largerThanMd ? 30 : 24} color='#495057' />,
+      label: 'パスワード(任意)',
+      text: '他のメンバーと共同で編集する場合のみ設定してください',
       children: (
         <div>
           <PasswordInput
@@ -127,27 +133,6 @@ export const Create = () => {
         </div>
       ),
     },
-    {
-      id: 3,
-      text: 'メールアドレスを登録すると、共有パスワードを忘れた際に再設定できます(任意)',
-      label: 'Option',
-      icon: <IconMail size={28} color='#495057' />,
-      children: (
-        <TextInput
-          placeholder='example@mail.com'
-          value={state.email}
-          onChange={(e) =>
-            dispatch({
-              type: 'email',
-              payload: { email: e.currentTarget.value },
-            })
-          }
-          onBlur={updateActive}
-          size={largerThanMd ? 'md' : 'sm'}
-          classNames={{ input: 'max-w-xs md:max-w-sm' }}
-        />
-      ),
-    },
   ]
 
   return (
@@ -158,7 +143,7 @@ export const Create = () => {
           <IconCalendarMinus size={largerThanXs ? 44 : 36} color='#6466F1' />
         }
       />
-      <Card label='簡単ステップで作成'>
+      <Card>
         {stepList.map((step) => {
           return (
             <Stepper
@@ -166,10 +151,9 @@ export const Create = () => {
               active={state.active[step.id]}
               step={{
                 id: step.id,
-                text: step.text,
-                subText: step.subText,
-                label: step.label,
                 icon: step.icon,
+                label: step.label,
+                text: step.text,
                 longer: step.longer,
               }}
             >

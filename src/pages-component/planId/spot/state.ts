@@ -10,7 +10,6 @@ type State = {
   name: string
   icon: Icon
   image: string
-  url: string
 }
 
 export type Action = {
@@ -28,7 +27,6 @@ export const initialState: { [K in keyof State]: State[K] } = {
   name: '',
   icon: null,
   image: '',
-  url: '',
 }
 
 /**
@@ -58,12 +56,6 @@ export const reducer: Reducer<State, Action> = (state, action) => {
       return {
         ...state,
         image: action.payload.image ?? initialState['image'],
-      }
-    }
-    case 'url': {
-      return {
-        ...state,
-        url: action.payload.url ?? initialState['url'],
       }
     }
   }

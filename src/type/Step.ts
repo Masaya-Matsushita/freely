@@ -1,9 +1,8 @@
 export type Step = {
   id: number
+  icon: JSX.Element
+  label: string
   text: string
-  subText?: string
-  label?: string
-  icon?: JSX.Element
   longer?: true
   children: JSX.Element
 }

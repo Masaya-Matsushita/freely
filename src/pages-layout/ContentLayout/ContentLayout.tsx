@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { ReactElement, useEffect, useState } from 'react'
+import { ReactElement } from 'react'
 import { RecoilRoot } from 'recoil'
 import { Header } from './Header'
 import { InitState } from './InitState'
@@ -15,20 +15,6 @@ import { Seo } from 'src/pages-layout/Seo'
 export const ContentLayout = (page: ReactElement) => {
   const router = useRouter()
   const largerThanSm = useMediaQuery('sm')
-  const [isShowSideNav, setIsShowSideNav] = useState(true)
-
-  // edit, spotページではSideNavを非表示
-  useEffect(() => {
-    if (
-      router.pathname === '/[planId]/[spotId]/edit' ||
-      router.pathname === '/[planId]/[spotId]/spot'
-    ) {
-      setIsShowSideNav(false)
-    }
-    return () => {
-      setIsShowSideNav(true)
-    }
-  }, [router])
 
   return (
     <RecoilRoot>
@@ -37,12 +23,12 @@ export const ContentLayout = (page: ReactElement) => {
         <InitState />
         <Header />
         <div className='flex'>
-          {isShowSideNav ? <SideNav /> : null}
+          <SideNav />
           <main className='min-h-[calc(100vh-96px)] flex-1 bg-main-100 pt-16 pb-40'>
             {page}
           </main>
         </div>
-        {isShowSideNav && largerThanSm ? null : <Footer />}
+        {largerThanSm ? null : <Footer />}
       </ErrorBoundary>
     </RecoilRoot>
   )
