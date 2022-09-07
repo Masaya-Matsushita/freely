@@ -51,16 +51,16 @@ export const Create = () => {
     validate: {
       name: (value) =>
         !value.length
-          ? 'プラン名を入力してください'
+          ? 'プラン名をご入力ください'
           : value.length > 40
-          ? 'プラン名は40字以内でご設定ください'
+          ? '40字以内でご設定ください'
           : null,
       dateRange: (value) =>
-        !value[0] || !value[1] ? '日程を選択してください' : null,
+        !value[0] || !value[1] ? '日程をご選択ください' : null,
       password: (value) =>
         !value || /^([a-zA-Z0-9]{6,})$/.test(value)
           ? null
-          : 'パスワードは半角英数6~20文字でご設定ください',
+          : '半角英数6~20文字でご設定ください',
       confirmPassword: (value, values) =>
         value !== values.password ? 'パスワードの値が一致しません' : null,
     },
@@ -194,7 +194,7 @@ export const Create = () => {
           })}
         </Card>
         <div className='flex justify-center py-20'>
-          <SimpleButton text='作成する' submit />
+          <SimpleButton text='作成する' type='submit' />
         </div>
       </form>
       <Notes />

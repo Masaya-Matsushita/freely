@@ -1,16 +1,16 @@
 import { Select } from '@mantine/core'
+import type { UseFormReturnType } from '@mantine/form'
 import Image from 'next/image'
-import { forwardRef, FC, Dispatch } from 'react'
-import { Icon, Action } from './state'
+import { forwardRef, FC } from 'react'
+import { FormValues } from './page'
 
 type Props = {
   largerThanMd: boolean
   updateActive: () => void
-  icon: Icon
-  dispatch: Dispatch<Action>
+  form: UseFormReturnType<FormValues>
 }
 
-type IconSelectBoxProps = React.ComponentPropsWithoutRef<'div'> & {
+type SelectItemProps = React.ComponentPropsWithoutRef<'div'> & {
   id: string
   image: string
   label: string
@@ -50,8 +50,8 @@ const ICON_LIST = [
 ]
 
 // eslint-disable-next-line react/display-name
-const SelectItem = forwardRef<HTMLDivElement, IconSelectBoxProps>(
-  ({ id, image, label, description, ...others }: IconSelectBoxProps, ref) => (
+const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(
+  ({ id, image, label, description, ...others }: SelectItemProps, ref) => (
     <div ref={ref} {...others}>
       <div className='flex items-center gap-4 py-1'>
         <Image src={image} alt='' height='25px' width='25px' />
@@ -74,10 +74,7 @@ export const IconSelectBox: FC<Props> = (props) => {
       itemComponent={SelectItem}
       data={ICON_LIST}
       clearable
-      value={props.icon}
-      onChange={(e: Icon) =>
-        props.dispatch({ type: 'icon', payload: { icon: e } })
-      }
+      {...props.form.getInputProps('icon')}
       onBlur={props.updateActive}
       filter={(value, item) => item.id === value}
       maxDropdownHeight={400}

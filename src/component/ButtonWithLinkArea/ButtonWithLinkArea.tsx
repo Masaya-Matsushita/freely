@@ -5,9 +5,10 @@ import { SimpleButton } from 'src/component/SimpleButton'
 import { getPath } from 'src/lib/const'
 
 type Props = {
-  text: string
-  onClick: () => void
   planId: string
+  text: string
+  onClick?: () => void
+  type?: 'submit' | 'reset'
   low?: true
 }
 
@@ -24,6 +25,7 @@ export const ButtonWithLinkArea: FC<Props> = (props) => {
       <SimpleButton
         text={props.text}
         onClick={props.onClick}
+        type={props.type}
         narrow={props.low}
       />
       <Link href={getPath('PLAN', props.planId)}>

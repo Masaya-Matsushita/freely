@@ -1,19 +1,20 @@
 import { Button, CloseButton, Modal, Slider } from '@mantine/core'
 import { Dropzone } from '@mantine/dropzone'
+import type { UseFormReturnType } from '@mantine/form'
 import { useMediaQuery as useOriginalMediaQuery } from '@mantine/hooks'
 import { IconPhoto } from '@tabler/icons'
-import { Dispatch, FC, useReducer } from 'react'
+import { FC, ReactNode, useReducer } from 'react'
 import type { Area, MediaSize } from 'react-easy-crop'
 import Cropper from 'react-easy-crop'
 import { useErrorHandler } from 'react-error-boundary'
 import { cropInitialState, cropReducer } from './cropState'
-import { Action } from './state'
+import { FormValues } from './page'
 import { useMediaQuery } from 'src/lib/mantine'
 
 type Props = {
-  image: string
-  dispatch: Dispatch<Action>
+  form: UseFormReturnType<FormValues>
   handleStep: () => void
+  error: ReactNode | null
 }
 
 // urlをもとにimage要素を作成
@@ -136,7 +137,7 @@ export const ImageDropzone: FC<Props> = (props) => {
         state.imgSrc,
         state.croppedAreaPixels,
       )
-      props.dispatch({ type: 'image', payload: { image: croppedImage } })
+      props.form.setFieldValue('image', croppedImage)
       dispatch({ type: 'opened', payload: { opened: false } })
     } catch (error) {
       handleError(error)
@@ -220,42 +221,53 @@ export const ImageDropzone: FC<Props> = (props) => {
         </div>
       </Modal>
       {/* 画像のドロップゾーン */}
-      {props.image ? (
+      {props.form.values.image ? (
         <div className='max-w-xs md:max-w-sm'>
-          {/* <div className='flex items-end justify-between text-dark-500'> */}
           <CloseButton
             size={largerThanXs ? 'md' : 'sm'}
             iconSize={largerThanXs ? 22 : 20}
-            onClick={() =>
-              props.dispatch({ type: 'image', payload: { image: '' } })
-            }
+            onClick={() => props.form.setFieldValue('image', '')}
             className='ml-auto mr-1'
           />
-          {/* </div> */}
           <div className='rounded-md border-solid border-slate-200 p-[3px] xs:p-1.5'>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={props.image}
+              src={props.form.values.image}
               alt='画像の描画に失敗しました。'
               className='h-full w-full rounded-md'
             />
           </div>
         </div>
       ) : (
-        <Dropzone
-          onDrop={onFileChange}
-          onReject={(files) => console.log('rejected files', files)}
-          maxSize={3 * 1024 ** 2}
-          accept={{ 'image/*': [] }}
-          className='mt-[22px] flex h-[186px] max-w-xs flex-col items-center justify-center border-[1px] text-center xs:mt-7 md:h-[222px] md:max-w-sm'
-        >
-          <div>
-            <IconPhoto size={40} stroke={1} color='#999999' />
-            <div className='text-sm text-dark-300 md:text-base'>
-              タップで写真を選択
+        <div>
+          <Dropzone
+            onDrop={onFileChange}
+            onReject={(files) => console.log('rejected files', files)}
+            maxSize={3 * 1024 ** 2}
+            accept={{ 'image/*': [] }}
+            className={`mt-[22px] flex h-[186px] max-w-xs flex-col items-center justify-center border-[1px] text-center xs:mt-7 md:h-[222px] md:max-w-sm ${
+              props.error ? 'border-red-500' : ''
+            }`}
+          >
+            <div>
+              <IconPhoto
+                size={40}
+                stroke={1}
+                color={props.error ? '#FA5352' : '#999999'}
+              />
+              <div
+                className={`text-sm md:text-base ${
+                  props.error ? 'text-red-500' : 'text-dark-300'
+                }`}
+              >
+                タップで写真を選択
+              </div>
             </div>
+          </Dropzone>
+          <div className='mt-1 text-xs text-red-500 md:mt-2 md:text-sm'>
+            {props.error}
           </div>
-        </Dropzone>
+        </div>
       )}
     </div>
   )
