@@ -1,4 +1,4 @@
-import { UnstyledButton } from '@mantine/core'
+import { Skeleton, UnstyledButton } from '@mantine/core'
 import { IconPlus } from '@tabler/icons'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -32,13 +32,13 @@ export const Plan = () => {
           <Link href={getPath('EDIT', planId)} passHref>
             <UnstyledButton
               component='a'
-              className='mx-4 mt-8 rounded-md p-2 text-3xl font-bold text-dark-500 xs:mx-6 xs:text-4xl sm:mx-10'
+              className='mx-3 block rounded-md p-2 text-3xl font-bold text-dark-500 xs:mx-5 xs:text-4xl sm:mx-9'
             >
               {planData.plan_name}
             </UnstyledButton>
           </Link>
           <Link href={getPath('EDIT', planId)} passHref>
-            <a className='ml-4 mt-4 block no-underline xs:mt-8 xs:ml-6 sm:ml-12'>
+            <a className='ml-6 mt-2 block no-underline xs:mt-4 xs:ml-8 sm:ml-14'>
               <DateRange dateList={[planData.start_date, planData.end_date]} />
             </a>
           </Link>
@@ -52,10 +52,10 @@ export const Plan = () => {
               className='opacity-10'
             />
           </div> */}
-          <div className='ml-4 mt-12 text-3xl font-bold text-dark-500 xs:ml-6 sm:ml-10'>
+          <div className='ml-4 mt-10 text-2xl font-bold text-dark-500 xs:mt-12 xs:ml-6 xs:text-3xl sm:mt-14 sm:ml-11'>
             スポット一覧
           </div>
-          <hr className='mx-2 h-[3px] border-0 bg-main-200 xs:mx-4 sm:mx-8' />
+          <hr className='mx-3 mt-1 h-[3px] border-0 bg-main-200 xs:mx-5 sm:mx-8' />
           <div className='mx-4 mt-6 flex flex-wrap gap-x-3 gap-y-4 xs:mx-6 xs:mt-8 xs:gap-x-4 xs:gap-y-6 sm:ml-12 md:mt-10 md:ml-16 md:mr-8 md:gap-x-6 md:gap-y-8'>
             {spotData.map((spot: Spot) => (
               <SpotCard key={spot.spot_id} spot={spot} />
@@ -77,13 +77,27 @@ export const Plan = () => {
           </div>
         </div>
       ) : (
-        <div>取得中です</div>
+        // データ取得中
+        <div className='mb-24 flex-1 pt-1'>
+          <Skeleton className='ml-5 h-10 w-64 rounded-3xl xxs:w-80 xs:h-12 xs:w-[420px] sm:ml-11' />
+          <Skeleton className='mt-[14px] ml-6 h-7 w-56 rounded-3xl xxs:w-72 xs:ml-8 xs:mt-4 xs:h-9 xs:w-[350px] sm:ml-14 sm:mt-5' />
+          <Skeleton className='mt-[34px] ml-4 h-8 w-40 rounded-3xl xxs:mt-10 xs:mt-11 xs:h-9 xs:w-48 sm:ml-11 sm:mt-[52px]' />
+          <Skeleton className='mx-3 mt-1 h-[3px] xs:mx-5 xs:mt-[6px] sm:mx-9' />
+          <div className='mx-4 mt-6 flex flex-wrap gap-x-3 gap-y-4 xs:mx-6 xs:mt-8 xs:gap-x-4 xs:gap-y-6 sm:ml-12 md:mt-10 md:ml-16 md:mr-8 md:gap-x-6 md:gap-y-8'>
+            <Skeleton className='h-[calc(55vw+25px)] w-full rounded-xl xxs:h-[calc(28vw+30px)] xxs:w-[calc(50vw-22px)] xs:h-[calc(28vw+35px)] xs:w-[calc(50vw-32px)] sm:h-[calc(28vw-50px)] sm:w-[calc(50vw-186px)] md:h-[217px] md:w-[292px]' />
+            <Skeleton className='h-[calc(55vw+25px)] w-full rounded-xl xxs:h-[calc(28vw+30px)] xxs:w-[calc(50vw-22px)] xs:h-[calc(28vw+35px)] xs:w-[calc(50vw-32px)] sm:h-[calc(28vw-50px)] sm:w-[calc(50vw-186px)] md:h-[217px] md:w-[292px]' />
+            <Skeleton className='h-[calc(55vw+25px)] w-full rounded-xl xxs:h-[calc(28vw+30px)] xxs:w-[calc(50vw-22px)] xs:h-[calc(28vw+35px)] xs:w-[calc(50vw-32px)] sm:h-[calc(28vw-50px)] sm:w-[calc(50vw-186px)] md:h-[217px] md:w-[292px]' />
+            <Skeleton className='h-[calc(55vw+25px)] w-full rounded-xl xxs:h-[calc(28vw+30px)] xxs:w-[calc(50vw-22px)] xs:h-[calc(28vw+35px)] xs:w-[calc(50vw-32px)] sm:h-[calc(28vw-50px)] sm:w-[calc(50vw-186px)] md:h-[217px] md:w-[292px]' />
+            <Skeleton className='h-[calc(55vw+25px)] w-full rounded-xl xxs:h-[calc(28vw+30px)] xxs:w-[calc(50vw-22px)] xs:h-[calc(28vw+35px)] xs:w-[calc(50vw-32px)] sm:h-[calc(28vw-50px)] sm:w-[calc(50vw-186px)] md:h-[217px] md:w-[292px]' />
+            <Skeleton className='h-[calc(55vw+25px)] w-full rounded-xl xxs:h-[calc(28vw+30px)] xxs:w-[calc(50vw-22px)] xs:h-[calc(28vw+35px)] xs:w-[calc(50vw-32px)] sm:h-[calc(28vw-50px)] sm:w-[calc(50vw-186px)] md:h-[217px] md:w-[292px]' />
+            <Skeleton className='h-[calc(55vw+25px)] w-full rounded-xl xxs:h-[calc(28vw+30px)] xxs:w-[calc(50vw-22px)] xs:h-[calc(28vw+35px)] xs:w-[calc(50vw-32px)] sm:h-[calc(28vw-50px)] sm:w-[calc(50vw-186px)] md:h-[217px] md:w-[292px]' />
+          </div>
+        </div>
       )}
     </>
   )
 }
 
-// TODO:モーダルorページ遷移
 const SpotCard: FC<{ spot: Spot }> = (props) => {
   return (
     <UnstyledButton className='rounded-xl shadow shadow-dark-200 xxs:w-[calc(50vw-22px)] xs:w-[calc(50vw-32px)] sm:w-[calc(50vw-186px)] md:w-[292px]'>
