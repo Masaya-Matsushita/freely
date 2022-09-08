@@ -194,11 +194,8 @@ export const Create = () => {
       if (json.plan_id) {
         // 成功
         successAlert('作成しました！')
-        // planId, password, prefIdを端末に保存
-        localStorage.setItem('planId', json.plan_id)
+        // passwordを端末に保存
         localStorage.setItem('password', password)
-        localStorage.setItem('prefId', '13')
-        // planページへ遷移
         router.push(`/${json.plan_id}/plan`)
       } else {
         // 通信エラー

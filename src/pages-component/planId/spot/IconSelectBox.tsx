@@ -2,12 +2,12 @@ import { Select } from '@mantine/core'
 import type { UseFormReturnType } from '@mantine/form'
 import Image from 'next/image'
 import { forwardRef, FC } from 'react'
-import { FormValues } from './page'
+import { SpotValues } from './page'
 
 type Props = {
   largerThanMd: boolean
   updateActive: () => void
-  form: UseFormReturnType<FormValues>
+  form: UseFormReturnType<SpotValues>
 }
 
 type SelectItemProps = React.ComponentPropsWithoutRef<'div'> & {

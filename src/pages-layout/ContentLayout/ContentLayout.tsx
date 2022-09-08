@@ -13,7 +13,6 @@ import { Seo } from 'src/pages-layout/Seo'
  * @package
  */
 export const ContentLayout = (page: ReactElement) => {
-  const router = useRouter()
   const largerThanSm = useMediaQuery('sm')
 
   return (

@@ -31,7 +31,7 @@ export const SpotMenu: FC<{ planId: string; spotId: number }> = (props) => {
         </Menu.Target>
         <Menu.Dropdown>
           <Menu.Item
-            icon={<IconPencil color='#495057' size={20} />}
+            icon={<IconPencil color='#495057' size={20} stroke={1.8} />}
             component={NextLink}
             href={{
               pathname: `/${props.planId}/spot`,
@@ -43,7 +43,7 @@ export const SpotMenu: FC<{ planId: string; spotId: number }> = (props) => {
           </Menu.Item>
           <Menu.Item
             color='red'
-            icon={<IconTrash size={20} />}
+            icon={<IconTrash size={20} stroke={1.6} />}
             onClick={() => setDialog(true)}
           >
             削除

@@ -17,7 +17,7 @@ export const NavLinks = () => {
 
   // href属性に''(空文字)が渡るとエラーになるため
   if (!planId || !prefId) {
-    return
+    return null
   }
 
   const LINKS = [

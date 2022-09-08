@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useSetRecoilState } from 'recoil'
 import { planIdState } from 'src/state/planId'
@@ -7,22 +8,31 @@ import { prefIdState } from 'src/state/prefId'
  * @package
  */
 export const InitState = () => {
+  const router = useRouter()
+  const planId = router.query.planId
   const setPlanId = useSetRecoilState(planIdState)
   const setPrefId = useSetRecoilState(prefIdState)
 
   useEffect(() => {
-    // planIdにLocalStorageの値を代入
+    if (typeof planId !== 'string') return
+    // planIdをセット
+    setPlanId(planId)
+    // 現在のplanIdをローカルストレージに保存
     const localPlanId = localStorage.getItem('planId')
-    if (localPlanId) {
-      setPlanId(localPlanId)
+    if (!localPlanId || localPlanId !== planId) {
+      localStorage.setItem('planId', planId)
     }
 
-    // prefIdにLocalStorageの値を代入
     const localPrefId = localStorage.getItem('prefId')
     if (localPrefId) {
+      // prefIdをセット
       setPrefId(localPrefId)
+    } else {
+      // 初期値13(東京)をローカルストレージに保存
+      localStorage.setItem('prefId', '13')
+      setPrefId('13')
     }
-  }, [setPlanId, setPrefId])
+  }, [planId, setPlanId, setPrefId])
 
   return null
 }

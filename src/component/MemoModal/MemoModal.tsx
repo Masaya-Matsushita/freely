@@ -97,10 +97,10 @@ export const MemoModal: FC<Props> = (props) => {
             </div>
           )}
         </div>
-        <div className='mx-2 flex items-center gap-3 pt-3 pb-4 xxs:mx-4 xs:mx-6 xs:gap-4'>
+        <div className='mx-2 flex items-center gap-2 pt-3 pb-4 xxs:mx-4 xs:mx-6 xs:gap-4'>
           <UnstyledButton
             onClick={() => setMarked((prev) => !prev)}
-            className='mt-1 rounded-md p-1 hover:bg-slate-100'
+            className='mt-1 rounded-md py-1 px-2 hover:bg-slate-100'
           >
             <FaPen color={marked ? '#ff2626' : '#999999'} size={22} />
           </UnstyledButton>
@@ -114,7 +114,7 @@ export const MemoModal: FC<Props> = (props) => {
           />
           <UnstyledButton
             onClick={handleSubmit}
-            className='mt-1 rounded-md p-1 hover:bg-slate-100'
+            className='mt-1 rounded-md py-1 px-2 hover:bg-slate-100'
           >
             <AiOutlineSend color='#495057' size={28} />
           </UnstyledButton>
