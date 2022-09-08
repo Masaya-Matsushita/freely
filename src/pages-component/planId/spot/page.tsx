@@ -1,5 +1,6 @@
 import { TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
+import { useDisclosure } from '@mantine/hooks'
 import { IconCamera, IconMap, IconMapPin } from '@tabler/icons'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
@@ -10,6 +11,7 @@ import { ImageDropzone } from './ImageDropzone'
 import { ButtonWithLinkArea } from 'src/component/ButtonWithLinkArea'
 import { Card } from 'src/component/Card'
 import { ContentLabel } from 'src/component/ContentLabel'
+import { PasswordModal } from 'src/component/PasswordModal'
 import { Stepper } from 'src/component/Stepper'
 import { failedAlert, successAlert, useMediaQuery } from 'src/lib/mantine'
 import { planIdState } from 'src/state/planId'
@@ -38,6 +40,7 @@ export const Spot = () => {
   const largerThanMd = useMediaQuery('md')
   const [initValue, setInitValue] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [opened, { open, close }] = useDisclosure(false)
   const [active, setAcitive] = useState<('filled' | 'active' | 'blank')[]>([
     'active',
     'blank',
@@ -174,6 +177,8 @@ export const Spot = () => {
         router.push(`/${planId}/plan`)
       } else if (json === false) {
         // パスワード認証に失敗
+        open()
+        setLoading(false)
       } else {
         // 通信エラー
         throw new Error(
@@ -189,6 +194,7 @@ export const Spot = () => {
     <>
       {planId ? (
         <div>
+          <PasswordModal opened={opened} closeModal={close} planId={planId} />
           <ContentLabel
             label={`スポット${spotId ? '更新' : '登録'}`}
             icon={<IconMapPin size={largerThanXs ? 44 : 36} color='#6466F1' />}
