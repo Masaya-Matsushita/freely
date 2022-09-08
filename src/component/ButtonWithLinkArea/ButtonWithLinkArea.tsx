@@ -10,6 +10,7 @@ type Props = {
   onClick?: () => void
   type?: 'submit' | 'reset'
   low?: true
+  loading?: boolean
 }
 
 /**
@@ -27,6 +28,7 @@ export const ButtonWithLinkArea: FC<Props> = (props) => {
         onClick={props.onClick}
         type={props.type}
         narrow={props.low}
+        loading={props.loading}
       />
       <Link href={getPath('PLAN', props.planId)}>
         <a

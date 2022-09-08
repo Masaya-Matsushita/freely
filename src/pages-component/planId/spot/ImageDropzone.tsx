@@ -63,7 +63,7 @@ const getCroppedImg = async (
  */
 export const ImageDropzone: FC<Props> = (props) => {
   const [state, dispatch] = useReducer(cropReducer, cropInitialState)
-  const handleError = useErrorHandler()
+  const catchError = useErrorHandler()
   const largerThanXxs = useMediaQuery('xxs')
   const largerThanXs = useMediaQuery('xs')
   const largerThan490 = useOriginalMediaQuery('(min-width: 490px)')
@@ -99,7 +99,7 @@ export const ImageDropzone: FC<Props> = (props) => {
         reader.readAsDataURL(files[0])
       }
     } catch (error) {
-      handleError(error)
+      catchError(error)
     }
   }
 
@@ -139,7 +139,7 @@ export const ImageDropzone: FC<Props> = (props) => {
       props.form.setFieldValue('image', croppedImage)
       dispatch({ type: 'opened', payload: { opened: false } })
     } catch (error) {
-      handleError(error)
+      catchError(error)
     }
   }
 

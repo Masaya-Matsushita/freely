@@ -13,7 +13,7 @@ type Props = {
  * @package
  */
 export const PasswordModal: FC<Props> = (props) => {
-  const handleError = useErrorHandler()
+  const catchError = useErrorHandler()
   const [password, setPassword] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [popover, { open, close }] = useDisclosure(false)
@@ -48,7 +48,7 @@ export const PasswordModal: FC<Props> = (props) => {
         setPasswordError('パスワードが間違っています。')
       }
     } catch (error) {
-      handleError(error)
+      catchError(error)
     }
   }
 

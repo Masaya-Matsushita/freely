@@ -1,4 +1,5 @@
 import { MantineProvider } from '@mantine/core'
+import { NotificationsProvider } from '@mantine/notifications'
 import { FC, ReactNode } from 'react'
 
 /**
@@ -15,7 +16,9 @@ export const AppMantineProvider: FC<{ children: ReactNode }> = ({
         colorScheme: 'light',
       }}
     >
-      {children}
+      <NotificationsProvider position='top-center' className='mt-16 xs:mt-12'>
+        {children}
+      </NotificationsProvider>
     </MantineProvider>
   )
 }

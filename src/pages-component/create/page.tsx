@@ -2,14 +2,18 @@ import { PasswordInput, TextInput } from '@mantine/core'
 import { DateRangePicker } from '@mantine/dates'
 import type { DateRangePickerValue } from '@mantine/dates'
 import { useForm } from '@mantine/form'
+import { showNotification } from '@mantine/notifications'
 import {
   IconCalendar,
   IconCalendarMinus,
+  IconCheck,
   IconKey,
   IconMap,
+  IconX,
 } from '@tabler/icons'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { useErrorHandler } from 'react-error-boundary'
 import { Notes } from './Notes'
 import { Card } from 'src/component/Card'
 import { ContentLabel } from 'src/component/ContentLabel'
@@ -33,6 +37,8 @@ export const Create = () => {
   const router = useRouter()
   const largerThanXs = useMediaQuery('xs')
   const largerThanMd = useMediaQuery('md')
+  const catchError = useErrorHandler()
+  const [loading, setLoading] = useState(false)
   const [active, setActive] = useState<('filled' | 'active' | 'blank')[]>([
     'active',
     'blank',
@@ -158,11 +164,105 @@ export const Create = () => {
   ]
 
   const handleError = () => {
-    console.log('失敗しました。入力値をご確認ください。')
+    showNotification({
+      id: 'failed',
+      autoClose: 5000,
+      title: '作成失敗',
+      message: '入力内容をご確認ください',
+      color: 'red',
+      icon: <IconX size={20} />,
+      styles: (theme) => ({
+        root: {
+          backgroundColor: theme.colors.red[1],
+          padding: '16px',
+        },
+        title: { color: theme.colors.gray[7] },
+        description: { color: theme.colors.gray[6] },
+        closeButton: {
+          color: theme.colors.gray[6],
+          '&:hover': { backgroundColor: theme.colors.red[2] },
+        },
+        icon: { width: '28px', height: '28px' },
+      }),
+    })
   }
 
-  const handleSubmit = (values: typeof form.values) => {
-    console.log(values)
+  // dateをYYYY/MM/DDの文字列に変換
+  const formatDate = (date: Date | null) => {
+    if (date) {
+      const y = date.getFullYear()
+      const m = ('00' + (date.getMonth() + 1)).slice(-2)
+      const d = ('00' + date.getDate()).slice(-2)
+      const strDate = y + '/' + m + '/' + d
+      return strDate
+    }
+  }
+
+  // プランを作成
+  const handleSubmit = async (values: typeof form.values) => {
+    try {
+      setLoading(true)
+
+      // 入力値を加工
+      const startDate = formatDate(values.dateRange[0])
+      const endDate = formatDate(values.dateRange[1])
+
+      let password = values.password
+      if (!password) {
+        // パスワード未設定の場合、乱数を設定
+        password = Math.random().toString(32).substring(2)
+      }
+
+      // APIと通信
+      const res = await fetch('/api/createPlan', {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({
+          password: password,
+          plan_name: values.name,
+          start_date: startDate,
+          end_date: endDate,
+        }),
+      })
+      const json: { plan_id: string } = await res.json()
+
+      if (json) {
+        // 正常に返ってきた場合
+
+        // 通知
+        showNotification({
+          id: 'success',
+          autoClose: 3000,
+          message: '作成しました！',
+          color: 'teal',
+          icon: <IconCheck size={20} />,
+          styles: (theme) => ({
+            root: {
+              backgroundColor: theme.colors.teal[0],
+            },
+            description: { color: theme.colors.gray[7] },
+            closeButton: {
+              color: theme.colors.gray[6],
+              '&:hover': { backgroundColor: theme.colors.teal[1] },
+            },
+            icon: { width: '28px', height: '28px' },
+          }),
+        })
+
+        // planId, password, prefIdを端末に保存
+        localStorage.setItem('planId', json.plan_id)
+        localStorage.setItem('password', password)
+        localStorage.setItem('prefId', '13')
+
+        // planページへ遷移
+        router.push(`/${json.plan_id}/plan`)
+      } else {
+        // エラーにする
+        throw new Error('サーバー側のエラーにより、プランの作成に失敗しました')
+      }
+    } catch (error) {
+      catchError(error)
+    }
   }
 
   return (
@@ -194,7 +294,7 @@ export const Create = () => {
           })}
         </Card>
         <div className='flex justify-center py-20'>
-          <SimpleButton text='作成する' type='submit' />
+          <SimpleButton text='作成する' type='submit' loading={loading} />
         </div>
       </form>
       <Notes />
