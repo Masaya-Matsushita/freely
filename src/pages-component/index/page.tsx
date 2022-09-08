@@ -46,6 +46,7 @@ export const Index = () => {
         close={close}
         planId='hoge'
         spotId={1}
+        spotName='東京スカイツリー'
         memoList={memoList}
       />
       {largerThanMd ? (
