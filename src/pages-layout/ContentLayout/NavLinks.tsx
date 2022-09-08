@@ -64,7 +64,7 @@ export const NavLinks = () => {
                     : 'bg-white'
                 }`}
               ></div>
-              <div className='flex'>{link.icon}</div>
+              <div>{link.icon}</div>
               <div className='ml-[10px] overflow-hidden text-clip xxs:whitespace-nowrap'>
                 {link.label}
               </div>

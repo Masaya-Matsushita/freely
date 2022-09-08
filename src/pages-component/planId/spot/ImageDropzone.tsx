@@ -152,9 +152,10 @@ export const ImageDropzone: FC<Props> = (props) => {
         closeOnClickOutside={false}
         closeOnEscape={false}
         withCloseButton={false}
+        centered
         size='lg'
         classNames={{
-          modal: 'bg-main-100 xxs:mx-3 mt-16',
+          modal: 'bg-main-100 xxs:mx-3',
         }}
       >
         <div className='ml-2 mt-2 mb-1 text-sm text-dark-500 xs:ml-6 xs:text-base'>

@@ -66,11 +66,11 @@ export const PasswordModal: FC<Props> = (props) => {
       opened={props.opened}
       onClose={props.closeModal}
       title='共有パスワードを入力してください'
+      centered
       classNames={{
         title: 'text-dark-500 mt-[2px]',
         modal: 'bg-main-100 xxs:mx-2 p-6 xs:p-10',
       }}
-      className='mt-28'
     >
       <div className='mt-6 flex flex-col items-end'>
         <Popover

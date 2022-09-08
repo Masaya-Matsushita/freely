@@ -26,7 +26,7 @@ type WrapperProps = {
 export const ShareModal = () => {
   const { Canvas } = useQRCode()
   const planId = useRecoilValue(planIdState)
-  const planUrl = APP_LINK + getPath('PLAN', planId)
+  const planUrl = APP_LINK + getPath('PLAN', String(planId))
   const largerThanSm = useMediaQuery('sm')
   const [opened, { open, close }] = useDisclosure(false)
 
@@ -36,9 +36,10 @@ export const ShareModal = () => {
         opened={opened}
         onClose={close}
         withCloseButton={false}
+        centered
         size='lg'
         classNames={{
-          modal: 'p-0 rounded-lg mt-16 xs:mx-8 mx-4 xs:mt-24',
+          modal: 'p-0 rounded-lg xs:mx-8 mx-4',
         }}
       >
         <div className='mb-1 mt-4 flex items-center'>
