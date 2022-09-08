@@ -14,14 +14,14 @@ export const failedAlert = (title: string, message: string) => {
     icon: <IconX size={20} />,
     styles: (theme) => ({
       root: {
-        backgroundColor: theme.colors.red[1],
+        backgroundColor: theme.colors.red[0],
         padding: '16px',
       },
       title: { color: theme.colors.gray[7] },
       description: { color: theme.colors.gray[6] },
       closeButton: {
         color: theme.colors.gray[6],
-        '&:hover': { backgroundColor: theme.colors.red[2] },
+        '&:hover': { backgroundColor: theme.colors.red[1] },
       },
       icon: { width: '28px', height: '28px' },
     }),
@@ -35,7 +35,7 @@ export const failedAlert = (title: string, message: string) => {
 export const successAlert = (message: string) => {
   showNotification({
     id: 'success',
-    autoClose: 3000,
+    autoClose: 2000,
     message: message,
     color: 'teal',
     icon: <IconCheck size={20} />,

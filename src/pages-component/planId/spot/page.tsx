@@ -3,6 +3,7 @@ import { useForm } from '@mantine/form'
 import { IconCamera, IconMap, IconMapPin } from '@tabler/icons'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
+import { useErrorHandler } from 'react-error-boundary'
 import { useRecoilValue } from 'recoil'
 import { IconSelectBox } from './IconSelectBox'
 import { ImageDropzone } from './ImageDropzone'
@@ -10,7 +11,7 @@ import { ButtonWithLinkArea } from 'src/component/ButtonWithLinkArea'
 import { Card } from 'src/component/Card'
 import { ContentLabel } from 'src/component/ContentLabel'
 import { Stepper } from 'src/component/Stepper'
-import { useMediaQuery } from 'src/lib/mantine'
+import { failedAlert, successAlert, useMediaQuery } from 'src/lib/mantine'
 import { planIdState } from 'src/state/planId'
 import { Step } from 'src/type/Step'
 
@@ -32,9 +33,11 @@ export const Spot = () => {
   const router = useRouter()
   const planId = useRecoilValue(planIdState)
   const spotId = router.query.spotId
+  const catchError = useErrorHandler()
   const largerThanXs = useMediaQuery('xs')
   const largerThanMd = useMediaQuery('md')
   const [initValue, setInitValue] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [active, setAcitive] = useState<('filled' | 'active' | 'blank')[]>([
     'active',
     'blank',
@@ -144,11 +147,42 @@ export const Spot = () => {
   ]
 
   const handleError = () => {
-    console.log('失敗しました。入力値をご確認ください。')
+    failedAlert('登録失敗', '入力内容をご確認ください')
   }
 
-  const handleSubmit = (values: typeof form.values) => {
-    console.log(values)
+  const handleSubmit = async (values: typeof form.values) => {
+    try {
+      setLoading(true)
+      const password = localStorage.getItem('password')
+      // APIと通信
+      const res = await fetch('/api/createSpot', {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({
+          password: password,
+          plan_id: planId,
+          spot_name: values.spot_name,
+          icon: values.icon,
+          image: values.image,
+        }),
+      })
+      const json: boolean = await res.json()
+
+      if (json === true) {
+        // 成功
+        successAlert('登録しました！')
+        router.push(`/${planId}/plan`)
+      } else if (json === false) {
+        // パスワード認証に失敗
+      } else {
+        // 通信エラー
+        throw new Error(
+          'サーバー側のエラーにより、スポットの登録に失敗しました',
+        )
+      }
+    } catch (error) {
+      catchError(error)
+    }
   }
 
   return (
@@ -184,6 +218,7 @@ export const Spot = () => {
                 planId={planId}
                 text={spotId ? '更新する' : '登録する'}
                 type='submit'
+                loading={loading}
               />
             </div>
           </form>

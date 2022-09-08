@@ -191,8 +191,8 @@ export const Create = () => {
       })
       const json: { plan_id: string } = await res.json()
 
-      if (json) {
-        // 正常に返ってきた場合
+      if (json.plan_id) {
+        // 成功
         successAlert('作成しました！')
         // planId, password, prefIdを端末に保存
         localStorage.setItem('planId', json.plan_id)
@@ -201,7 +201,7 @@ export const Create = () => {
         // planページへ遷移
         router.push(`/${json.plan_id}/plan`)
       } else {
-        // エラーにする
+        // 通信エラー
         throw new Error('サーバー側のエラーにより、プランの作成に失敗しました')
       }
     } catch (error) {
