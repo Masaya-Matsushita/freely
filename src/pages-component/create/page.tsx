@@ -2,14 +2,11 @@ import { PasswordInput, TextInput } from '@mantine/core'
 import { DateRangePicker } from '@mantine/dates'
 import type { DateRangePickerValue } from '@mantine/dates'
 import { useForm } from '@mantine/form'
-import { showNotification } from '@mantine/notifications'
 import {
   IconCalendar,
   IconCalendarMinus,
-  IconCheck,
   IconKey,
   IconMap,
-  IconX,
 } from '@tabler/icons'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -19,7 +16,8 @@ import { Card } from 'src/component/Card'
 import { ContentLabel } from 'src/component/ContentLabel'
 import { SimpleButton } from 'src/component/SimpleButton'
 import { Stepper } from 'src/component/Stepper'
-import { useMediaQuery } from 'src/lib/mantine'
+import { formatDate } from 'src/lib/const'
+import { failedAlert, successAlert, useMediaQuery } from 'src/lib/mantine'
 import 'dayjs/locale/ja'
 import { Step } from 'src/type/Step'
 
@@ -163,56 +161,23 @@ export const Create = () => {
     },
   ]
 
+  // フォームの入力が不十分のとき
   const handleError = () => {
-    showNotification({
-      id: 'failed',
-      autoClose: 5000,
-      title: '作成失敗',
-      message: '入力内容をご確認ください',
-      color: 'red',
-      icon: <IconX size={20} />,
-      styles: (theme) => ({
-        root: {
-          backgroundColor: theme.colors.red[1],
-          padding: '16px',
-        },
-        title: { color: theme.colors.gray[7] },
-        description: { color: theme.colors.gray[6] },
-        closeButton: {
-          color: theme.colors.gray[6],
-          '&:hover': { backgroundColor: theme.colors.red[2] },
-        },
-        icon: { width: '28px', height: '28px' },
-      }),
-    })
-  }
-
-  // dateをYYYY/MM/DDの文字列に変換
-  const formatDate = (date: Date | null) => {
-    if (date) {
-      const y = date.getFullYear()
-      const m = ('00' + (date.getMonth() + 1)).slice(-2)
-      const d = ('00' + date.getDate()).slice(-2)
-      const strDate = y + '/' + m + '/' + d
-      return strDate
-    }
+    failedAlert('作成失敗', '入力内容をご確認ください')
   }
 
   // プランを作成
   const handleSubmit = async (values: typeof form.values) => {
     try {
       setLoading(true)
-
       // 入力値を加工
       const startDate = formatDate(values.dateRange[0])
       const endDate = formatDate(values.dateRange[1])
-
       let password = values.password
       if (!password) {
         // パスワード未設定の場合、乱数を設定
         password = Math.random().toString(32).substring(2)
       }
-
       // APIと通信
       const res = await fetch('/api/createPlan', {
         method: 'POST',
@@ -228,32 +193,11 @@ export const Create = () => {
 
       if (json) {
         // 正常に返ってきた場合
-
-        // 通知
-        showNotification({
-          id: 'success',
-          autoClose: 3000,
-          message: '作成しました！',
-          color: 'teal',
-          icon: <IconCheck size={20} />,
-          styles: (theme) => ({
-            root: {
-              backgroundColor: theme.colors.teal[0],
-            },
-            description: { color: theme.colors.gray[7] },
-            closeButton: {
-              color: theme.colors.gray[6],
-              '&:hover': { backgroundColor: theme.colors.teal[1] },
-            },
-            icon: { width: '28px', height: '28px' },
-          }),
-        })
-
+        successAlert('作成しました！')
         // planId, password, prefIdを端末に保存
         localStorage.setItem('planId', json.plan_id)
         localStorage.setItem('password', password)
         localStorage.setItem('prefId', '13')
-
         // planページへ遷移
         router.push(`/${json.plan_id}/plan`)
       } else {
