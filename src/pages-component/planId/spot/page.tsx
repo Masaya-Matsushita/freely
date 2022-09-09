@@ -156,6 +156,7 @@ export const Spot = () => {
   const handleSubmit = async (values: typeof form.values) => {
     try {
       setLoading(true)
+      // パスワードを取得
       const password = localStorage.getItem('password')
       // APIと通信
       // FIXME: 画像のバイナリデータが送信できない

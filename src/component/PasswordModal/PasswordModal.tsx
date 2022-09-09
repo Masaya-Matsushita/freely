@@ -8,6 +8,7 @@ type Props = {
   opened: boolean
   closeModal: () => void
   planId: string
+  clear?: true
 }
 
 /**
@@ -66,6 +67,8 @@ export const PasswordModal: FC<Props> = (props) => {
       opened={props.opened}
       onClose={props.closeModal}
       title='共有パスワードを入力してください'
+      overlayOpacity={props.clear ? 0.3 : 1}
+      overlayBlur={props.clear ? 1.5 : 0}
       centered
       classNames={{
         title: 'text-dark-500 mt-[2px]',

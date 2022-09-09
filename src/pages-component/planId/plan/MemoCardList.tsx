@@ -1,12 +1,6 @@
 import { Skeleton, UnstyledButton } from '@mantine/core'
 import { IconTrash } from '@tabler/icons'
 import { FC } from 'react'
-import useSWR from 'swr'
-
-type Props = {
-  spotId: number
-  open: () => void
-}
 
 type Memo = {
   spot_id: number
@@ -15,22 +9,18 @@ type Memo = {
   marked: 'White' | 'Red' | 'Green'
 }
 
+type Props = {
+  spotId: number
+  open: () => void
+  memoList: Memo[]
+}
+
 /**
  * @package
  */
 export const MemoCardList: FC<Props> = (props) => {
-  // メモ取得
-  const { data: memoData, error: memoError } = useSWR(
-    `/api/memoList?spot_id=${String(props.spotId)}`,
-  )
-
-  // 取得時のエラー
-  if (memoError) {
-    console.log('memoError', memoError)
-  }
-
   // 取得中
-  if (!memoData) {
+  if (!props.memoList) {
     return (
       <div className='space-y-4 opacity-80 xs:space-y-5'>
         <SkeltonCard />
@@ -42,7 +32,7 @@ export const MemoCardList: FC<Props> = (props) => {
   }
 
   // メモが空のとき
-  if (!memoData.length) {
+  if (!props.memoList.length) {
     return (
       <div className='mt-36 text-center text-dark-300'>メモはありません</div>
     )
@@ -50,7 +40,7 @@ export const MemoCardList: FC<Props> = (props) => {
 
   return (
     <div className='space-y-4 xs:space-y-5'>
-      {memoData.map((memo: Memo) => {
+      {props.memoList.map((memo) => {
         return (
           <div key={memo.memo_id} className='flex items-center gap-2 xs:gap-3'>
             <div className='flex-1 rounded-md bg-white'>
