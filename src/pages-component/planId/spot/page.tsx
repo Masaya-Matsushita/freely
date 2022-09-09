@@ -159,9 +159,6 @@ export const Spot = () => {
       // パスワードを取得
       const password = localStorage.getItem('password')
       // APIと通信
-      // FIXME: 画像のバイナリデータが送信できない
-      // Uncaught SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
-      // APIドキュメント上ではできた
       const res = await fetch('/api/createSpot', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },

@@ -35,11 +35,12 @@ export const MemoModal: FC<Props> = (props) => {
   const catchError = useErrorHandler()
   const { mutate } = useSWRConfig()
   const strSpotId = String(props.spotId)
+  const memoListUrl = `/api/memoList?plan_id=${props.planId}&spot_id=${strSpotId}`
 
   // メモ取得
   // TODO: 全スポットごとに個別でAPIを叩くのはリクエストが多すぎる？
   // NOTE: メモを一括で取得 & クライアント側で取得データをスポットごとに加工　とすべき？
-  const { data, error } = useSWR(`/api/memoList?spot_id=${strSpotId}`)
+  const { data, error } = useSWR(memoListUrl)
 
   // 取得時のエラー
   if (error) {
@@ -69,7 +70,7 @@ export const MemoModal: FC<Props> = (props) => {
       })
       const json: boolean = await res.json()
       if (json === true) {
-        mutate(`/api/memoList?spot_id=${strSpotId}`)
+        await mutate(memoListUrl)
         setMemo('')
         setMarked('White')
         setLoading(false)
@@ -116,7 +117,7 @@ export const MemoModal: FC<Props> = (props) => {
               ? props.spotName
               : props.spotName.slice(0, 10) + '...'}
           </div>
-          <SpotMenu planId={props.planId} spotId={props.spotId} />
+          <SpotMenu planId={props.planId} spotId={strSpotId} />
         </div>
         <div className='h-[360px] overflow-auto border-[1px] border-solid border-main-200 border-y-dark-100 bg-main-200 py-6 pl-4 pr-3 xs:h-[400px] xs:px-6'>
           <MemoCardList

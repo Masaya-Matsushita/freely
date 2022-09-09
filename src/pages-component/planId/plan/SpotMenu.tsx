@@ -8,7 +8,7 @@ import { useMediaQuery } from 'src/lib/mantine'
 /**
  * @package
  */
-export const SpotMenu: FC<{ planId: string; spotId: number }> = (props) => {
+export const SpotMenu: FC<{ planId: string; spotId: string }> = (props) => {
   const [dialog, setDialog] = useState(false)
   const largerThanMd = useMediaQuery('md')
 
@@ -36,7 +36,7 @@ export const SpotMenu: FC<{ planId: string; spotId: number }> = (props) => {
             component={NextLink}
             href={{
               pathname: `/${props.planId}/spot`,
-              query: { spot_id: String(props.spotId) },
+              query: { spot_id: props.spotId },
             }}
             className='text-dark-500'
           >
