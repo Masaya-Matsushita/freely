@@ -1,7 +1,7 @@
 import { Menu, UnstyledButton } from '@mantine/core'
 import { NextLink } from '@mantine/next'
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons'
-import { Dispatch, FC, SetStateAction } from 'react'
+import { FC } from 'react'
 import { ConfirmDialog } from 'src/component/ConfirmDialog'
 import { useMediaQuery } from 'src/lib/mantine'
 
@@ -9,7 +9,7 @@ type Props = {
   planId: string
   spotId: number
   dialog: boolean
-  setDialog: Dispatch<SetStateAction<boolean>>
+  setDialog: (state: boolean) => void
   handleDelete: () => Promise<void>
 }
 

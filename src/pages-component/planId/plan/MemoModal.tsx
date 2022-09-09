@@ -5,13 +5,14 @@ import {
   TextInput,
   UnstyledButton,
 } from '@mantine/core'
-import { FC, useState } from 'react'
+import { FC, useReducer } from 'react'
 import { useErrorHandler } from 'react-error-boundary'
 import { AiOutlineSend } from 'react-icons/ai'
 import { FaPen } from 'react-icons/fa'
 import useSWR, { useSWRConfig } from 'swr'
 import { MemoCardList } from './MemoCardList'
 import { SpotMenu } from './SpotMenu'
+import { initialState, reducer } from './memoState'
 import { ConfirmDialog } from 'src/component/ConfirmDialog'
 import { PasswordModal } from 'src/component/PasswordModal'
 
@@ -27,13 +28,7 @@ type Props = {
  * @package
  */
 export const MemoModal: FC<Props> = (props) => {
-  const [memo, setMemo] = useState('')
-  const [marked, setMarked] = useState<'White' | 'Red' | 'Green'>('White')
-  const [loading, setLoading] = useState(false)
-  const [spotDialog, setSpotDialog] = useState(false)
-  const [memoDialog, setMemoDialog] = useState(false)
-  const [targetMemo, setTargetMemo] = useState(0)
-  const [passwordModal, setPasswordModal] = useState(false)
+  const [state, dispatch] = useReducer(reducer, initialState)
   const catchError = useErrorHandler()
   const { mutate } = useSWRConfig()
   const password = localStorage.getItem('password')
@@ -55,9 +50,12 @@ export const MemoModal: FC<Props> = (props) => {
   const handleSubmit = async () => {
     try {
       // 100字以上の場合、実行しない
-      if (memo.length > 100) return
+      if (state.memo.length > 100) return
 
-      setLoading(true)
+      dispatch({
+        type: 'loading',
+        payload: { loading: true },
+      })
       // API通信
       const res = await fetch('/api/createMemo', {
         method: 'POST',
@@ -66,8 +64,8 @@ export const MemoModal: FC<Props> = (props) => {
           password: password,
           plan_id: props.planId,
           spot_id: props.spotId,
-          text: memo,
-          marked: marked,
+          text: state.memo,
+          marked: state.marked,
         }),
       })
       const json: boolean = await res.json()
@@ -75,13 +73,16 @@ export const MemoModal: FC<Props> = (props) => {
       if (json === true) {
         // 作成成功
         await mutate(memoListUrl)
-        setMemo('')
-        setMarked('White')
-        setLoading(false)
+        dispatch({
+          type: 'createMemoSuccess',
+          payload: { memo: '', marked: 'White', loading: false },
+        })
       } else if (json === false) {
         // パスワード認証に失敗
-        setPasswordModal(true)
-        setLoading(false)
+        dispatch({
+          type: 'createMemoFailed',
+          payload: { passwordModal: true, loading: false },
+        })
       } else {
         // 通信エラー
         throw new Error('サーバー側のエラーにより、メモの追加に失敗しました')
@@ -102,7 +103,7 @@ export const MemoModal: FC<Props> = (props) => {
           password: password,
           plan_id: props.planId,
           spot_id: props.spotId,
-          memo_id: targetMemo,
+          memo_id: state.targetMemoId,
         }),
       })
       const json: boolean = await res.json()
@@ -110,11 +111,16 @@ export const MemoModal: FC<Props> = (props) => {
       if (json === true) {
         // 削除成功
         mutate(memoListUrl)
-        setMemoDialog(false)
+        dispatch({
+          type: 'memoDialog',
+          payload: { memoDialog: false },
+        })
       } else if (json === false) {
         // パスワード認証に失敗
-        setMemoDialog(false)
-        setPasswordModal(true)
+        dispatch({
+          type: 'deleteMemoFailed',
+          payload: { memoDialog: false, passwordModal: true },
+        })
       } else {
         // 通信エラー
         throw new Error('サーバー側のエラーにより、メモの削除に失敗しました')
@@ -142,12 +148,17 @@ export const MemoModal: FC<Props> = (props) => {
       if (json === true) {
         // 削除成功
         await mutate(`/api/spotList?planId=${props.planId}`)
-        setSpotDialog(false)
+        dispatch({
+          type: 'spotDialog',
+          payload: { spotDialog: false },
+        })
         props.close()
       } else if (json === false) {
         // パスワード認証に失敗
-        setSpotDialog(false)
-        setPasswordModal(true)
+        dispatch({
+          type: 'deleteSpotFailed',
+          payload: { spotDialog: false, passwordModal: true },
+        })
       } else {
         // 通信エラー
         throw new Error(
@@ -187,8 +198,13 @@ export const MemoModal: FC<Props> = (props) => {
           <SpotMenu
             planId={props.planId}
             spotId={props.spotId}
-            dialog={spotDialog}
-            setDialog={setSpotDialog}
+            dialog={state.spotDialog}
+            setDialog={(state: boolean) => {
+              dispatch({
+                type: 'spotDialog',
+                payload: { spotDialog: state },
+              })
+            }}
             handleDelete={deleteSpot}
           />
         </div>
@@ -196,8 +212,10 @@ export const MemoModal: FC<Props> = (props) => {
           <MemoCardList
             spotId={props.spotId}
             open={(memoId: number) => {
-              setMemoDialog(true)
-              setTargetMemo(memoId)
+              dispatch({
+                type: 'targetMemoId',
+                payload: { memoDialog: true, targetMemoId: memoId },
+              })
             }}
             memoList={data}
           />
@@ -205,23 +223,34 @@ export const MemoModal: FC<Props> = (props) => {
         <div className='mx-2 my-3 flex items-start gap-2 xxs:mx-4 xs:mx-6 xs:gap-4'>
           <UnstyledButton
             onClick={() =>
-              setMarked((prev) => (prev === 'White' ? 'Red' : 'White'))
+              dispatch({
+                type: 'marked',
+                payload: { marked: state.marked === 'White' ? 'Red' : 'White' },
+              })
             }
             className='mt-1 rounded-md py-1 px-2 hover:bg-slate-100'
           >
-            <FaPen color={marked === 'Red' ? '#ff2626' : '#999999'} size={22} />
+            <FaPen
+              color={state.marked === 'Red' ? '#ff2626' : '#999999'}
+              size={22}
+            />
           </UnstyledButton>
           <TextInput
             placeholder='時間、料金、持ち物など'
-            value={memo}
-            onChange={(e) => setMemo(e.currentTarget.value)}
-            error={memo.length > 100 ? '100字以内でご入力ください' : null}
-            disabled={loading}
+            value={state.memo}
+            onChange={(e) =>
+              dispatch({
+                type: 'memo',
+                payload: { memo: e.currentTarget.value },
+              })
+            }
+            error={state.memo.length > 100 ? '100字以内でご入力ください' : null}
+            disabled={state.loading}
             size={'sm'}
             classNames={{ input: 'rounded-2xl bg-slate-100' }}
             className='flex-1'
           />
-          {!loading ? (
+          {!state.loading ? (
             <UnstyledButton
               onClick={handleSubmit}
               className='mt-[1px] rounded-md py-1 px-2 hover:bg-slate-100'
@@ -235,13 +264,23 @@ export const MemoModal: FC<Props> = (props) => {
       </Modal>
       <ConfirmDialog
         name='メモ'
-        opened={memoDialog}
-        close={() => setMemoDialog(false)}
+        opened={state.memoDialog}
+        close={() =>
+          dispatch({
+            type: 'memoDialog',
+            payload: { memoDialog: false },
+          })
+        }
         handleDelete={deleteMemo}
       />
       <PasswordModal
-        opened={passwordModal}
-        closeModal={() => setPasswordModal(false)}
+        opened={state.passwordModal}
+        closeModal={() =>
+          dispatch({
+            type: 'passwordModal',
+            payload: { passwordModal: false },
+          })
+        }
         planId={props.planId}
         clear
       />
