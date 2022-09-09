@@ -5,16 +5,18 @@ import { Dispatch, FC, SetStateAction } from 'react'
 import { ConfirmDialog } from 'src/component/ConfirmDialog'
 import { useMediaQuery } from 'src/lib/mantine'
 
-/**
- * @package
- */
-export const SpotMenu: FC<{
+type Props = {
   planId: string
-  spotId: string
+  spotId: number
   dialog: boolean
   setDialog: Dispatch<SetStateAction<boolean>>
   handleDelete: () => Promise<void>
-}> = (props) => {
+}
+
+/**
+ * @package
+ */
+export const SpotMenu: FC<Props> = (props) => {
   const largerThanMd = useMediaQuery('md')
 
   return (
@@ -36,7 +38,7 @@ export const SpotMenu: FC<{
             component={NextLink}
             href={{
               pathname: `/${props.planId}/spot`,
-              query: { spot_id: props.spotId },
+              query: { spot_id: String(props.spotId) },
             }}
             className='text-dark-500'
           >

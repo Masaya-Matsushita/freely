@@ -2,17 +2,15 @@ import { Skeleton, UnstyledButton } from '@mantine/core'
 import { IconTrash } from '@tabler/icons'
 import { FC } from 'react'
 
-type Memo = {
-  spot_id: number
-  memo_id: number
-  text: string
-  marked: 'White' | 'Red' | 'Green'
-}
-
 type Props = {
   spotId: number
   open: (memoId: number) => void
-  memoList: Memo[]
+  memoList: {
+    spot_id: number
+    memo_id: number
+    text: string
+    marked: 'White' | 'Red' | 'Green'
+  }[]
 }
 
 /**

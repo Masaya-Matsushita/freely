@@ -7,7 +7,7 @@ import { FC, ReactNode, useReducer } from 'react'
 import type { Area, MediaSize } from 'react-easy-crop'
 import Cropper from 'react-easy-crop'
 import { useErrorHandler } from 'react-error-boundary'
-import { cropInitialState, cropReducer } from './cropState'
+import { initialState, reducer } from './cropState'
 import { SpotValues } from './page'
 import { useMediaQuery } from 'src/lib/mantine'
 
@@ -62,7 +62,7 @@ const getCroppedImg = async (
  * @package
  */
 export const ImageDropzone: FC<Props> = (props) => {
-  const [state, dispatch] = useReducer(cropReducer, cropInitialState)
+  const [state, dispatch] = useReducer(reducer, initialState)
   const catchError = useErrorHandler()
   const largerThanXxs = useMediaQuery('xxs')
   const largerThanXs = useMediaQuery('xs')

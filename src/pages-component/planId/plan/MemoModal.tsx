@@ -36,9 +36,10 @@ export const MemoModal: FC<Props> = (props) => {
   const [passwordModal, setPasswordModal] = useState(false)
   const catchError = useErrorHandler()
   const { mutate } = useSWRConfig()
-  const strSpotId = String(props.spotId)
   const password = localStorage.getItem('password')
-  const memoListUrl = `/api/memoList?plan_id=${props.planId}&spot_id=${strSpotId}`
+  const memoListUrl = `/api/memoList?plan_id=${props.planId}&spot_id=${String(
+    props.spotId,
+  )}`
 
   // メモ取得
   // TODO: 全スポットごとに個別でAPIを叩くのはリクエストが多すぎる？
@@ -53,7 +54,7 @@ export const MemoModal: FC<Props> = (props) => {
   // メモ追加
   const handleSubmit = async () => {
     try {
-      // 100字以上の場合、中断
+      // 100字以上の場合、実行しない
       if (memo.length > 100) return
 
       setLoading(true)
@@ -70,6 +71,7 @@ export const MemoModal: FC<Props> = (props) => {
         }),
       })
       const json: boolean = await res.json()
+
       if (json === true) {
         // 作成成功
         await mutate(memoListUrl)
@@ -184,7 +186,7 @@ export const MemoModal: FC<Props> = (props) => {
           </div>
           <SpotMenu
             planId={props.planId}
-            spotId={strSpotId}
+            spotId={props.spotId}
             dialog={spotDialog}
             setDialog={setSpotDialog}
             handleDelete={deleteSpot}
