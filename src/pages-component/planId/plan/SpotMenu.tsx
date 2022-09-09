@@ -1,21 +1,21 @@
 import { Menu, UnstyledButton } from '@mantine/core'
 import { NextLink } from '@mantine/next'
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons'
-import { FC, useState } from 'react'
+import { Dispatch, FC, SetStateAction } from 'react'
 import { ConfirmDialog } from 'src/component/ConfirmDialog'
 import { useMediaQuery } from 'src/lib/mantine'
 
 /**
  * @package
  */
-export const SpotMenu: FC<{ planId: string; spotId: string }> = (props) => {
-  const [dialog, setDialog] = useState(false)
+export const SpotMenu: FC<{
+  planId: string
+  spotId: string
+  dialog: boolean
+  setDialog: Dispatch<SetStateAction<boolean>>
+  handleDelete: () => Promise<void>
+}> = (props) => {
   const largerThanMd = useMediaQuery('md')
-
-  // スポット削除
-  const handleDelete = () => {
-    console.log('スポット削除')
-  }
 
   return (
     <div>
@@ -45,7 +45,7 @@ export const SpotMenu: FC<{ planId: string; spotId: string }> = (props) => {
           <Menu.Item
             color='red'
             icon={<IconTrash size={20} stroke={1.6} />}
-            onClick={() => setDialog(true)}
+            onClick={() => props.setDialog(true)}
           >
             削除
           </Menu.Item>
@@ -53,9 +53,9 @@ export const SpotMenu: FC<{ planId: string; spotId: string }> = (props) => {
       </Menu>
       <ConfirmDialog
         name='スポット'
-        opened={dialog}
-        close={() => setDialog(false)}
-        handleDelete={handleDelete}
+        opened={props.dialog}
+        close={() => props.setDialog(false)}
+        handleDelete={props.handleDelete}
       />
     </div>
   )

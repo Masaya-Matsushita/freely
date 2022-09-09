@@ -30,7 +30,8 @@ export const MemoModal: FC<Props> = (props) => {
   const [memo, setMemo] = useState('')
   const [marked, setMarked] = useState<'White' | 'Red' | 'Green'>('White')
   const [loading, setLoading] = useState(false)
-  const [dialog, setDialog] = useState(false)
+  const [spotDialog, setSpotDialog] = useState(false)
+  const [memoDialog, setMemoDialog] = useState(false)
   const [targetMemo, setTargetMemo] = useState(0)
   const [passwordModal, setPasswordModal] = useState(false)
   const catchError = useErrorHandler()
@@ -89,7 +90,7 @@ export const MemoModal: FC<Props> = (props) => {
   }
 
   // メモ削除
-  const handleDelete = async () => {
+  const deleteMemo = async () => {
     try {
       // API通信
       const res = await fetch('/api/deleteMemo', {
@@ -107,14 +108,49 @@ export const MemoModal: FC<Props> = (props) => {
       if (json === true) {
         // 削除成功
         mutate(memoListUrl)
-        setDialog(false)
+        setMemoDialog(false)
       } else if (json === false) {
         // パスワード認証に失敗
-        setDialog(false)
+        setMemoDialog(false)
         setPasswordModal(true)
       } else {
         // 通信エラー
         throw new Error('サーバー側のエラーにより、メモの削除に失敗しました')
+      }
+    } catch (error) {
+      catchError(error)
+    }
+  }
+
+  // スポット削除
+  const deleteSpot = async () => {
+    try {
+      // API通信
+      const res = await fetch('/api/deleteSpot', {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({
+          password: password,
+          plan_id: props.planId,
+          spot_id: props.spotId,
+        }),
+      })
+      const json: boolean = await res.json()
+
+      if (json === true) {
+        // 削除成功
+        await mutate(`/api/spotList?planId=${props.planId}`)
+        setSpotDialog(false)
+        props.close()
+      } else if (json === false) {
+        // パスワード認証に失敗
+        setSpotDialog(false)
+        setPasswordModal(true)
+      } else {
+        // 通信エラー
+        throw new Error(
+          'サーバー側のエラーにより、スポットの削除に失敗しました',
+        )
       }
     } catch (error) {
       catchError(error)
@@ -146,13 +182,19 @@ export const MemoModal: FC<Props> = (props) => {
               ? props.spotName
               : props.spotName.slice(0, 10) + '...'}
           </div>
-          <SpotMenu planId={props.planId} spotId={strSpotId} />
+          <SpotMenu
+            planId={props.planId}
+            spotId={strSpotId}
+            dialog={spotDialog}
+            setDialog={setSpotDialog}
+            handleDelete={deleteSpot}
+          />
         </div>
         <div className='h-[360px] overflow-auto border-[1px] border-solid border-main-200 border-y-dark-100 bg-main-200 py-6 pl-4 pr-3 xs:h-[400px] xs:px-6'>
           <MemoCardList
             spotId={props.spotId}
             open={(memoId: number) => {
-              setDialog(true)
+              setMemoDialog(true)
               setTargetMemo(memoId)
             }}
             memoList={data}
@@ -191,9 +233,9 @@ export const MemoModal: FC<Props> = (props) => {
       </Modal>
       <ConfirmDialog
         name='メモ'
-        opened={dialog}
-        close={() => setDialog(false)}
-        handleDelete={handleDelete}
+        opened={memoDialog}
+        close={() => setMemoDialog(false)}
+        handleDelete={deleteMemo}
       />
       <PasswordModal
         opened={passwordModal}
