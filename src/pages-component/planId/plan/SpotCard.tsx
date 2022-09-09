@@ -3,43 +3,21 @@ import { useDisclosure } from '@mantine/hooks'
 import Image from 'next/image'
 import { FC } from 'react'
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai'
+import useSWR from 'swr'
 import { MemoModal } from './MemoModal'
 import { Spot } from 'src/type/Spot'
 
 type Props = { spot: Spot; planId: string }
-
-const memoList: {
-  id: number
-  text: string
-  marked: 'White' | 'Red' | 'Green'
-}[] = [
-  {
-    id: 1,
-    text: '入場料3,100円',
-    marked: 'White',
-  },
-  {
-    id: 2,
-    text: 'お土産購入忘れずに',
-    marked: 'Red',
-  },
-  {
-    id: 3,
-    text: '初日が悪天候みたいなので、2日目の午後へ予定変更',
-    marked: 'White',
-  },
-  {
-    id: 4,
-    text: 'この場所は訪れました！',
-    marked: 'Green',
-  },
-]
 
 /**
  * @package
  */
 export const SpotCard: FC<Props> = (props) => {
   const [opened, { open, close }] = useDisclosure(false)
+
+  const { data: memoData, error: memoError } = useSWR(
+    `/api/memoList?spot_id=${String(props.spot.spot_id)}`,
+  )
 
   return (
     <div>
@@ -89,7 +67,7 @@ export const SpotCard: FC<Props> = (props) => {
         planId={props.planId}
         spotId={1}
         spotName='東京スカイツリー'
-        memoList={memoList}
+        memoList={memoData}
       />
     </div>
   )

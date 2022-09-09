@@ -22,6 +22,11 @@ export const Plan = () => {
     `/api/spotList?planId=${planId}`,
   )
 
+  if (planError || spotError) {
+    console.log('planError:', planError)
+    console.log('spotError:', spotError)
+  }
+
   return (
     <>
       {planId && planData && spotData ? (
@@ -66,12 +71,9 @@ export const Plan = () => {
             <Link href={getPath('SPOT', planId)} passHref>
               <UnstyledButton
                 component='a'
-                className='flex h-[calc(55vw+25px)] w-full flex-col items-center justify-center rounded-xl bg-slate-100 shadow shadow-dark-200 xxs:h-[calc(28vw+30px)] xxs:w-[calc(50vw-22px)] xs:h-[calc(28vw+35px)] xs:w-[calc(50vw-32px)] sm:h-[calc(28vw-50px)] sm:w-[calc(50vw-186px)] md:h-[217px] md:w-[292px]'
+                className='flex h-[calc(55vw+25px)] w-full items-center justify-center rounded-xl bg-slate-100 shadow shadow-dark-200 xxs:h-[calc(28vw+30px)] xxs:w-[calc(50vw-22px)] xs:h-[calc(28vw+35px)] xs:w-[calc(50vw-32px)] sm:h-[calc(28vw-50px)] sm:w-[calc(50vw-186px)] md:h-[217px] md:w-[292px]'
               >
                 <IconPlus size={36} color='#495057' />
-                <div className='text-sm text-dark-500 xs:text-base sm:text-sm'>
-                  追加
-                </div>
               </UnstyledButton>
             </Link>
           </div>
