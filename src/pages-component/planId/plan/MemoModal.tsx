@@ -24,6 +24,7 @@ export const MemoModal: FC<Props> = (props) => {
   const [dialog, setDialog] = useState(false)
 
   const handleSubmit = () => {
+    if (value.length > 100) return
     console.log(value)
   }
 
@@ -97,7 +98,7 @@ export const MemoModal: FC<Props> = (props) => {
             </div>
           )}
         </div>
-        <div className='mx-2 flex items-center gap-2 pt-3 pb-4 xxs:mx-4 xs:mx-6 xs:gap-4'>
+        <div className='mx-2 my-3 flex items-start gap-2 xxs:mx-4 xs:mx-6 xs:gap-4'>
           <UnstyledButton
             onClick={() => setMarked((prev) => !prev)}
             className='mt-1 rounded-md py-1 px-2 hover:bg-slate-100'
@@ -108,13 +109,14 @@ export const MemoModal: FC<Props> = (props) => {
             placeholder='時間、料金、持ち物など'
             value={value}
             onChange={(e) => setValue(e.currentTarget.value)}
+            error={value.length > 100 ? '100字以内でご入力ください' : null}
             size={'sm'}
             classNames={{ input: 'rounded-2xl bg-slate-100' }}
             className='flex-1'
           />
           <UnstyledButton
             onClick={handleSubmit}
-            className='mt-1 rounded-md py-1 px-2 hover:bg-slate-100'
+            className='mt-[1px] rounded-md py-1 px-2 hover:bg-slate-100'
           >
             <AiOutlineSend color='#495057' size={28} />
           </UnstyledButton>
