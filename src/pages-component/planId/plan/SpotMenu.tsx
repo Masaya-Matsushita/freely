@@ -12,6 +12,7 @@ export const SpotMenu: FC<{ planId: string; spotId: number }> = (props) => {
   const [dialog, setDialog] = useState(false)
   const largerThanMd = useMediaQuery('md')
 
+  // スポット削除
   const handleDelete = () => {
     console.log('スポット削除')
   }

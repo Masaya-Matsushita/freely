@@ -3,21 +3,14 @@ import { useDisclosure } from '@mantine/hooks'
 import Image from 'next/image'
 import { FC } from 'react'
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai'
-import useSWR from 'swr'
 import { MemoModal } from './MemoModal'
 import { Spot } from 'src/type/Spot'
-
-type Props = { spot: Spot; planId: string }
 
 /**
  * @package
  */
-export const SpotCard: FC<Props> = (props) => {
+export const SpotCard: FC<{ spot: Spot }> = (props) => {
   const [opened, { open, close }] = useDisclosure(false)
-
-  const { data: memoData, error: memoError } = useSWR(
-    `/api/memoList?spot_id=${String(props.spot.spot_id)}`,
-  )
 
   return (
     <div>
@@ -64,10 +57,9 @@ export const SpotCard: FC<Props> = (props) => {
       <MemoModal
         opened={opened}
         close={close}
-        planId={props.planId}
-        spotId={1}
-        spotName='東京スカイツリー'
-        memoList={memoData}
+        planId={props.spot.plan_id}
+        spotId={props.spot.spot_id}
+        spotName={props.spot.spot_name}
       />
     </div>
   )

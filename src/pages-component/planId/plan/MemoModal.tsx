@@ -1,8 +1,8 @@
 import { CloseButton, Modal, TextInput, UnstyledButton } from '@mantine/core'
-import { IconTrash } from '@tabler/icons'
 import { FC, useState } from 'react'
 import { AiOutlineSend } from 'react-icons/ai'
 import { FaPen } from 'react-icons/fa'
+import { MemoCardList } from './MemoCardList'
 import { SpotMenu } from './SpotMenu'
 import { ConfirmDialog } from 'src/component/ConfirmDialog'
 
@@ -12,12 +12,6 @@ type Props = {
   planId: string
   spotId: number
   spotName: string
-  memoList?: {
-    spot_id: number
-    memo_id: number
-    text: string
-    marked: 'White' | 'Red' | 'Green'
-  }[]
 }
 
 /**
@@ -28,11 +22,14 @@ export const MemoModal: FC<Props> = (props) => {
   const [value, setValue] = useState('')
   const [dialog, setDialog] = useState(false)
 
+  // メモ追加
   const handleSubmit = () => {
+    // 100字以上の場合、中断
     if (value.length > 100) return
     console.log(value)
   }
 
+  // メモ削除
   const handleDelete = () => {
     console.log('メモ削除')
   }
@@ -65,49 +62,7 @@ export const MemoModal: FC<Props> = (props) => {
           <SpotMenu planId={props.planId} spotId={props.spotId} />
         </div>
         <div className='h-[360px] overflow-auto border-[1px] border-solid border-main-200 border-y-dark-100 bg-main-200 py-6 pl-4 pr-3 xs:h-[400px] xs:px-6'>
-          {props.memoList ? (
-            <div>
-              {props.memoList.length ? (
-                <div className='space-y-4 xs:space-y-5'>
-                  {props.memoList.map((memo) => {
-                    return (
-                      <div
-                        key={memo.memo_id}
-                        className='flex items-center gap-2 xs:gap-3'
-                      >
-                        <div className='flex-1 rounded-md bg-white'>
-                          <div
-                            className={`mx-1 rounded-sm border-[0.1px] border-l-4 border-solid border-white p-2 text-sm text-dark-600 xs:text-base
-                  ${
-                    memo.marked === 'Red'
-                      ? 'border-l-red-500'
-                      : memo.marked === 'Green'
-                      ? 'border-l-green-400'
-                      : null
-                  }`}
-                          >
-                            {memo.text}
-                          </div>
-                        </div>
-                        <UnstyledButton
-                          onClick={() => setDialog(true)}
-                          className='rounded-md p-[2px] hover:bg-slate-300'
-                        >
-                          <IconTrash color='#fff' size={30} />
-                        </UnstyledButton>
-                      </div>
-                    )
-                  })}
-                </div>
-              ) : (
-                <div className='mt-36 text-center text-dark-300'>
-                  メモはありません
-                </div>
-              )}
-            </div>
-          ) : (
-            <div>hoge</div>
-          )}
+          <MemoCardList spotId={props.spotId} open={() => setDialog(true)} />
         </div>
         <div className='mx-2 my-3 flex items-start gap-2 xxs:mx-4 xs:mx-6 xs:gap-4'>
           <UnstyledButton

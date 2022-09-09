@@ -15,13 +15,17 @@ import { Spot } from 'src/type/Spot'
  */
 export const Plan = () => {
   const planId = useRecoilValue(planIdState)
+
+  // プラン取得
   const { data: planData, error: planError } = useSWR(
     `/api/plan?planId=${planId}`,
   )
+  // スポット一覧取得
   const { data: spotData, error: spotError } = useSWR(
     `/api/spotList?planId=${planId}`,
   )
 
+  // 取得時のエラー
   if (planError || spotError) {
     console.log('planError:', planError)
     console.log('spotError:', spotError)
@@ -60,7 +64,7 @@ export const Plan = () => {
           <hr className='mx-3 mt-1 h-[3px] border-0 bg-main-200 xs:mx-5 sm:mx-8' />
           <div className='mx-4 mt-6 flex flex-wrap gap-x-3 gap-y-4 xs:mx-6 xs:mt-8 xs:gap-x-4 xs:gap-y-6 sm:ml-12 md:mt-10 md:ml-16 md:mr-8 md:gap-x-6 md:gap-y-8'>
             {spotData.map((spot: Spot) => (
-              <SpotCard key={spot.spot_id} spot={spot} planId={planId} />
+              <SpotCard key={spot.spot_id} spot={spot} />
             ))}
             {/* 追加ボタン候補
             <div className='my-4 flex w-full items-center justify-center xxs:my-0 xxs:w-[calc(50vw-22px)] xs:w-[calc(50vw-32px)] sm:min-h-[155px] sm:w-[calc(50vw-186px)] md:min-h-[200px] md:w-[292px]'>
