@@ -48,6 +48,7 @@ export const PasswordModal: FC<Props> = (props) => {
       if (json === true) {
         // 認証成功
         localStorage.setItem('password', password)
+        setPassword('')
         props.closeModal()
         successAlert('認証成功')
       } else if (json === false) {

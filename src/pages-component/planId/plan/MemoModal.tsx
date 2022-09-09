@@ -31,10 +31,12 @@ export const MemoModal: FC<Props> = (props) => {
   const [marked, setMarked] = useState<'White' | 'Red' | 'Green'>('White')
   const [loading, setLoading] = useState(false)
   const [dialog, setDialog] = useState(false)
+  const [targetMemo, setTargetMemo] = useState(0)
   const [passwordModal, setPasswordModal] = useState(false)
   const catchError = useErrorHandler()
   const { mutate } = useSWRConfig()
   const strSpotId = String(props.spotId)
+  const password = localStorage.getItem('password')
   const memoListUrl = `/api/memoList?plan_id=${props.planId}&spot_id=${strSpotId}`
 
   // メモ取得
@@ -54,8 +56,6 @@ export const MemoModal: FC<Props> = (props) => {
       if (memo.length > 100) return
 
       setLoading(true)
-      // パスワードを取得
-      const password = localStorage.getItem('password')
       // API通信
       const res = await fetch('/api/createMemo', {
         method: 'POST',
@@ -63,13 +63,14 @@ export const MemoModal: FC<Props> = (props) => {
         body: JSON.stringify({
           password: password,
           plan_id: props.planId,
-          spot_id: strSpotId,
+          spot_id: props.spotId,
           text: memo,
           marked: marked,
         }),
       })
       const json: boolean = await res.json()
       if (json === true) {
+        // 作成成功
         await mutate(memoListUrl)
         setMemo('')
         setMarked('White')
@@ -88,8 +89,36 @@ export const MemoModal: FC<Props> = (props) => {
   }
 
   // メモ削除
-  const handleDelete = () => {
-    console.log('メモ削除')
+  const handleDelete = async () => {
+    try {
+      // API通信
+      const res = await fetch('/api/deleteMemo', {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({
+          password: password,
+          plan_id: props.planId,
+          spot_id: props.spotId,
+          memo_id: targetMemo,
+        }),
+      })
+      const json: boolean = await res.json()
+
+      if (json === true) {
+        // 削除成功
+        mutate(memoListUrl)
+        setDialog(false)
+      } else if (json === false) {
+        // パスワード認証に失敗
+        setDialog(false)
+        setPasswordModal(true)
+      } else {
+        // 通信エラー
+        throw new Error('サーバー側のエラーにより、メモの削除に失敗しました')
+      }
+    } catch (error) {
+      catchError(error)
+    }
   }
 
   return (
@@ -122,7 +151,10 @@ export const MemoModal: FC<Props> = (props) => {
         <div className='h-[360px] overflow-auto border-[1px] border-solid border-main-200 border-y-dark-100 bg-main-200 py-6 pl-4 pr-3 xs:h-[400px] xs:px-6'>
           <MemoCardList
             spotId={props.spotId}
-            open={() => setDialog(true)}
+            open={(memoId: number) => {
+              setDialog(true)
+              setTargetMemo(memoId)
+            }}
             memoList={data}
           />
         </div>

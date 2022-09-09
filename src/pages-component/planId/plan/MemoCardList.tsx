@@ -11,7 +11,7 @@ type Memo = {
 
 type Props = {
   spotId: number
-  open: () => void
+  open: (memoId: number) => void
   memoList: Memo[]
 }
 
@@ -58,7 +58,7 @@ export const MemoCardList: FC<Props> = (props) => {
               </div>
             </div>
             <UnstyledButton
-              onClick={props.open}
+              onClick={() => props.open(memo.memo_id)}
               className='rounded-md p-[2px] hover:bg-slate-300'
             >
               <IconTrash color='#fff' size={30} />
