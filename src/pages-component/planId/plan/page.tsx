@@ -1,15 +1,10 @@
 import { UnstyledButton } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
 import { IconPlus } from '@tabler/icons'
-import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { FC } from 'react'
-import { AiFillStar, AiOutlineStar } from 'react-icons/ai'
 import { useRecoilValue } from 'recoil'
 import useSWR from 'swr'
-import { MemoModal } from './MemoModal'
 import { SkeletonLoading } from './SkeltonLoading'
+import { SpotCard } from './SpotCard'
 import { DateRange } from 'src/component/DateRange'
 import { getPath } from 'src/lib/const'
 import { planIdState } from 'src/state/planId'
@@ -19,42 +14,13 @@ import { Spot } from 'src/type/Spot'
  * @package
  */
 export const Plan = () => {
-  const router = useRouter()
   const planId = useRecoilValue(planIdState)
-  const [opened, { open, close }] = useDisclosure(true)
   const { data: planData, error: planError } = useSWR(
     `/api/plan?planId=${planId}`,
   )
   const { data: spotData, error: spotError } = useSWR(
     `/api/spotList?planId=${planId}`,
   )
-
-  const memoList: {
-    id: number
-    text: string
-    marked: 'White' | 'Red' | 'Green'
-  }[] = [
-    {
-      id: 1,
-      text: '入場料3,100円',
-      marked: 'White',
-    },
-    {
-      id: 2,
-      text: 'お土産購入忘れずに',
-      marked: 'Red',
-    },
-    {
-      id: 3,
-      text: '初日が悪天候みたいなので、2日目の午後へ予定変更',
-      marked: 'White',
-    },
-    {
-      id: 4,
-      text: 'この場所は訪れました！',
-      marked: 'Green',
-    },
-  ]
 
   return (
     <>
@@ -89,7 +55,7 @@ export const Plan = () => {
           <hr className='mx-3 mt-1 h-[3px] border-0 bg-main-200 xs:mx-5 sm:mx-8' />
           <div className='mx-4 mt-6 flex flex-wrap gap-x-3 gap-y-4 xs:mx-6 xs:mt-8 xs:gap-x-4 xs:gap-y-6 sm:ml-12 md:mt-10 md:ml-16 md:mr-8 md:gap-x-6 md:gap-y-8'>
             {spotData.map((spot: Spot) => (
-              <SpotCard key={spot.spot_id} spot={spot} onClick={open} />
+              <SpotCard key={spot.spot_id} spot={spot} planId={planId} />
             ))}
             {/* 追加ボタン候補
             <div className='my-4 flex w-full items-center justify-center xxs:my-0 xxs:w-[calc(50vw-22px)] xs:w-[calc(50vw-32px)] sm:min-h-[155px] sm:w-[calc(50vw-186px)] md:min-h-[200px] md:w-[292px]'>
@@ -109,63 +75,10 @@ export const Plan = () => {
               </UnstyledButton>
             </Link>
           </div>
-          <MemoModal
-            opened={opened}
-            close={close}
-            planId='hoge'
-            spotId={1}
-            spotName='東京スカイツリー'
-            memoList={memoList}
-          />
         </div>
       ) : (
         <SkeletonLoading />
       )}
     </>
-  )
-}
-
-const SpotCard: FC<{ spot: Spot; onClick: () => void }> = (props) => {
-  return (
-    <UnstyledButton
-      onClick={props.onClick}
-      className='rounded-xl shadow shadow-dark-200 xxs:w-[calc(50vw-22px)] xs:w-[calc(50vw-32px)] sm:w-[calc(50vw-186px)] md:w-[292px]'
-    >
-      {props.spot.image ? (
-        <Image
-          src={props.spot.image}
-          height='900px'
-          width='1600px'
-          alt=''
-          className='rounded-t-lg'
-        />
-      ) : (
-        <Image
-          src={`/${props.spot.icon}Image.svg`}
-          height='900px'
-          width='1600px'
-          alt=''
-          className='rounded-t-lg'
-        />
-      )}
-      <div className='flex h-10 items-center gap-2 xs:h-12 xs:gap-4'>
-        {props.spot.priority ? (
-          <AiFillStar
-            color='#f0dc00'
-            size={26}
-            className='ml-3 shrink-0 xs:ml-5'
-          />
-        ) : (
-          <AiOutlineStar
-            color='#AFAFAF'
-            size={26}
-            className='ml-3 shrink-0 xs:ml-5'
-          />
-        )}
-        <div className='mr-2 max-h-[40px] overflow-hidden text-ellipsis text-sm font-bold text-dark-500'>
-          {props.spot.spot_name}
-        </div>
-      </div>
-    </UnstyledButton>
   )
 }
