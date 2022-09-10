@@ -163,22 +163,36 @@ export const Spot = () => {
     failedAlert('登録失敗', '入力内容をご確認ください')
   }
 
+  // スポット作成 or 更新
   const handleSubmit = async (values: typeof form.values) => {
     try {
       setLoading(true)
       // パスワードを取得
       const password = localStorage.getItem('password')
+      // 作成 or 更新で異なるエンドポイントとボディを設定
+      const apiUrl = spotId ? '/api/updateSpot' : '/api/createSpot'
+      const body = spotId
+        ? {
+            password: password,
+            plan_id: planId,
+            spot_id: spotId,
+            spot_name: values.spot_name,
+            icon: values.icon,
+            image: values.image,
+          }
+        : {
+            password: password,
+            plan_id: planId,
+            spot_name: values.spot_name,
+            icon: values.icon,
+            image: values.image,
+          }
+
       // APIと通信
-      const res = await fetch('/api/createSpot', {
+      const res = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify({
-          password: password,
-          plan_id: planId,
-          spot_name: values.spot_name,
-          icon: values.icon,
-          image: values.image,
-        }),
+        body: JSON.stringify(body),
       })
       const json: boolean = await res.json()
 
