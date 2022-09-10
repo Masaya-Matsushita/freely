@@ -39,11 +39,11 @@ export const ShareModal = () => {
         centered
         size='lg'
         classNames={{
-          modal: 'p-0 rounded-lg xs:mx-8 mx-4 max-w-[550px]',
+          modal: 'p-0 rounded-lg xs:mx-8 mx-4 max-w-[450px] md:max-w-[500px] mt-20',
         }}
       >
         <div className='mb-1 mt-4 flex items-center'>
-          <div className='ml-12 text-xl font-semibold text-dark-500 xxs:ml-4 xs:ml-8 md:text-2xl'>
+          <div className='ml-12 text-xl font-semibold text-dark-500 xxs:ml-4 md:ml-6 md:text-2xl'>
             メンバーを招待
           </div>
           <CloseButton
@@ -54,17 +54,17 @@ export const ShareModal = () => {
             className='ml-auto mr-12 xxs:mr-4'
           />
         </div>
-        <div className='ml-12 text-sm text-dark-400 xxs:ml-4 xs:ml-8 xs:text-base'>
+        <div className='ml-12 text-sm text-dark-400 xxs:ml-4 md:ml-6 md:text-base'>
           一緒にプランを作成しよう
         </div>
         <hr className='mb-0 h-[1px] border-0 bg-dark-100' />
-        <div className='rounded-b-lg bg-[#EEF0F5] py-12 px-8 xs:pb-20'>
+        <div className='rounded-b-lg bg-[#EEF0F5] px-8 pt-12 pb-14'>
           <Wrapper
             label='リンクを共有する'
             icon={<IconUnlink color='#6466F1' size={26} />}
           >
-            <div className='mb-3 w-64 rounded-3xl border-[1px] border-solid border-slate-300 p-1 xs:mb-5 xs:w-80 xs:p-2'>
-              <div className='mx-2 overflow-hidden text-clip whitespace-nowrap text-sm font-medium tracking-tight text-dark-500 xs:mx-4'>
+            <div className='mb-3 w-64 rounded-3xl border-[1px] border-solid border-slate-300 p-1 xs:mt-2 md:mb-5 md:w-80 md:p-2'>
+              <div className='mx-2 overflow-hidden text-clip whitespace-nowrap text-sm font-medium tracking-tight text-dark-400 md:mx-4'>
                 {planUrl}
               </div>
             </div>
@@ -73,7 +73,7 @@ export const ShareModal = () => {
                 <Button
                   variant='light'
                   classNames={{
-                    root: `border-solid rounded-md h-7 w-36 xs:h-8 xs:w-44 ${
+                    root: `border-solid rounded-3xl h-7 opacity-90 w-36 md:h-8 md:w-44 ${
                       copied
                         ? 'border-green-500 bg-green-100 hover:bg-green-100 text-green-500'
                         : 'border-main-400 bg-main-300 hover:bg-main-300 text-main-500'
@@ -128,13 +128,11 @@ export const ShareModal = () => {
 
 const Wrapper: FC<WrapperProps> = (props) => {
   return (
-    <div className='relative flex flex-col items-center rounded-2xl bg-white px-4 pb-6 pt-4 shadow shadow-dark-100 xs:mx-8 xs:py-8'>
+    <div className='relative flex flex-col items-center rounded-2xl bg-white px-4 pb-6 pt-4 shadow shadow-dark-100 md:mx-8 md:py-7'>
       <div className='absolute -top-6 left-6 flex h-12 w-12 items-center justify-center rounded-full border-[0.5px] border-solid border-dark-100 bg-main-300'>
         {props.icon}
       </div>
-      <div className='mb-2 font-bold text-dark-500 xs:mb-4 xs:text-lg'>
-        {props.label}
-      </div>
+      <div className='mb-2 font-bold text-dark-500 md:mb-3'>{props.label}</div>
       {props.children}
     </div>
   )

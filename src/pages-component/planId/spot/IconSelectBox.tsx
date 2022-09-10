@@ -80,16 +80,15 @@ export const IconSelectBox: FC<Props> = (props) => {
       maxDropdownHeight={400}
       size={props.largerThanMd ? 'md' : 'sm'}
       classNames={{ input: 'max-w-xs md:max-w-sm mt-6' }}
-      styles={(theme) => ({
+      styles={{
         item: {
           '&[data-selected]': {
             '&, &:hover': {
-              backgroundColor: theme.colors.indigo[1],
-              color: theme.colors.indigo[9],
+              backgroundColor: '#eef2ff',
             },
           },
         },
-      })}
+      }}
     />
   )
 }

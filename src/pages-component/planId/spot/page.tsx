@@ -140,7 +140,7 @@ export const Spot = () => {
             largerThanMd={largerThanMd}
             updateActive={updateActive}
           />
-          <div className='mt-8 mb-1 text-center text-dark-300 xs:text-lg'>
+          <div className='mt-8 mb-2 text-center text-dark-300 xs:text-lg'>
             OR
           </div>
           <ImageDropzone form={form} error={form.errors.image} />

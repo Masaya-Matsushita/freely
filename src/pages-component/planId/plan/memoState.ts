@@ -71,6 +71,7 @@ export const reducer: Reducer<State, Action> = (state, action) => {
     case 'targetMemoId': {
       return {
         ...state,
+        memoDialog: action.payload.memoDialog ?? initialState['memoDialog'],
         targetMemoId:
           action.payload.targetMemoId ?? initialState['targetMemoId'],
       }

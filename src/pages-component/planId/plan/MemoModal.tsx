@@ -1,6 +1,6 @@
 import {
   CloseButton,
-  Loader,
+  LoadingOverlay,
   Modal,
   TextInput,
   UnstyledButton,
@@ -15,6 +15,7 @@ import { SpotMenu } from './SpotMenu'
 import { initialState, reducer } from './memoState'
 import { ConfirmDialog } from 'src/component/ConfirmDialog'
 import { PasswordModal } from 'src/component/PasswordModal'
+import { useMediaQuery } from 'src/lib/mantine'
 
 type Props = {
   opened: boolean
@@ -31,6 +32,7 @@ export const MemoModal: FC<Props> = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const catchError = useErrorHandler()
   const { mutate } = useSWRConfig()
+  const largerThanXs = useMediaQuery('xs')
   const password = localStorage.getItem('password')
   const memoListUrl = `/api/memoList?plan_id=${props.planId}&spot_id=${String(
     props.spotId,
@@ -191,9 +193,11 @@ export const MemoModal: FC<Props> = (props) => {
         />
         <div className='mx-2 mb-3 flex items-center justify-between gap-1 xxs:mx-4'>
           <div className='ml-2 text-xl text-dark-500'>
-            {props.spotName.length < 10
-              ? props.spotName
-              : props.spotName.slice(0, 10) + '...'}
+            {largerThanXs && props.spotName.length > 16
+              ? props.spotName.slice(0, 16) + '...'
+              : !largerThanXs && props.spotName.length > 10
+              ? props.spotName.slice(0, 10) + '...'
+              : props.spotName}
           </div>
           <SpotMenu
             planId={props.planId}
@@ -208,17 +212,25 @@ export const MemoModal: FC<Props> = (props) => {
             handleDelete={deleteSpot}
           />
         </div>
-        <div className='h-[360px] overflow-auto border-[1px] border-solid border-main-200 border-y-dark-100 bg-main-200 py-6 pl-4 pr-3 xs:h-[400px] xs:px-6'>
-          <MemoCardList
-            spotId={props.spotId}
-            open={(memoId: number) => {
-              dispatch({
-                type: 'targetMemoId',
-                payload: { memoDialog: true, targetMemoId: memoId },
-              })
-            }}
-            memoList={data}
+        <div className='relative'>
+          <LoadingOverlay
+            visible={state.loading}
+            overlayBlur={0.5}
+            overlayOpacity={0.5}
+            overlayColor='#eaecf2'
           />
+          <div className='h-[360px] overflow-auto border-[1px] border-solid border-main-200 border-y-dark-100 bg-main-200 py-6 pl-4 pr-3 xs:h-[400px] xs:px-6'>
+            <MemoCardList
+              spotId={props.spotId}
+              open={(memoId: number) => {
+                dispatch({
+                  type: 'targetMemoId',
+                  payload: { memoDialog: true, targetMemoId: memoId },
+                })
+              }}
+              memoList={data}
+            />
+          </div>
         </div>
         <div className='mx-2 my-3 flex items-start gap-2 xxs:mx-4 xs:mx-6 xs:gap-4'>
           <UnstyledButton
@@ -250,16 +262,14 @@ export const MemoModal: FC<Props> = (props) => {
             classNames={{ input: 'rounded-2xl bg-slate-100' }}
             className='flex-1'
           />
-          {!state.loading ? (
-            <UnstyledButton
-              onClick={handleSubmit}
-              className='mt-[1px] rounded-md py-1 px-2 hover:bg-slate-100'
-            >
-              <AiOutlineSend color='#495057' size={28} />
-            </UnstyledButton>
-          ) : (
-            <Loader size={26} className='mx-[9px] mt-[6px] mb-2' />
-          )}
+          <UnstyledButton
+            onClick={handleSubmit}
+            className={`mx-[3px] rounded-md p-[5px] hover:bg-slate-100 ${
+              state.loading ? 'bg-slate-100' : 'bg-white'
+            }`}
+          >
+            <AiOutlineSend color='#495057' size={28} />
+          </UnstyledButton>
         </div>
       </Modal>
       <ConfirmDialog
