@@ -68,6 +68,7 @@ export const MemoCardList: FC<Props> = (props) => {
   )
 }
 
+// スケルトンローディング
 const SkeltonCard = () => {
   return (
     <div className='flex w-full gap-3'>

@@ -11,6 +11,7 @@ type Props = {
   type?: 'submit' | 'reset'
   low?: true
   loading?: boolean
+  disabled?: boolean
 }
 
 /**
@@ -29,6 +30,7 @@ export const ButtonWithLinkArea: FC<Props> = (props) => {
         type={props.type}
         narrow={props.low}
         loading={props.loading}
+        disabled={props.disabled}
       />
       <Link href={getPath('PLAN', props.planId)}>
         <a

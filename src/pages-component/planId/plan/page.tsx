@@ -48,16 +48,6 @@ export const Plan = () => {
               <DateRange dateList={[planData.start_date, planData.end_date]} />
             </a>
           </Link>
-          {/* 世界地図背景
-          <div className='absolute right-2 ml-16 hidden max-w-xs xxs:top-[106px] xxs:block xs:top-24 xs:max-w-md sm:right-12 md:max-w-xl lg:max-w-3xl'>
-            <Image
-              src='/WorldMap.png'
-              width={largerThanSm ? '800px' : '500px'}
-              height={largerThanSm ? '400px' : '300px'}
-              alt=''
-              className='opacity-10'
-            />
-          </div> */}
           <div className='ml-4 mt-10 text-2xl font-bold text-dark-500 xs:mt-12 xs:ml-6 xs:text-3xl sm:mt-14 sm:ml-11'>
             スポット一覧
           </div>
@@ -66,12 +56,6 @@ export const Plan = () => {
             {spotData.map((spot: Spot) => (
               <SpotCard key={spot.spot_id} spot={spot} />
             ))}
-            {/* 追加ボタン候補
-            <div className='my-4 flex w-full items-center justify-center xxs:my-0 xxs:w-[calc(50vw-22px)] xs:w-[calc(50vw-32px)] sm:min-h-[155px] sm:w-[calc(50vw-186px)] md:min-h-[200px] md:w-[292px]'>
-              <Button className='h-14 w-60 rounded-lg bg-white shadow-md shadow-dark-200 xxs:h-[18vw] xxs:w-[18vw] xs:rounded-2xl sm:h-[13vw] sm:w-[13vw] md:h-28 md:w-28'>
-                <IconPlus size={44} color='#495057' />
-              </Button>
-            </div> */}
             <Link href={getPath('SPOT', planId)} passHref>
               <UnstyledButton
                 component='a'

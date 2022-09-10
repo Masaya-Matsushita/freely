@@ -5,6 +5,7 @@ import { forwardRef, FC } from 'react'
 import { SpotValues } from './page'
 
 type Props = {
+  disabled: boolean
   largerThanMd: boolean
   updateActive: () => void
   form: UseFormReturnType<SpotValues>
@@ -70,7 +71,8 @@ const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(
 export const IconSelectBox: FC<Props> = (props) => {
   return (
     <Select
-      placeholder='アイコンを選択'
+      placeholder={`${props.disabled ? '取得中...' : 'アイコンを選択'}`}
+      disabled={props.disabled}
       itemComponent={SelectItem}
       data={ICON_LIST}
       clearable
@@ -79,7 +81,7 @@ export const IconSelectBox: FC<Props> = (props) => {
       filter={(value, item) => item.id === value}
       maxDropdownHeight={400}
       size={props.largerThanMd ? 'md' : 'sm'}
-      classNames={{ input: 'max-w-xs md:max-w-sm mt-6' }}
+      classNames={{ input: 'max-w-xs md:max-w-sm mt-6 disabled:bg-white' }}
       styles={{
         item: {
           '&[data-selected]': {

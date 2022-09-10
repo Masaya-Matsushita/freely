@@ -34,11 +34,11 @@ export type SpotValues = {
 export const Spot = () => {
   const router = useRouter()
   const planId = useRecoilValue(planIdState)
-  const spotId = router.query.spotId
-  const catchError = useErrorHandler()
+  const spotId = router.query.spot_id
   const largerThanXs = useMediaQuery('xs')
   const largerThanMd = useMediaQuery('md')
-  const [initValue, setInitValue] = useState(false)
+  const catchError = useErrorHandler()
+  const [fetchValue, setFetchValue] = useState(false)
   const [loading, setLoading] = useState(false)
   const [opened, { open, close }] = useDisclosure(false)
   const [active, setAcitive] = useState<('filled' | 'active' | 'blank')[]>([
@@ -93,9 +93,11 @@ export const Spot = () => {
   // spotIdがあるとき、データを取得しフォームの初期値へ代入
   const fetchSpotData = useCallback(async () => {
     if (planId && spotId) {
+      setFetchValue(true)
       const res = await fetch(`/api/spot?planId=${planId}&spotId=${spotId}`)
-      form.setValues(await res.json())
-      setInitValue(true)
+      const json = await res.json()
+      form.setValues(json)
+      setFetchValue(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [planId, spotId])
@@ -108,7 +110,7 @@ export const Spot = () => {
   useEffect(() => {
     updateActive()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initValue, form.values.image])
+  }, [fetchValue, form.values.image])
 
   // Stepperの要素
   const stepList: Step[] = [
@@ -119,10 +121,11 @@ export const Spot = () => {
       text: '店名、観光地名、施設名など',
       children: (
         <TextInput
-          placeholder={`${spotId ? '' : '(例) 東京スカイツリー'}`}
+          placeholder={`${fetchValue ? '取得中...' : '(例) 東京スカイツリー'}`}
           onBlur={updateActive}
+          disabled={fetchValue}
           size={largerThanMd ? 'md' : 'sm'}
-          classNames={{ input: 'max-w-xs md:max-w-sm' }}
+          classNames={{ input: 'max-w-xs md:max-w-sm disabled:bg-white' }}
           {...form.getInputProps('spot_name')}
         />
       ),
@@ -136,6 +139,7 @@ export const Spot = () => {
       children: (
         <div>
           <IconSelectBox
+            disabled={fetchValue}
             form={form}
             largerThanMd={largerThanMd}
             updateActive={updateActive}
@@ -143,7 +147,13 @@ export const Spot = () => {
           <div className='mt-8 mb-2 text-center text-dark-300 xs:text-lg'>
             OR
           </div>
-          <ImageDropzone form={form} error={form.errors.image} />
+          {fetchValue ? (
+            <div className='mt-[22px] flex h-[186px] max-w-xs items-center justify-center rounded-lg border-[1px] border-dotted border-dark-100 xs:mt-7 md:h-[222px] md:max-w-sm'>
+              <div className='text-sm text-dark-200'>取得中...</div>
+            </div>
+          ) : (
+            <ImageDropzone form={form} error={form.errors.image} />
+          )}
         </div>
       ),
     },
@@ -222,6 +232,7 @@ export const Spot = () => {
             </Card>
             <div className='mt-20 text-center'>
               <ButtonWithLinkArea
+                disabled={fetchValue}
                 planId={planId}
                 text={spotId ? '更新する' : '登録する'}
                 type='submit'
