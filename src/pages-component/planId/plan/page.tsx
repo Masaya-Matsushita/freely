@@ -2,11 +2,11 @@ import { UnstyledButton } from '@mantine/core'
 import { IconPlus } from '@tabler/icons'
 import Link from 'next/link'
 import { useRecoilValue } from 'recoil'
-import useSWR from 'swr'
 import { SkeletonLoading } from './SkeltonLoading'
 import { SpotCard } from './SpotCard'
 import { DateRange } from 'src/component/DateRange'
 import { getPath } from 'src/lib/const'
+import { useFetch } from 'src/lib/hooks'
 import { planIdState } from 'src/state/planId'
 import { Spot } from 'src/type/Spot'
 
@@ -17,15 +17,26 @@ export const Plan = () => {
   const planId = useRecoilValue(planIdState)
 
   // プラン取得
-  const { data: planData, error: planError } = useSWR(
-    `/api/plan?planId=${planId}`,
-  )
-  // スポット一覧取得
-  const { data: spotData, error: spotError } = useSWR(
-    `/api/spotList?planId=${planId}`,
-  )
+  const {
+    data: planData,
+    error: planError,
+    isLoading: planIsLoading,
+  } = useFetch(`/api/plan?planId=${planId}`)
 
-  // 取得時のエラー
+  // スポット一覧取得
+  const {
+    data: spotData,
+    error: spotError,
+    isLoading: spotIsLoading,
+    mutate: spotMutate,
+  } = useFetch(`/api/spotList?planId=${planId}`)
+
+  // ローディング中
+  if (planIsLoading || spotIsLoading) {
+    return <SkeletonLoading />
+  }
+
+  // エラー
   if (planError || spotError) {
     console.log('planError:', planError)
     console.log('spotError:', spotError)
@@ -33,8 +44,9 @@ export const Plan = () => {
 
   return (
     <>
-      {planId && planData && spotData ? (
+      {planId ? (
         <div>
+          {/* プラン */}
           <Link href={getPath('EDIT', planId)} passHref>
             <UnstyledButton
               component='a'
@@ -48,6 +60,8 @@ export const Plan = () => {
               <DateRange dateList={[planData.start_date, planData.end_date]} />
             </a>
           </Link>
+
+          {/* スポット一覧 */}
           <div className='ml-4 mt-10 text-2xl font-bold text-dark-500 xs:mt-12 xs:ml-6 xs:text-3xl sm:mt-14 sm:ml-11'>
             スポット一覧
           </div>
@@ -66,9 +80,7 @@ export const Plan = () => {
             </Link>
           </div>
         </div>
-      ) : (
-        <SkeletonLoading />
-      )}
+      ) : null}
     </>
   )
 }
