@@ -28,7 +28,6 @@ export const Plan = () => {
     data: spotData,
     error: spotError,
     isLoading: spotIsLoading,
-    mutate: spotMutate,
   } = useFetch(`/api/spotList?planId=${planId}`)
 
   // ローディング中

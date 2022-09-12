@@ -23,6 +23,7 @@ type Props = {
   planId: string
   spotId: number
   spotName: string
+  password: string | null
 }
 
 /**
@@ -33,7 +34,6 @@ export const MemoModal: FC<Props> = (props) => {
   const catchError = useErrorHandler()
   const { mutate } = useSWRConfig()
   const largerThanXs = useMediaQuery('xs')
-  const password = localStorage.getItem('password')
   const memoListUrl = `/api/memoList?plan_id=${props.planId}&spot_id=${String(
     props.spotId,
   )}`
@@ -63,7 +63,7 @@ export const MemoModal: FC<Props> = (props) => {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({
-          password: password,
+          password: props.password,
           plan_id: props.planId,
           spot_id: props.spotId,
           text: state.memo,
@@ -102,7 +102,7 @@ export const MemoModal: FC<Props> = (props) => {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({
-          password: password,
+          password: props.password,
           plan_id: props.planId,
           spot_id: props.spotId,
           memo_id: state.targetMemoId,
@@ -140,7 +140,7 @@ export const MemoModal: FC<Props> = (props) => {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({
-          password: password,
+          password: props.password,
           plan_id: props.planId,
           spot_id: props.spotId,
         }),

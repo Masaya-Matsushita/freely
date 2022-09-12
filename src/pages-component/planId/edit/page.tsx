@@ -61,6 +61,7 @@ export const Edit = () => {
       setLoading(true)
       // 入力値を加工
       const startDate = formatDate(values.dateRange[0])
+      // TODO: date型にする
       const endDate = formatDate(values.dateRange[1])
       const password = localStorage.getItem('password')
 
