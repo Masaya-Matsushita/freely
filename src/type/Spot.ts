@@ -5,5 +5,4 @@ export type Spot = {
   image: string
   icon: number
   priority: boolean
-  visited: boolean
 }
