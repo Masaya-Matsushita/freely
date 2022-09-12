@@ -3,7 +3,7 @@ import { useForm } from '@mantine/form'
 import { useDisclosure } from '@mantine/hooks'
 import { IconCamera, IconMap, IconMapPin } from '@tabler/icons'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useErrorHandler } from 'react-error-boundary'
 import { useRecoilValue } from 'recoil'
 import { IconSelectBox } from './IconSelectBox'
@@ -91,20 +91,22 @@ export const Spot = () => {
   }
 
   // spotIdがあるとき、データを取得しフォームの初期値へ代入
-  const fetchSpotData = useCallback(async () => {
-    if (planId && spotId) {
-      setFetchValue(true)
-      const res = await fetch(`/api/spot?planId=${planId}&spotId=${spotId}`)
-      const json = await res.json()
-      form.setValues(json)
-      setFetchValue(false)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [planId, spotId])
-
   useEffect(() => {
+    const fetchSpotData = async () => {
+      try {
+        if (planId && spotId && form) {
+          setFetchValue(true)
+          const res = await fetch(`/api/spot?planId=${planId}&spotId=${spotId}`)
+          const json = await res.json()
+          form.setValues(json)
+          setFetchValue(false)
+        }
+      } catch (error) {
+        catchError(error)
+      }
+    }
     fetchSpotData()
-  }, [fetchSpotData])
+  }, [planId, spotId, form, catchError])
 
   // 取得したspotのデータを初期値に設定時 & 画像選択時
   useEffect(() => {

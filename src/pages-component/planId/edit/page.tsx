@@ -5,7 +5,7 @@ import { useForm } from '@mantine/form'
 import { useDisclosure } from '@mantine/hooks'
 import { IconCalendarMinus } from '@tabler/icons'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useErrorHandler } from 'react-error-boundary'
 import { useRecoilValue } from 'recoil'
 import { ButtonWithLinkArea } from 'src/component/ButtonWithLinkArea'
@@ -30,6 +30,7 @@ export const Edit = () => {
   const catchError = useErrorHandler()
   const [opened, { open, close }] = useDisclosure(false)
   const [loading, setLoading] = useState(false)
+  const [fetchValue, setFetchValue] = useState(false)
 
   // フォームの初期値、バリデーション
   const form = useForm<FormValues>({
@@ -50,10 +51,23 @@ export const Edit = () => {
     },
   })
 
-  // フォームの入力が不十分のとき
-  const handleError = () => {
-    failedAlert('作成失敗', '入力内容をご確認ください')
-  }
+  // データを取得し、フォームの初期値へ代入
+  useEffect(() => {
+    const fetchPlanData = async () => {
+      try {
+        if (form && planId) {
+          setFetchValue(true)
+          const res = await fetch(`/api/plan?planId=${planId}`)
+          const json = await res.json()
+          form.setValues(json)
+          setFetchValue(false)
+        }
+      } catch (error) {
+        catchError(error)
+      }
+    }
+    fetchPlanData()
+  }, [form, planId, catchError])
 
   // プランを更新
   const handleSubmit = async (values: typeof form.values) => {
@@ -96,11 +110,15 @@ export const Edit = () => {
     }
   }
 
+  // フォームの入力が不十分のとき
+  const handleError = () => {
+    failedAlert('作成失敗', '入力内容をご確認ください')
+  }
+
   return (
     <>
       {planId ? (
         <div>
-          <PasswordModal opened={opened} closeModal={close} planId={planId} />
           <ContentLabel
             label='プランを更新'
             icon={
@@ -117,32 +135,36 @@ export const Edit = () => {
             >
               <TextInput
                 label='プラン名'
-                placeholder='東京観光'
+                placeholder={`${fetchValue ? '取得中...' : ''}`}
                 size='md'
+                disabled={fetchValue}
                 {...form.getInputProps('name')}
               />
               <DateRangePicker
                 label='日程'
                 locale='ja'
-                placeholder='日付を選択'
+                placeholder={`${fetchValue ? '取得中...' : '日付を選択'}`}
                 firstDayOfWeek='sunday'
                 inputFormat='YYYY/MM/DD'
                 labelFormat='YYYY/MM'
                 size='md'
+                disabled={fetchValue}
                 className='mt-3 xs:mt-4'
                 {...form.getInputProps('dateRange')}
               />
               <div className='mt-12 xs:mt-14'>
                 <ButtonWithLinkArea
                   text='更新'
-                  onClick={() => console.log('click')}
+                  type='submit'
                   planId={planId}
                   loading={loading}
+                  disabled={fetchValue}
                   low
                 />
               </div>
             </form>
           </div>
+          <PasswordModal opened={opened} closeModal={close} planId={planId} />
         </div>
       ) : null}
     </>
