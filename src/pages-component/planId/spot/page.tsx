@@ -94,11 +94,11 @@ export const Spot = () => {
   useEffect(() => {
     const fetchSpotData = async () => {
       try {
-        if (planId && spotId && form) {
+        if (form && planId && spotId) {
           setFetchValue(true)
           const res = await fetch(`/api/spot?planId=${planId}&spotId=${spotId}`)
           const json = await res.json()
-          form.setValues(json)
+          form.setValues(json[0])
           setFetchValue(false)
         }
       } catch (error) {
@@ -106,7 +106,8 @@ export const Spot = () => {
       }
     }
     fetchSpotData()
-  }, [planId, spotId, form, catchError])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planId, spotId, catchError])
 
   // 取得したspotのデータを初期値に設定時 & 画像選択時
   useEffect(() => {
@@ -200,7 +201,7 @@ export const Spot = () => {
 
       if (json === true) {
         // 成功
-        successAlert('登録しました！')
+        successAlert(`${spotId ? '更新' : '登録'}しました！`)
         router.push(`/${planId}/plan`)
       } else if (json === false) {
         // パスワード認証に失敗

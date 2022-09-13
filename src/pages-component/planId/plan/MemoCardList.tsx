@@ -9,7 +9,7 @@ type Props = {
     spot_id: number
     memo_id: number
     text: string
-    marked: 'White' | 'Red' | 'Green'
+    marked: 'White' | 'Red'
   }[]
 }
 
@@ -44,13 +44,7 @@ export const MemoCardList: FC<Props> = (props) => {
             <div className='flex-1 rounded-md bg-white'>
               <div
                 className={`mx-1 rounded-sm border-[0.1px] border-l-4 border-solid border-white p-2 text-sm text-dark-600 xs:text-base
-                  ${
-                    memo.marked === 'Red'
-                      ? 'border-l-red-500'
-                      : memo.marked === 'Green'
-                      ? 'border-l-green-400'
-                      : null
-                  }`}
+                  ${memo.marked === 'Red' ? 'border-l-red-500' : null}`}
               >
                 {memo.text}
               </div>

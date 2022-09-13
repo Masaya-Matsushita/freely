@@ -79,23 +79,25 @@ export const SpotCard: FC<{ spot: Spot }> = (props) => {
         )}
         <div className='flex h-10 items-center gap-2 xs:h-12 xs:gap-4'>
           {loading ? (
-            <Loader />
+            <Loader size={24} />
           ) : (
-            <UnstyledButton onClick={handleTogglePriority}>
+            <div>
               {props.spot.priority ? (
                 <AiFillStar
                   color='#f0dc00'
                   size={26}
                   className='ml-3 shrink-0 xs:ml-5'
+                  onClick={handleTogglePriority}
                 />
               ) : (
                 <AiOutlineStar
                   color='#AFAFAF'
                   size={26}
                   className='ml-3 shrink-0 xs:ml-5'
+                  onClick={handleTogglePriority}
                 />
               )}
-            </UnstyledButton>
+            </div>
           )}
           <div className='mr-2 max-h-[40px] overflow-hidden text-ellipsis text-sm font-bold text-dark-500'>
             {props.spot.spot_name}

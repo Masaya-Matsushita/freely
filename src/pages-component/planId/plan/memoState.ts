@@ -2,7 +2,7 @@ import { Reducer } from 'react'
 
 type State = {
   memo: string
-  marked: 'White' | 'Red' | 'Green'
+  marked: 'White' | 'Red'
   loading: boolean
   spotDialog: boolean
   memoDialog: boolean

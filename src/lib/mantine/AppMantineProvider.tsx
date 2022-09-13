@@ -16,7 +16,7 @@ export const AppMantineProvider: FC<{ children: ReactNode }> = ({
         colorScheme: 'light',
       }}
     >
-      <NotificationsProvider position='top-center' className='mt-16 xs:mt-12'>
+      <NotificationsProvider position='top-center' className='mt-10'>
         {children}
       </NotificationsProvider>
     </MantineProvider>

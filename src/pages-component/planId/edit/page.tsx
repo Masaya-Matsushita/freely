@@ -59,8 +59,7 @@ export const Edit = () => {
           setFetchValue(true)
           const res = await fetch(`/api/plan?planId=${planId}`)
           const json = await res.json()
-          // TODO: datetime型でデータを扱う
-          form.setFieldValue('name', json.plan_name)
+          form.setFieldValue('name', json[0].plan_name)
           setFetchValue(false)
         }
       } catch (error) {
@@ -68,7 +67,8 @@ export const Edit = () => {
       }
     }
     fetchPlanData()
-  }, [form, planId, catchError])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planId, catchError])
 
   // プランを更新
   const handleSubmit = async (values: typeof form.values) => {
@@ -95,7 +95,7 @@ export const Edit = () => {
 
       if (json === true) {
         // 成功
-        successAlert('登録しました！')
+        successAlert('更新しました！')
         router.push(`/${planId}/plan`)
       } else if (json === false) {
         // パスワード認証に失敗
@@ -159,7 +159,7 @@ export const Edit = () => {
                   planId={planId}
                   loading={loading}
                   disabled={fetchValue}
-                  low
+                  narrow
                 />
               </div>
             </form>
