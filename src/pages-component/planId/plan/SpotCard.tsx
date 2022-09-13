@@ -1,5 +1,4 @@
 import { Loader, UnstyledButton } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
 import Image from 'next/image'
 import { FC, useState } from 'react'
 import { useErrorHandler } from 'react-error-boundary'
@@ -14,8 +13,8 @@ import { Spot } from 'src/type/Spot'
  */
 export const SpotCard: FC<{ spot: Spot }> = (props) => {
   const [loading, setLoading] = useState(false)
-  const [pwModal, setpwModal] = useState(false)
-  const [opened, { open, close }] = useDisclosure(false)
+  const [pwModal, setPwModal] = useState(false)
+  const [memoModal, setMemoModal] = useState(false)
   const password = localStorage.getItem('password')
   const { mutate } = useSWRConfig()
   const catchError = useErrorHandler()
@@ -43,7 +42,7 @@ export const SpotCard: FC<{ spot: Spot }> = (props) => {
         setLoading(false)
       } else if (json === false) {
         // パスワード認証に失敗
-        setpwModal(true)
+        setPwModal(true)
         setLoading(false)
       } else {
         // 通信エラー
@@ -57,7 +56,7 @@ export const SpotCard: FC<{ spot: Spot }> = (props) => {
   return (
     <div>
       <UnstyledButton
-        onClick={open}
+        onClick={() => setMemoModal(true)}
         className='rounded-xl shadow shadow-dark-200 xxs:w-[calc(50vw-22px)] xs:w-[calc(50vw-32px)] sm:w-[calc(50vw-186px)] md:w-[292px]'
       >
         {props.spot.image ? (
@@ -105,8 +104,8 @@ export const SpotCard: FC<{ spot: Spot }> = (props) => {
         </div>
       </UnstyledButton>
       <MemoModal
-        opened={opened}
-        close={close}
+        opened={memoModal}
+        close={() => setMemoModal(false)}
         planId={props.spot.plan_id}
         spotId={props.spot.spot_id}
         spotName={props.spot.spot_name}
@@ -114,7 +113,7 @@ export const SpotCard: FC<{ spot: Spot }> = (props) => {
       />
       <PasswordModal
         opened={pwModal}
-        closeModal={() => setpwModal(false)}
+        closeModal={() => setPwModal(false)}
         planId={props.spot.plan_id}
       />
     </div>

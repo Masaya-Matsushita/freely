@@ -2,11 +2,11 @@ import { UnstyledButton } from '@mantine/core'
 import { IconPlus } from '@tabler/icons'
 import Link from 'next/link'
 import { useRecoilValue } from 'recoil'
+import useSWR from 'swr'
 import { SkeletonLoading } from './SkeltonLoading'
 import { SpotCard } from './SpotCard'
 import { DateRange } from 'src/component/DateRange'
 import { getPath } from 'src/lib/const'
-import { useFetch } from 'src/lib/hooks'
 import { planIdState } from 'src/state/planId'
 import { Spot } from 'src/type/Spot'
 
@@ -17,23 +17,14 @@ export const Plan = () => {
   const planId = useRecoilValue(planIdState)
 
   // プラン取得
-  const {
-    data: planData,
-    error: planError,
-    isLoading: planIsLoading,
-  } = useFetch(`/api/plan?planId=${planId}`)
+  const { data: planData, error: planError } = useSWR(
+    planId ? `/api/plan?planId=${planId}` : null,
+  )
 
   // スポット一覧取得
-  const {
-    data: spotData,
-    error: spotError,
-    isLoading: spotIsLoading,
-  } = useFetch(`/api/spotList?planId=${planId}`)
-
-  // ローディング中
-  if (planIsLoading || spotIsLoading) {
-    return <SkeletonLoading />
-  }
+  const { data: spotData, error: spotError } = useSWR(
+    planId ? `/api/spotList?planId=${planId}` : null,
+  )
 
   // エラー
   if (planError || spotError) {
@@ -43,7 +34,7 @@ export const Plan = () => {
 
   return (
     <>
-      {planId ? (
+      {planId && planData && spotData ? (
         <div>
           {/* プラン */}
           <Link href={getPath('EDIT', planId)} passHref>
@@ -51,12 +42,14 @@ export const Plan = () => {
               component='a'
               className='mx-3 block rounded-md p-2 text-3xl font-bold text-dark-500 xs:mx-5 xs:text-4xl sm:mx-9'
             >
-              {planData.plan_name}
+              {planData[0].plan_name}
             </UnstyledButton>
           </Link>
           <Link href={getPath('EDIT', planId)} passHref>
             <a className='mx-6 mt-2 block no-underline xs:mx-8 xs:mt-4 sm:mx-14'>
-              <DateRange dateList={[planData.start_date, planData.end_date]} />
+              <DateRange
+                dateList={[planData[0].start_date, planData[0].end_date]}
+              />
             </a>
           </Link>
 
@@ -79,7 +72,9 @@ export const Plan = () => {
             </Link>
           </div>
         </div>
-      ) : null}
+      ) : (
+        <SkeletonLoading />
+      )}
     </>
   )
 }

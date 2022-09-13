@@ -34,13 +34,11 @@ export const MemoModal: FC<Props> = (props) => {
   const catchError = useErrorHandler()
   const { mutate } = useSWRConfig()
   const largerThanXs = useMediaQuery('xs')
-  const memoListUrl = `/api/memoList?plan_id=${props.planId}&spot_id=${String(
-    props.spotId,
-  )}`
+  const memoListUrl = `/api/memoList?plan_id=${props.planId}&spot_id=${props.spotId}`
 
   // メモ取得
   // TODO: 全スポットごとに個別でAPIを叩くのはリクエストが多すぎる？
-  // NOTE: メモを一括で取得 & クライアント側で取得データをスポットごとに加工　とすべき？
+  // NOTE: メモを一括で取得 & クライアント側で取得データをスポットごとに加工 とすべき？
   const { data, error } = useSWR(memoListUrl)
 
   // 取得時のエラー

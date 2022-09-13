@@ -17,11 +17,19 @@ export const InitState = () => {
     if (typeof planId !== 'string') return
     // planIdをセット
     setPlanId(planId)
-    // 現在のplanIdをローカルストレージに保存
-    const localPlanId = localStorage.getItem('planId')
-    if (!localPlanId || localPlanId !== planId) {
-      localStorage.setItem('planId', planId)
+
+    // 「現在のplanIdを先頭とする配列」をLocalStorageに保存
+    const planIdList = localStorage.getItem('planIdList')
+    if (!planIdList) {
+      // planIdListがまだ無い場合
+      localStorage.setItem('planIdList', JSON.stringify([planId]))
+      return
     }
+    // 「現在のplanIdを先頭とする配列」を作成し、上書き
+    const prevList: string[] = JSON.parse(planIdList)
+    const trimmedList = prevList.filter((item) => item !== planId)
+    const newList = [planId, ...trimmedList]
+    localStorage.setItem('planIdList', JSON.stringify(newList))
 
     const localPrefId = localStorage.getItem('prefId')
     if (localPrefId) {

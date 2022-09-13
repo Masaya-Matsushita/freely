@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import { ReactElement } from 'react'
 import { RecoilRoot } from 'recoil'
 import { Header } from './Header'
