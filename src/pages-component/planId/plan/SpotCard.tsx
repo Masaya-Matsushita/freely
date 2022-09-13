@@ -3,9 +3,11 @@ import Image from 'next/image'
 import { FC, useState } from 'react'
 import { useErrorHandler } from 'react-error-boundary'
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai'
+import { useRecoilValue } from 'recoil'
 import { useSWRConfig } from 'swr'
 import { MemoModal } from './MemoModal'
 import { PasswordModal } from 'src/component/PasswordModal'
+import { passwordState } from 'src/state/password'
 import { Spot } from 'src/type/Spot'
 
 /**
@@ -15,7 +17,8 @@ export const SpotCard: FC<{ spot: Spot }> = (props) => {
   const [loading, setLoading] = useState(false)
   const [pwModal, setPwModal] = useState(false)
   const [memoModal, setMemoModal] = useState(false)
-  const password = localStorage.getItem('password')
+  const password = useRecoilValue(passwordState)
+
   const { mutate } = useSWRConfig()
   const catchError = useErrorHandler()
 

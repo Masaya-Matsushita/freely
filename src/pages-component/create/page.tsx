@@ -16,7 +16,7 @@ import { Card } from 'src/component/Card'
 import { ContentLabel } from 'src/component/ContentLabel'
 import { SimpleButton } from 'src/component/SimpleButton'
 import { Stepper } from 'src/component/Stepper'
-import { formatDate } from 'src/lib/const'
+import { formatDate, sortAndSavePlanList } from 'src/lib/func'
 import { failedAlert, successAlert, useMediaQuery } from 'src/lib/mantine'
 import 'dayjs/locale/ja'
 import { Step } from 'src/type/Step'
@@ -194,8 +194,8 @@ export const Create = () => {
       if (json.plan_id) {
         // 成功
         successAlert('作成しました！')
-        // passwordを端末に保存
-        localStorage.setItem('password', password)
+        // planId, passwordを端末に保存
+        sortAndSavePlanList(json.plan_id, password)
         router.push(`/${json.plan_id}/plan`)
       } else {
         // 通信エラー

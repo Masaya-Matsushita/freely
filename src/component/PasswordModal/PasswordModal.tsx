@@ -2,7 +2,10 @@ import { Button, Modal, PasswordInput, Popover } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { FC, useState } from 'react'
 import { useErrorHandler } from 'react-error-boundary'
+import { useSetRecoilState } from 'recoil'
+import { sortAndSavePlanList } from 'src/lib/func'
 import { successAlert } from 'src/lib/mantine'
+import { passwordState } from 'src/state/password'
 
 type Props = {
   opened: boolean
@@ -15,24 +18,12 @@ type Props = {
  * @package
  */
 export const PasswordModal: FC<Props> = (props) => {
-  const catchError = useErrorHandler()
-  const [password, setPassword] = useState('')
-  const [passwordError, setPasswordError] = useState('')
+  const [value, setValue] = useState('')
+  const [valueError, setValueError] = useState('')
   const [popover, { open, close }] = useDisclosure(false)
+  const setPassword = useSetRecoilState(passwordState)
 
-  // // localStorageにpasswordを保存
-  // const savePassword = (planId: string) => {
-  //   const pwListJson = localStorage.getItem('pwList')
-  //   if (pwListJson) {
-  //     // 既に別のプランを編集したことがある場合
-  //     const pwList = JSON.parse(pwListJson)
-  //     pwList[planId] = password
-  //     localStorage.setItem('pwList', JSON.stringify(pwList))
-  //   } else {
-  //     // 初めてプランを編集する場合
-  //     localStorage.setItem('pwList', JSON.stringify({ planId: password }))
-  //   }
-  // }
+  const catchError = useErrorHandler()
 
   // パスワード認証
   const handleAuth = async () => {
@@ -41,19 +32,20 @@ export const PasswordModal: FC<Props> = (props) => {
       const res = await fetch('/api/auth', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify({ plan_id: props.planId, password: password }),
+        body: JSON.stringify({ plan_id: props.planId, password: value }),
       })
       const json: boolean = await res.json()
 
       if (json === true) {
         // 認証成功
-        localStorage.setItem('password', password)
-        setPassword('')
+        sortAndSavePlanList(props.planId, value)
+        setPassword(value)
+        setValue('')
         props.closeModal()
         successAlert('認証成功')
       } else if (json === false) {
         // 認証失敗
-        setPasswordError('パスワードが間違っています')
+        setValueError('パスワードが間違っています')
       } else {
         // 通信エラー
         throw new Error('サーバー側のエラーにより、認証が失敗しました')
@@ -101,9 +93,9 @@ export const PasswordModal: FC<Props> = (props) => {
         </Popover>
         <PasswordInput
           placeholder='入力する'
-          value={password}
-          error={passwordError}
-          onChange={(e) => setPassword(e.currentTarget.value)}
+          value={value}
+          error={valueError}
+          onChange={(e) => setValue(e.currentTarget.value)}
           withAsterisk
           className='mt-2 min-w-full'
         />

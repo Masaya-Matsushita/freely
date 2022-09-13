@@ -14,6 +14,7 @@ import { ContentLabel } from 'src/component/ContentLabel'
 import { PasswordModal } from 'src/component/PasswordModal'
 import { Stepper } from 'src/component/Stepper'
 import { failedAlert, successAlert, useMediaQuery } from 'src/lib/mantine'
+import { passwordState } from 'src/state/password'
 import { planIdState } from 'src/state/planId'
 import { Step } from 'src/type/Step'
 
@@ -35,6 +36,8 @@ export const Spot = () => {
   const router = useRouter()
   const planId = useRecoilValue(planIdState)
   const spotId = router.query.spot_id
+  const password = useRecoilValue(passwordState)
+
   const largerThanXs = useMediaQuery('xs')
   const largerThanMd = useMediaQuery('md')
   const catchError = useErrorHandler()
@@ -170,8 +173,7 @@ export const Spot = () => {
   const handleSubmit = async (values: typeof form.values) => {
     try {
       setLoading(true)
-      // パスワードを取得
-      const password = localStorage.getItem('password')
+
       // 作成 or 更新で異なるエンドポイントとボディを設定
       const apiUrl = spotId ? '/api/updateSpot' : '/api/createSpot'
       const body = spotId

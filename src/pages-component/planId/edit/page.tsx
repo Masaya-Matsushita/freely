@@ -11,8 +11,9 @@ import { useRecoilValue } from 'recoil'
 import { ButtonWithLinkArea } from 'src/component/ButtonWithLinkArea'
 import { ContentLabel } from 'src/component/ContentLabel'
 import { PasswordModal } from 'src/component/PasswordModal'
-import { formatDate } from 'src/lib/const'
+import { formatDate } from 'src/lib/func'
 import { failedAlert, successAlert, useMediaQuery } from 'src/lib/mantine'
+import { passwordState } from 'src/state/password'
 import { planIdState } from 'src/state/planId'
 
 type FormValues = {
@@ -31,6 +32,7 @@ export const Edit = () => {
   const [opened, { open, close }] = useDisclosure(false)
   const [loading, setLoading] = useState(false)
   const [fetchValue, setFetchValue] = useState(false)
+  const password = useRecoilValue(passwordState)
 
   // フォームの初期値、バリデーション
   const form = useForm<FormValues>({
@@ -77,7 +79,6 @@ export const Edit = () => {
       // 入力値を加工
       const startDate = formatDate(values.dateRange[0])
       const endDate = formatDate(values.dateRange[1])
-      const password = localStorage.getItem('password')
 
       // APIと通信
       const res = await fetch('/api/updatePlan', {
