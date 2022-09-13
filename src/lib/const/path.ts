@@ -1,6 +1,7 @@
 const PATH = {
   INDEX: '/',
   CREATE: '/create',
+  HISTORY: '/history',
   PLAN: '/[planId]/plan',
   EDIT: '/[planId]/edit',
   SPOT: '/[planId]/spot',
