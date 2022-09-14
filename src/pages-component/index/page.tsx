@@ -1,5 +1,8 @@
 /* eslint-disable tailwindcss/enforces-negative-arbitrary-values */
+import { showNotification } from '@mantine/notifications'
+import { IconInfoCircle } from '@tabler/icons'
 import Image from 'next/image'
+import { useEffect } from 'react'
 import { HeroText } from './HeroText'
 import { useMediaQuery } from 'src/lib/mantine'
 
@@ -8,6 +11,27 @@ import { useMediaQuery } from 'src/lib/mantine'
  */
 export const Index = () => {
   const largerThanMd = useMediaQuery('md')
+
+  useEffect(() => {
+    const planList = localStorage.getItem('planList')
+    if (planList) {
+      showNotification({
+        id: 'info',
+        autoClose: 5000,
+        message: '「履歴」ページから前回のプランへ戻れます。',
+        icon: <IconInfoCircle size={20} />,
+        styles: (theme) => ({
+          root: {
+            backgroundColor: '#fff',
+            padding: '16px',
+          },
+          description: { color: theme.colors.gray[7] },
+          closeButton: { color: theme.colors.gray[6] },
+          icon: { width: '28px', height: '28px' },
+        }),
+      })
+    }
+  }, [])
 
   return (
     <>
