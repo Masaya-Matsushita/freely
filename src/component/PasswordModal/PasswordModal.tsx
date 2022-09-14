@@ -28,6 +28,7 @@ export const PasswordModal: FC<Props> = (props) => {
   // パスワード認証
   const handleAuth = async () => {
     try {
+      setValueError('')
       // APIと通信
       const res = await fetch('/api/auth', {
         method: 'POST',

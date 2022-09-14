@@ -1,9 +1,12 @@
 import { UnstyledButton } from '@mantine/core'
 import { IconClock } from '@tabler/icons'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { ContentLabel } from 'src/component/ContentLabel'
 import { DateRange } from 'src/component/DateRange'
 import { useMediaQuery } from 'src/lib/mantine'
+
+type Plan = { id: string; password: string }
 
 type PlanData = {
   planId: string
@@ -17,45 +20,34 @@ type PlanData = {
  * @package
  */
 export const History = () => {
+  const router = useRouter()
   const largerThanXs = useMediaQuery('xs')
   const [planDataList, setPlanDataList] = useState<PlanData[]>()
 
   // LocalStorageからplanIdを全て取得し、データをフェッチ
   useEffect(() => {
     const fetchPlan = async () => {
+      // LocalStorageから取得したplanIdの配列を作成
       const planListStr = localStorage.getItem('planList')
       if (planListStr) {
-        const planList = JSON.parse(planListStr)
-        const planIdList: string[] = planList.map(
-          (e: { id: string; password: string }) => e.id,
-        )
+        const planList: Plan[] = JSON.parse(planListStr)
+        const planIdList = planList.map((plan) => plan.id)
+        // planIdをもとにデータを並列で取得
         setPlanDataList(
           await Promise.all(
             planIdList.map(async (planId) => {
-              const res = await fetch(`/api/plan?plan_id=${planId}`)
+              const res = await fetch(`/api/plan?planId=${planId}`)
               const json = await res.json()
               return {
-                planId: json.plan_id,
-                name: json.name,
-                startDate: json.start_date,
-                endDate: json.end_date,
+                planId: planId,
+                name: json[0].plan_name,
+                startDate: json[0].start_date,
+                endDate: json[0].end_date,
                 timestamp: '2022/09/04',
               }
             }),
           ),
         )
-        // let dataList: PlanData[] = []
-        // for (let i = 0; i < planIdList.length; i++) {
-        //   const res = await fetch(`/api/plan?plan_id=${planIdList[i]}`)
-        //   const json = await res.json()
-        //   dataList.push({
-        //     planId: json.plan_id,
-        //     name: json.name,
-        //     startDate: json.start_date,
-        //     endDate: json.end_date,
-        //     timestamp: '2022/09/04',
-        //   })
-        // }
       }
     }
     fetchPlan()
@@ -75,7 +67,7 @@ export const History = () => {
               return (
                 <div key={plan.planId} className='flex justify-center'>
                   <UnstyledButton
-                    onClick={() => console.log('click')}
+                    onClick={() => router.push(`/${plan.planId}/plan`)}
                     className='mx-6 mt-6 max-w-xl flex-1 rounded-lg bg-white p-6 pt-4 pb-8 shadow-sm shadow-dark-100 xs:mx-10 xs:mt-8 xs:px-8'
                   >
                     <div className='text-right text-sm tracking-wide text-dark-400 xs:text-base'>
