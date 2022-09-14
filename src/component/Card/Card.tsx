@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react'
 
 type Props = {
-  label?: string
+  fit?: true
   children: ReactNode
 }
 
@@ -10,12 +10,11 @@ type Props = {
  */
 export const Card: FC<Props> = (props) => {
   return (
-    <div className='mx-4 mt-12 rounded-lg bg-white px-6 pt-12 pb-24 shadow shadow-dark-100 xxs:mx-6 xs:mx-auto xs:mt-20 xs:w-[550px] xs:pt-16 xs:pb-28 md:w-[650px] md:pt-20'>
-      {props.label ? (
-        <div className='mx-auto mb-12 max-w-[450px] xs:text-lg md:mb-16 md:max-w-[550px]'>
-          {props.label}
-        </div>
-      ) : null}
+    <div
+      className={`mx-4 mt-16 rounded-lg bg-white px-6 pt-14 pb-20 shadow shadow-dark-100 xxs:mx-6 xs:mx-auto xs:mt-24 xs:w-[500px] xs:pt-20 xs:pb-28 ${
+        props.fit ? 'sm:w-[480px]' : null
+      } md:w-[600px]`}
+    >
       {props.children}
     </div>
   )

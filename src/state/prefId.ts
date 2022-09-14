@@ -1,6 +1,6 @@
 import { atom } from 'recoil'
 
-export const prefIdState = atom<string | null>({
+export const prefIdState = atom<string>({
   key: 'prefIdState',
-  default: null,
+  default: '13',
 })

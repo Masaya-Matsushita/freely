@@ -2,53 +2,57 @@ import { Button, Modal, PasswordInput, Popover } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { FC, useState } from 'react'
 import { useErrorHandler } from 'react-error-boundary'
+import { useSetRecoilState } from 'recoil'
+import { sortAndSavePlanList } from 'src/lib/func'
+import { successAlert } from 'src/lib/mantine'
+import { passwordState } from 'src/state/password'
 
 type Props = {
   opened: boolean
   closeModal: () => void
   planId: string
+  clear?: true
 }
 
 /**
  * @package
  */
 export const PasswordModal: FC<Props> = (props) => {
-  const handleError = useErrorHandler()
-  const [password, setPassword] = useState('')
-  const [passwordError, setPasswordError] = useState('')
+  const [value, setValue] = useState('')
+  const [valueError, setValueError] = useState('')
   const [popover, { open, close }] = useDisclosure(false)
+  const setPassword = useSetRecoilState(passwordState)
 
-  // localStorageにpasswordを保存
-  const savePassword = (planId: string) => {
-    const pwListJson = localStorage.getItem('pwList')
-    if (pwListJson) {
-      // 既に別のプランを編集したことがある場合
-      const pwList = JSON.parse(pwListJson)
-      pwList[planId] = password
-      localStorage.setItem('pwList', JSON.stringify(pwList))
-    } else {
-      // 初めてプランを編集する場合
-      localStorage.setItem('pwList', JSON.stringify({ planId: password }))
-    }
-  }
+  const catchError = useErrorHandler()
 
   // パスワード認証
   const handleAuth = async () => {
     try {
+      setValueError('')
+      // APIと通信
       const res = await fetch('/api/auth', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify({ planId: props.planId, password: password }),
+        body: JSON.stringify({ plan_id: props.planId, password: value }),
       })
-      const json = await res.json()
-      if (json) {
-        savePassword(props.planId)
+      const json: boolean = await res.json()
+
+      if (json === true) {
+        // 認証成功
+        sortAndSavePlanList(props.planId, value)
+        setPassword(value)
+        setValue('')
         props.closeModal()
+        successAlert('認証成功')
+      } else if (json === false) {
+        // 認証失敗
+        setValueError('パスワードが間違っています')
       } else {
-        setPasswordError('パスワードが間違っています。')
+        // 通信エラー
+        throw new Error('サーバー側のエラーにより、認証が失敗しました')
       }
     } catch (error) {
-      handleError(error)
+      catchError(error)
     }
   }
 
@@ -57,14 +61,18 @@ export const PasswordModal: FC<Props> = (props) => {
       opened={props.opened}
       onClose={props.closeModal}
       title='共有パスワードを入力してください'
-      padding='xl'
-      classNames={{ title: 'text-dark-500', modal: 'bg-main-100 xxs:mx-2' }}
-      className='mt-32'
+      overlayOpacity={props.clear ? 0.3 : 1}
+      overlayBlur={props.clear ? 1.5 : 0}
+      centered
+      classNames={{
+        title: 'text-dark-500 mt-[2px]',
+        modal: 'bg-main-100 xxs:mx-2 p-6 xs:p-10',
+      }}
     >
-      <div className='mt-8 flex flex-col items-end px-2 xs:px-4'>
+      <div className='mt-6 flex flex-col items-end'>
         <Popover
           width={200}
-          position='bottom'
+          position='top'
           withArrow
           shadow='md'
           opened={popover}
@@ -75,7 +83,7 @@ export const PasswordModal: FC<Props> = (props) => {
               onMouseLeave={close}
               className='text-sm font-bold text-main-400 underline'
             >
-              ？ 共有パスワードとは
+              共有パスワードとは
             </span>
           </Popover.Target>
           <Popover.Dropdown sx={{ pointerEvents: 'none' }}>
@@ -85,17 +93,16 @@ export const PasswordModal: FC<Props> = (props) => {
           </Popover.Dropdown>
         </Popover>
         <PasswordInput
-          placeholder='Password'
-          label='共有パスワード'
-          value={password}
-          error={passwordError}
-          onChange={(e) => setPassword(e.currentTarget.value)}
+          placeholder='入力する'
+          value={value}
+          error={valueError}
+          onChange={(e) => setValue(e.currentTarget.value)}
           withAsterisk
-          className='mt-2 min-w-full xs:px-4'
+          className='mt-2 min-w-full'
         />
         <Button
           onClick={handleAuth}
-          className='mt-4 h-10 w-28 bg-main-500 font-bold hover:bg-main-500 xs:mr-4'
+          className='mt-4 h-10 w-28 bg-main-500 font-bold hover:bg-main-500'
         >
           認証
         </Button>
