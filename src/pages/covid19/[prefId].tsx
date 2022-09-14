@@ -16,7 +16,7 @@ export const getStaticPaths: GetStaticPaths<{ prefId: string }> = () => {
 
 export const getStaticProps: GetStaticProps<
   { covid19: Covid19Data },
-  { id: string }
+  { prefId: string }
 > = async (ctx) => {
   if (!ctx.params) {
     return { notFound: true }
@@ -44,7 +44,7 @@ export const getStaticProps: GetStaticProps<
 
   // 都道府県
   const API_URL_PREF = `https://opendata.corona.go.jp/api/Covid19JapanAll?dataName=${
-    prefList[Number(ctx.params.id) - 1].name
+    prefList[Number(ctx.params.prefId) - 1].name
   }`
   const prefRes = await fetch(API_URL_PREF)
   const prefData = await prefRes.json()
