@@ -1,9 +1,11 @@
 /* eslint-disable tailwindcss/enforces-negative-arbitrary-values */
 import { showNotification } from '@mantine/notifications'
-import { IconInfoCircle } from '@tabler/icons'
+import { IconArrowBackUp } from '@tabler/icons'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useEffect } from 'react'
 import { HeroText } from './HeroText'
+import { getPath } from 'src/lib/const'
 import { useMediaQuery } from 'src/lib/mantine'
 
 /**
@@ -18,8 +20,16 @@ export const Index = () => {
       showNotification({
         id: 'info',
         autoClose: 5000,
-        message: '「履歴」ページから前回のプランへ戻れます。',
-        icon: <IconInfoCircle size={20} />,
+        color: 'indigo',
+        message: (
+          <div>
+            <Link href={getPath('HISTORY')}>
+              <a className='mx-1 font-bold tracking-wide text-main-500'>履歴</a>
+            </Link>
+            <span>ページから前回のプランへ戻れます。</span>
+          </div>
+        ),
+        icon: <IconArrowBackUp size={18} />,
         styles: (theme) => ({
           root: {
             backgroundColor: '#fff',
