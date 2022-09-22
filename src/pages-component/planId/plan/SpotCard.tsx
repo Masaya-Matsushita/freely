@@ -1,4 +1,4 @@
-import { Loader, UnstyledButton } from '@mantine/core'
+import { LoadingOverlay, UnstyledButton } from '@mantine/core'
 import Image from 'next/image'
 import { FC, useState } from 'react'
 import { useErrorHandler } from 'react-error-boundary'
@@ -41,7 +41,7 @@ export const SpotCard: FC<{ spot: Spot }> = (props) => {
 
       if (json === true) {
         // 成功
-        mutate(`/api/spot/readSpotList?planId=${props.spot.plan_id}`)
+        await mutate(`/api/spot/readSpotList?planId=${props.spot.plan_id}`)
         setLoading(false)
       } else if (json === false) {
         // パスワード認証に失敗
@@ -57,7 +57,14 @@ export const SpotCard: FC<{ spot: Spot }> = (props) => {
   }
 
   return (
-    <div className='rounded-xl shadow shadow-dark-200 xxs:w-[calc(50vw-22px)] xs:w-[calc(50vw-32px)] sm:w-[calc(50vw-186px)] md:w-[292px]'>
+    <div className='relative rounded-xl shadow shadow-dark-200 xxs:w-[calc(50vw-22px)] xs:w-[calc(50vw-32px)] sm:w-[calc(50vw-186px)] md:w-[292px]'>
+      <LoadingOverlay
+        visible={loading}
+        loader={customLoader}
+        overlayOpacity={0.3}
+        overlayColor='#c5c5c5'
+        className='rounded-xl'
+      />
       {props.spot.image ? (
         <Image
           src={props.spot.image}
@@ -78,20 +85,16 @@ export const SpotCard: FC<{ spot: Spot }> = (props) => {
         />
       )}
       <div className='mb-1 flex h-8 items-center gap-1 xs:h-10 xs:gap-2'>
-        {loading ? (
-          <Loader size={22} className='ml-4 xs:ml-7' />
-        ) : (
-          <UnstyledButton
-            onClick={handleTogglePriority}
-            className='ml-3 rounded-md xs:ml-6'
-          >
-            {props.spot.priority ? (
-              <AiFillStar color='#f0dc00' size={26} className='shrink-0' />
-            ) : (
-              <AiOutlineStar color='#AFAFAF' size={26} className='shrink-0' />
-            )}
-          </UnstyledButton>
-        )}
+        <UnstyledButton
+          onClick={handleTogglePriority}
+          className='ml-3 rounded-md xs:ml-6'
+        >
+          {props.spot.priority ? (
+            <AiFillStar color='#f0dc00' size={26} className='shrink-0' />
+          ) : (
+            <AiOutlineStar color='#AFAFAF' size={26} className='shrink-0' />
+          )}
+        </UnstyledButton>
         <UnstyledButton
           onClick={() => setMemoModal(true)}
           className='mr-2 flex-1 rounded-md p-[5px]'
@@ -117,3 +120,29 @@ export const SpotCard: FC<{ spot: Spot }> = (props) => {
     </div>
   )
 }
+
+const customLoader = (
+  <svg
+    width='48'
+    height='48'
+    viewBox='-10 -10 60 60'
+    xmlns='http://www.w3.org/2000/svg'
+    stroke='#6C6DE4'
+  >
+    <g fill='none' fillRule='evenodd'>
+      <g transform='translate(1 1)' strokeWidth='5'>
+        <circle strokeOpacity='.5' cx='18' cy='18' r='18' />
+        <path d='M36 18c0-9.94-8.06-18-18-18'>
+          <animateTransform
+            attributeName='transform'
+            type='rotate'
+            from='0 18 18'
+            to='360 18 18'
+            dur='1s'
+            repeatCount='indefinite'
+          />
+        </path>
+      </g>
+    </g>
+  </svg>
+)
