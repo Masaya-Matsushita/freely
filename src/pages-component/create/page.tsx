@@ -179,7 +179,7 @@ export const Create = () => {
         password = Math.random().toString(32).substring(2)
       }
       // APIと通信
-      const res = await fetch('/api/createPlan', {
+      const res = await fetch('/api/plan/create', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({

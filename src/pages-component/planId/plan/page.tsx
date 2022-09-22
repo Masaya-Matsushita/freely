@@ -18,12 +18,12 @@ export const Plan = () => {
 
   // プラン取得
   const { data: planData, error: planError } = useSWR(
-    planId ? `/api/plan?planId=${planId}` : null,
+    planId ? `/api/plan/read?planId=${planId}` : null,
   )
 
   // スポット一覧取得
   const { data: spotData, error: spotError } = useSWR(
-    planId ? `/api/spotList?planId=${planId}` : null,
+    planId ? `/api/spot/readSpotList?planId=${planId}` : null,
   )
 
   // エラー

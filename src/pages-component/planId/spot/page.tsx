@@ -99,7 +99,7 @@ export const Spot = () => {
       try {
         if (form && planId && spotId) {
           setFetchValue(true)
-          const res = await fetch(`/api/spot?planId=${planId}&spotId=${spotId}`)
+          const res = await fetch(`/api/spot/readSpot?planId=${planId}&spotId=${spotId}`)
           const json = await res.json()
           form.setValues(json[0])
           setFetchValue(false)
@@ -175,7 +175,7 @@ export const Spot = () => {
       setLoading(true)
 
       // 作成 or 更新で異なるエンドポイントとボディを設定
-      const apiUrl = spotId ? '/api/updateSpot' : '/api/createSpot'
+      const apiUrl = spotId ? '/api/spot/updateSpot' : '/api/spot/create'
       const body = spotId
         ? {
             password: password,

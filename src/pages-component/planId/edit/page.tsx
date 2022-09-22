@@ -59,7 +59,7 @@ export const Edit = () => {
       try {
         if (form && planId) {
           setFetchValue(true)
-          const res = await fetch(`/api/plan?planId=${planId}`)
+          const res = await fetch(`/api/plan/read?planId=${planId}`)
           const json = await res.json()
           form.setFieldValue('name', json[0].plan_name)
           setFetchValue(false)
@@ -81,7 +81,7 @@ export const Edit = () => {
       const endDate = formatDate(values.dateRange[1])
 
       // APIと通信
-      const res = await fetch('/api/updatePlan', {
+      const res = await fetch('/api/plan/update', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({

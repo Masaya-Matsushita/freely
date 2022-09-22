@@ -41,7 +41,7 @@ export const History = () => {
           setPlanDataList(
             await Promise.all(
               planIdList.map(async (planId) => {
-                const res = await fetch(`/api/plan?planId=${planId}`)
+                const res = await fetch(`/api/plan/read?planId=${planId}`)
                 const json = await res.json()
                 return {
                   planId: planId,

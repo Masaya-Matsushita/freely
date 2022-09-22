@@ -27,7 +27,7 @@ export const SpotCard: FC<{ spot: Spot }> = (props) => {
     try {
       setLoading(true)
       // API通信
-      const res = await fetch('/api/updatePriority', {
+      const res = await fetch('/api/spot/updatePriority', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({
@@ -41,7 +41,7 @@ export const SpotCard: FC<{ spot: Spot }> = (props) => {
 
       if (json === true) {
         // 成功
-        mutate(`/api/spotList?planId=${props.spot.plan_id}`)
+        mutate(`/api/spot/readSpotList?planId=${props.spot.plan_id}`)
         setLoading(false)
       } else if (json === false) {
         // パスワード認証に失敗

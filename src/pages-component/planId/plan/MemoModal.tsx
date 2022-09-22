@@ -34,7 +34,7 @@ export const MemoModal: FC<Props> = (props) => {
   const catchError = useErrorHandler()
   const { mutate } = useSWRConfig()
   const largerThanXs = useMediaQuery('xs')
-  const memoListUrl = `/api/memoList?plan_id=${props.planId}&spot_id=${props.spotId}`
+  const memoListUrl = `/api/memo/read?plan_id=${props.planId}&spot_id=${props.spotId}`
 
   // メモ取得
   // TODO: 全スポットごとに個別でAPIを叩くのはリクエストが多すぎる？
@@ -57,7 +57,7 @@ export const MemoModal: FC<Props> = (props) => {
         payload: { loading: true },
       })
       // API通信
-      const res = await fetch('/api/createMemo', {
+      const res = await fetch('/api/memo/create', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({
@@ -96,7 +96,7 @@ export const MemoModal: FC<Props> = (props) => {
   const deleteMemo = async () => {
     try {
       // API通信
-      const res = await fetch('/api/deleteMemo', {
+      const res = await fetch('/api/memo/delete', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({
@@ -134,7 +134,7 @@ export const MemoModal: FC<Props> = (props) => {
   const deleteSpot = async () => {
     try {
       // API通信
-      const res = await fetch('/api/deleteSpot', {
+      const res = await fetch('/api/spot/delete', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({
@@ -147,7 +147,7 @@ export const MemoModal: FC<Props> = (props) => {
 
       if (json === true) {
         // 削除成功
-        await mutate(`/api/spotList?planId=${props.planId}`)
+        await mutate(`/api/spot/readSpotList?planId=${props.planId}`)
         dispatch({
           type: 'spotDialog',
           payload: { spotDialog: false },
