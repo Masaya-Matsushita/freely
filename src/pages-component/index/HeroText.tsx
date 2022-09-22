@@ -7,6 +7,7 @@ import { getPath } from 'src/lib/const'
  */
 export const HeroText = () => {
   const [planId, setPlanId] = useState('')
+
   useEffect(() => {
     const planListStr = localStorage.getItem('planList')
     if (planListStr) {

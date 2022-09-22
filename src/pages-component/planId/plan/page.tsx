@@ -10,6 +10,33 @@ import { getPath } from 'src/lib/const'
 import { planIdState } from 'src/state/planId'
 import { Spot } from 'src/type/Spot'
 
+// spotListを priority, spot_id の値によってソート
+const spotFetcher = async (input: RequestInfo) => {
+  const res = await fetch(input)
+  const json: Spot[] = await res.json()
+  // priorityの値で並べ替え
+  let firstSpotList: Spot[] = []
+  let secondSpotList: Spot[] = []
+  json.forEach((spot) => {
+    if (spot.priority) {
+      firstSpotList = [...firstSpotList, spot]
+    } else {
+      secondSpotList = [...secondSpotList, spot]
+    }
+  })
+  // spot_idの値で並べ替え
+  const sortSpotList = (list: Spot[]) => {
+    return list.sort((a, b) => {
+      if (a.spot_id < b.spot_id) return -1
+      if (a.spot_id > b.spot_id) return 1
+      return 0
+    })
+  }
+  sortSpotList(firstSpotList)
+  sortSpotList(secondSpotList)
+  return [...firstSpotList, ...secondSpotList]
+}
+
 /**
  * @package
  */
@@ -24,6 +51,7 @@ export const Plan = () => {
   // スポット一覧取得
   const { data: spotData, error: spotError } = useSWR(
     planId ? `/api/spot/readSpotList?planId=${planId}` : null,
+    spotFetcher,
   )
 
   // エラー

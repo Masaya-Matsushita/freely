@@ -37,7 +37,6 @@ export const Spot = () => {
   const planId = useRecoilValue(planIdState)
   const spotId = router.query.spot_id
   const password = useRecoilValue(passwordState)
-
   const largerThanXs = useMediaQuery('xs')
   const largerThanMd = useMediaQuery('md')
   const catchError = useErrorHandler()
@@ -73,6 +72,33 @@ export const Spot = () => {
     },
   })
 
+  // spotIdがあるとき、データを取得しフォームの初期値へ代入
+  useEffect(() => {
+    const fetchSpotData = async () => {
+      try {
+        if (form && planId && spotId) {
+          setFetchValue(true)
+          const res = await fetch(
+            `/api/spot/readSpot?planId=${planId}&spotId=${spotId}`,
+          )
+          const json = await res.json()
+          form.setValues(json[0])
+          setFetchValue(false)
+        }
+      } catch (error) {
+        catchError(error)
+      }
+    }
+    fetchSpotData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planId, spotId, catchError])
+
+  // 取得したspotのデータを初期値に設定時 & 画像選択時
+  useEffect(() => {
+    updateActive()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchValue, form.values.image])
+
   // フォームの入力箇所までactiveを進める
   const updateActive = () => {
     const valList = [form.values.spot_name, form.values.icon, form.values.image]
@@ -92,31 +118,6 @@ export const Spot = () => {
     }
     setAcitive(activeList)
   }
-
-  // spotIdがあるとき、データを取得しフォームの初期値へ代入
-  useEffect(() => {
-    const fetchSpotData = async () => {
-      try {
-        if (form && planId && spotId) {
-          setFetchValue(true)
-          const res = await fetch(`/api/spot/readSpot?planId=${planId}&spotId=${spotId}`)
-          const json = await res.json()
-          form.setValues(json[0])
-          setFetchValue(false)
-        }
-      } catch (error) {
-        catchError(error)
-      }
-    }
-    fetchSpotData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [planId, spotId, catchError])
-
-  // 取得したspotのデータを初期値に設定時 & 画像選択時
-  useEffect(() => {
-    updateActive()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchValue, form.values.image])
 
   // Stepperの要素
   const stepList: Step[] = [

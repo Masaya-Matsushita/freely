@@ -61,8 +61,10 @@ export const SpotCard: FC<{ spot: Spot }> = (props) => {
       <LoadingOverlay
         visible={loading}
         loader={customLoader}
-        overlayOpacity={0.3}
+        overlayBlur={0.6}
+        overlayOpacity={0.4}
         overlayColor='#c5c5c5'
+        zIndex={10}
         className='rounded-xl'
       />
       {props.spot.image ? (
