@@ -49,8 +49,8 @@ export const MemoModal: FC<Props> = (props) => {
   // メモ追加
   const handleSubmit = async () => {
     try {
-      // 100字以上の場合、実行しない
-      if (state.memo.length > 100) return
+      // 未入力 or 100字以上 のとき実行しない
+      if (!state.memo || state.memo.length > 100) return
 
       dispatch({
         type: 'loading',
