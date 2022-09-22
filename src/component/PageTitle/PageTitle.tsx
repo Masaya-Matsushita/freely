@@ -15,7 +15,7 @@ export const PageTitle: FC<{ page?: string }> = (props) => {
 
   return (
     <Head>
-      <title>{props.page} | Freely</title>
+      <title>{`${props.page} | Freely`}</title>
     </Head>
   )
 }
