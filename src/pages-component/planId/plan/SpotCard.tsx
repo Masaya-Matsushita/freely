@@ -37,19 +37,29 @@ export const SpotCard: FC<{ spot: Spot }> = (props) => {
           priority: !props.spot.priority,
         }),
       })
-      const json: boolean = await res.json()
 
-      if (json === true) {
+      // 404エラー
+      if (res.status === 404) {
+        throw new Error(
+          '指定したプランが見つかりません。URLが誤っていないことをご確認ください。(404 Error)',
+        )
+      }
+      // 404以外のエラー
+      if (!res.ok) {
+        throw new Error(
+          'データの更新に失敗しました。時間を置いて再度お試しください。',
+        )
+      }
+
+      const json: boolean = await res.json()
+      if (json) {
         // 成功
         await mutate(`/api/spot/readSpotList?planId=${props.spot.plan_id}`)
         setLoading(false)
-      } else if (json === false) {
+      } else {
         // パスワード認証に失敗
         setPwModal(true)
         setLoading(false)
-      } else {
-        // 通信エラー
-        throw new Error('サーバー側のエラーにより、メモの追加に失敗しました')
       }
     } catch (error) {
       catchError(error)

@@ -15,7 +15,7 @@ import { SpotMenu } from './SpotMenu'
 import { initialState, reducer } from './memoState'
 import { ConfirmDialog } from 'src/component/ConfirmDialog'
 import { PasswordModal } from 'src/component/PasswordModal'
-import { useMediaQuery } from 'src/lib/mantine'
+import { reloadAlert, useMediaQuery } from 'src/lib/mantine'
 
 type Props = {
   opened: boolean
@@ -43,7 +43,7 @@ export const MemoModal: FC<Props> = (props) => {
 
   // 取得時のエラー
   if (error) {
-    console.log('memoError', error)
+    reloadAlert()
   }
 
   // メモ追加
@@ -68,24 +68,26 @@ export const MemoModal: FC<Props> = (props) => {
           marked: state.marked,
         }),
       })
-      const json: boolean = await res.json()
 
-      if (json === true) {
+      // 404以外のエラー
+      if (!res.ok) {
+        throw new Error('通信に失敗しました。時間を置いて再度お試しください。')
+      }
+
+      const json: boolean = await res.json()
+      if (json) {
         // 作成成功
         await mutate(memoListUrl)
         dispatch({
           type: 'createMemoSuccess',
           payload: { memo: '', marked: 'White', loading: false },
         })
-      } else if (json === false) {
+      } else {
         // パスワード認証に失敗
         dispatch({
           type: 'createMemoFailed',
           payload: { passwordModal: true, loading: false },
         })
-      } else {
-        // 通信エラー
-        throw new Error('サーバー側のエラーにより、メモの追加に失敗しました')
       }
     } catch (error) {
       catchError(error)
@@ -106,24 +108,34 @@ export const MemoModal: FC<Props> = (props) => {
           memo_id: state.targetMemoId,
         }),
       })
-      const json: boolean = await res.json()
 
-      if (json === true) {
+      // 404エラー
+      if (res.status === 404) {
+        throw new Error(
+          '指定したプランが見つかりません。URLが誤っていないことをご確認ください。(404 Error)',
+        )
+      }
+      // 404以外のエラー
+      if (!res.ok) {
+        throw new Error(
+          'データの取得に失敗しました。時間を置いて再度お試しください。',
+        )
+      }
+
+      const json: boolean = await res.json()
+      if (json) {
         // 削除成功
         mutate(memoListUrl)
         dispatch({
           type: 'memoDialog',
           payload: { memoDialog: false },
         })
-      } else if (json === false) {
+      } else {
         // パスワード認証に失敗
         dispatch({
           type: 'deleteMemoFailed',
           payload: { memoDialog: false, passwordModal: true },
         })
-      } else {
-        // 通信エラー
-        throw new Error('サーバー側のエラーにより、メモの削除に失敗しました')
       }
     } catch (error) {
       catchError(error)
@@ -143,9 +155,22 @@ export const MemoModal: FC<Props> = (props) => {
           spot_id: props.spotId,
         }),
       })
-      const json: boolean = await res.json()
 
-      if (json === true) {
+      // 404エラー
+      if (res.status === 404) {
+        throw new Error(
+          '指定したプランが見つかりません。URLが誤っていないことをご確認ください。(404 Error)',
+        )
+      }
+      // 404以外のエラー
+      if (!res.ok) {
+        throw new Error(
+          'データの取得に失敗しました。時間を置いて再度お試しください。',
+        )
+      }
+
+      const json: boolean = await res.json()
+      if (json) {
         // 削除成功
         await mutate(`/api/spot/readSpotList?planId=${props.planId}`)
         dispatch({
@@ -153,17 +178,12 @@ export const MemoModal: FC<Props> = (props) => {
           payload: { spotDialog: false },
         })
         props.close()
-      } else if (json === false) {
+      } else {
         // パスワード認証に失敗
         dispatch({
           type: 'deleteSpotFailed',
           payload: { spotDialog: false, passwordModal: true },
         })
-      } else {
-        // 通信エラー
-        throw new Error(
-          'サーバー側のエラーにより、スポットの削除に失敗しました',
-        )
       }
     } catch (error) {
       catchError(error)

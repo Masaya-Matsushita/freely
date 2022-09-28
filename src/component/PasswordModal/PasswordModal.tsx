@@ -35,21 +35,31 @@ export const PasswordModal: FC<Props> = (props) => {
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({ plan_id: props.planId, password: value }),
       })
-      const json: boolean = await res.json()
 
-      if (json === true) {
+      // 404エラー
+      if (res.status === 404) {
+        throw new Error(
+          '指定したプランが見つかりません。URLが誤っていないことをご確認ください。(404 Error)',
+        )
+      }
+      // 404以外のエラー
+      if (!res.ok) {
+        throw new Error(
+          'サーバー側のエラーにより認証に失敗しました。時間を置いて再度お試しください。',
+        )
+      }
+
+      const json: boolean = await res.json()
+      if (json) {
         // 認証成功
         sortAndSavePlanList(props.planId, value)
         setPassword(value)
         setValue('')
         props.closeModal()
         successAlert('認証成功')
-      } else if (json === false) {
+      } else {
         // 認証失敗
         setValueError('パスワードが間違っています')
-      } else {
-        // 通信エラー
-        throw new Error('サーバー側のエラーにより、認証が失敗しました')
       }
     } catch (error) {
       catchError(error)

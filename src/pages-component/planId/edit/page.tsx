@@ -60,6 +60,20 @@ export const Edit = () => {
         if (form && planId) {
           setFetchValue(true)
           const res = await fetch(`/api/plan/read?planId=${planId}`)
+
+          // 404エラー
+          if (res.status === 404) {
+            throw new Error(
+              '指定したプランが見つかりません。URLの指定が誤っていないことをご確認ください。(404 Error)',
+            )
+          }
+          // 404以外のエラー
+          if (!res.ok) {
+            throw new Error(
+              'データの取得に失敗しました。時間を置いて再度お試しください。',
+            )
+          }
+
           const json = await res.json()
           form.setFieldValue('name', json[0].plan_name)
           setFetchValue(false)
@@ -92,19 +106,28 @@ export const Edit = () => {
           end_date: endDate,
         }),
       })
-      const json: boolean = await res.json()
 
-      if (json === true) {
+      // 通信エラー
+      if (res.status === 404) {
+        throw new Error(
+          '指定したプランが見つかりません。URLの指定が誤っていないことをご確認ください。(404 Error)',
+        )
+      }
+      if (!res.ok) {
+        throw new Error(
+          'データの通信に失敗しました。時間を置いて再度お試しください。',
+        )
+      }
+
+      const json: boolean = await res.json()
+      if (json) {
         // 成功
         successAlert('更新しました！')
         router.push(`/${planId}/plan`)
-      } else if (json === false) {
+      } else {
         // パスワード認証に失敗
         open()
         setLoading(false)
-      } else {
-        // 通信エラー
-        throw new Error('サーバー側のエラーにより、プランの更新に失敗しました')
       }
     } catch (error) {
       catchError(error)

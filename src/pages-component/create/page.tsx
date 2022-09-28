@@ -189,18 +189,19 @@ export const Create = () => {
           end_date: endDate,
         }),
       })
-      const json: { plan_id: string } = await res.json()
 
-      if (json.plan_id) {
-        // 成功
-        successAlert('作成しました！')
-        // planId, passwordを端末に保存
-        sortAndSavePlanList(json.plan_id, password)
-        router.push(`/${json.plan_id}/plan`)
-      } else {
-        // 通信エラー
-        throw new Error('サーバー側のエラーにより、プランの作成に失敗しました')
+      // エラー
+      if (!res.ok) {
+        throw new Error(
+          '作成に失敗しました。しばらく時間を置いて再度お試しください。',
+        )
       }
+
+      const json: { plan_id: string } = await res.json()
+      successAlert('作成しました！')
+      // planId, passwordを端末に保存
+      sortAndSavePlanList(json.plan_id, password)
+      router.push(`/${json.plan_id}/plan`)
     } catch (error) {
       catchError(error)
     }
