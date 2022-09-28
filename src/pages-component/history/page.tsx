@@ -25,7 +25,7 @@ export const History = () => {
   const catchError = useErrorHandler()
   const largerThanXs = useMediaQuery('xs')
   const [loading, setLoading] = useState(false)
-  const [planDataList, setPlanDataList] = useState<PlanData[]>()
+  const [planDataList, setPlanDataList] = useState<(PlanData | null)[]>()
 
   // LocalStorageからplanIdを全て取得し、データをフェッチ
   useEffect(() => {
@@ -42,7 +42,10 @@ export const History = () => {
             await Promise.all(
               planIdList.map(async (planId) => {
                 const res = await fetch(`/api/plan/read?planId=${planId}`)
+                // データが見つからない(=planIdが間違っている)場合、null
+                if (!res.ok) return null
                 const json = await res.json()
+                // TODO: timestampの設定
                 return {
                   planId: planId,
                   name: json[0].plan_name,

@@ -4,9 +4,10 @@ import { FC } from 'react'
 import { PlanData } from './page'
 import { DateRange } from 'src/component/DateRange'
 
-export const PlanCard: FC<{ planDataList?: PlanData[]; loading: boolean }> = (
-  props,
-) => {
+export const PlanCard: FC<{
+  planDataList?: (PlanData | null)[]
+  loading: boolean
+}> = (props) => {
   const router = useRouter()
 
   // ローディング中
@@ -36,8 +37,8 @@ export const PlanCard: FC<{ planDataList?: PlanData[]; loading: boolean }> = (
 
   return (
     <div className='mt-4'>
-      {props.planDataList.map((plan: any) => {
-        return (
+      {props.planDataList.map((plan) => {
+        return !plan ? null : (
           <div key={plan.planId} className='flex justify-center'>
             <UnstyledButton
               onClick={() => router.push(`/${plan.planId}/plan`)}
