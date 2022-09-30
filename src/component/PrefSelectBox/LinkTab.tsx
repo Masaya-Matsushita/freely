@@ -4,10 +4,15 @@ import { useRouter } from 'next/router'
 import { FC } from 'react'
 import { getPath } from 'src/lib/const'
 
+type Props = {
+  prefId: string
+  planId: string | null
+}
+
 /**
  * @package
  */
-export const LinkTab: FC<{ prefId: string }> = (props) => {
+export const LinkTab: FC<Props> = (props) => {
   const router = useRouter()
 
   return (
@@ -16,7 +21,10 @@ export const LinkTab: FC<{ prefId: string }> = (props) => {
         defaultValue={router.pathname.slice(1).split('/')[0].toUpperCase()}
         value={router.query.activeTab as string}
         onTabChange={(value: 'WEATHER' | 'COVID19' | 'SAKE') =>
-          router.push(getPath(value, props.prefId))
+          router.push({
+            pathname: getPath(value, props.prefId),
+            query: { planId: props.planId },
+          })
         }
         className='mx-2 mt-12'
       >

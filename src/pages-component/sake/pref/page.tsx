@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { FC } from 'react'
 import { PrefSelectBox } from 'src/component/PrefSelectBox'
 import { SakeData } from 'src/type/SakeData'
@@ -6,6 +7,15 @@ import { SakeData } from 'src/type/SakeData'
  * @package
  */
 export const Sake: FC<{ data: SakeData }> = (props) => {
+  const router = useRouter()
+
+  // パスのクエリにplanIdが無いとき
+  if (router.isReady && !router.query.planId) {
+    throw new Error(
+      '不正なパス遷移として検出されました。Top画面から入り直してください。',
+    )
+  }
+
   return (
     <>
       <PrefSelectBox />

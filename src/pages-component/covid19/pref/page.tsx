@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { FC } from 'react'
 import { PrefSelectBox } from 'src/component/PrefSelectBox'
 import { Covid19Data } from 'src/type/Covid19Data'
@@ -91,6 +92,14 @@ const prefData = {
 export const Covid19 = () => {
   // const japanData = props.data.covid19Japan
   // const prefData = props.data.covid19Pref
+  const router = useRouter()
+
+  // パスのクエリにplanIdが無いとき
+  if (router.isReady && !router.query.planId) {
+    throw new Error(
+      '不正なパス遷移として検出されました。Top画面から入り直してください。',
+    )
+  }
 
   return (
     <>
