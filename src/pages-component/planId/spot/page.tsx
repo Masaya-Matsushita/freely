@@ -37,7 +37,6 @@ export const Spot = () => {
   const planId = useRecoilValue(planIdState)
   const spotId = router.query.spot_id
   const password = useRecoilValue(passwordState)
-
   const largerThanXs = useMediaQuery('xs')
   const largerThanMd = useMediaQuery('md')
   const catchError = useErrorHandler()
@@ -73,6 +72,47 @@ export const Spot = () => {
     },
   })
 
+  // spotIdがあるとき、データを取得しフォームの初期値へ代入
+  useEffect(() => {
+    const fetchSpotData = async () => {
+      try {
+        if (form && planId && spotId) {
+          setFetchValue(true)
+          const res = await fetch(
+            `/api/spot/readSpot?planId=${planId}&spotId=${spotId}`,
+          )
+
+          // 404エラー
+          if (res.status === 404) {
+            throw new Error(
+              '指定したプランが見つかりません。URLが誤っていないことをご確認ください。(404 Error)',
+            )
+          }
+          // 404以外のエラー
+          if (!res.ok) {
+            throw new Error(
+              'データの取得に失敗しました。時間を置いて再度お試しください。',
+            )
+          }
+
+          const json = await res.json()
+          form.setValues(json[0])
+          setFetchValue(false)
+        }
+      } catch (error) {
+        catchError(error)
+      }
+    }
+    fetchSpotData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planId, spotId, catchError])
+
+  // 取得したspotのデータを初期値に設定時 & 画像選択時
+  useEffect(() => {
+    updateActive()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchValue, form.values.image])
+
   // フォームの入力箇所までactiveを進める
   const updateActive = () => {
     const valList = [form.values.spot_name, form.values.icon, form.values.image]
@@ -92,31 +132,6 @@ export const Spot = () => {
     }
     setAcitive(activeList)
   }
-
-  // spotIdがあるとき、データを取得しフォームの初期値へ代入
-  useEffect(() => {
-    const fetchSpotData = async () => {
-      try {
-        if (form && planId && spotId) {
-          setFetchValue(true)
-          const res = await fetch(`/api/spot?planId=${planId}&spotId=${spotId}`)
-          const json = await res.json()
-          form.setValues(json[0])
-          setFetchValue(false)
-        }
-      } catch (error) {
-        catchError(error)
-      }
-    }
-    fetchSpotData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [planId, spotId, catchError])
-
-  // 取得したspotのデータを初期値に設定時 & 画像選択時
-  useEffect(() => {
-    updateActive()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchValue, form.values.image])
 
   // Stepperの要素
   const stepList: Step[] = [
@@ -175,7 +190,7 @@ export const Spot = () => {
       setLoading(true)
 
       // 作成 or 更新で異なるエンドポイントとボディを設定
-      const apiUrl = spotId ? '/api/updateSpot' : '/api/createSpot'
+      const apiUrl = spotId ? '/api/spot/updateSpot' : '/api/spot/create'
       const body = spotId
         ? {
             password: password,
@@ -199,21 +214,29 @@ export const Spot = () => {
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify(body),
       })
-      const json: boolean = await res.json()
 
-      if (json === true) {
+      // 404エラー
+      if (res.status === 404) {
+        throw new Error(
+          '指定したプランが見つかりません。URLが誤っていないことをご確認ください。(404 Error)',
+        )
+      }
+      // 404以外のエラー
+      if (!res.ok) {
+        throw new Error(
+          'データの取得に失敗しました。時間を置いて再度お試しください。',
+        )
+      }
+
+      const json: boolean = await res.json()
+      if (json) {
         // 成功
         successAlert(`${spotId ? '更新' : '登録'}しました！`)
         router.push(`/${planId}/plan`)
-      } else if (json === false) {
+      } else {
         // パスワード認証に失敗
         open()
         setLoading(false)
-      } else {
-        // 通信エラー
-        throw new Error(
-          'サーバー側のエラーにより、スポットの登録に失敗しました',
-        )
       }
     } catch (error) {
       catchError(error)

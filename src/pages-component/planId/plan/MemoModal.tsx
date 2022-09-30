@@ -15,7 +15,7 @@ import { SpotMenu } from './SpotMenu'
 import { initialState, reducer } from './memoState'
 import { ConfirmDialog } from 'src/component/ConfirmDialog'
 import { PasswordModal } from 'src/component/PasswordModal'
-import { useMediaQuery } from 'src/lib/mantine'
+import { reloadAlert, useMediaQuery } from 'src/lib/mantine'
 
 type Props = {
   opened: boolean
@@ -34,7 +34,7 @@ export const MemoModal: FC<Props> = (props) => {
   const catchError = useErrorHandler()
   const { mutate } = useSWRConfig()
   const largerThanXs = useMediaQuery('xs')
-  const memoListUrl = `/api/memoList?plan_id=${props.planId}&spot_id=${props.spotId}`
+  const memoListUrl = `/api/memo/read?plan_id=${props.planId}&spot_id=${props.spotId}`
 
   // メモ取得
   // TODO: 全スポットごとに個別でAPIを叩くのはリクエストが多すぎる？
@@ -43,21 +43,21 @@ export const MemoModal: FC<Props> = (props) => {
 
   // 取得時のエラー
   if (error) {
-    console.log('memoError', error)
+    reloadAlert()
   }
 
   // メモ追加
   const handleSubmit = async () => {
     try {
-      // 100字以上の場合、実行しない
-      if (state.memo.length > 100) return
+      // 未入力 or 100字以上 のとき実行しない
+      if (!state.memo || state.memo.length > 100) return
 
       dispatch({
         type: 'loading',
         payload: { loading: true },
       })
       // API通信
-      const res = await fetch('/api/createMemo', {
+      const res = await fetch('/api/memo/create', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({
@@ -68,24 +68,26 @@ export const MemoModal: FC<Props> = (props) => {
           marked: state.marked,
         }),
       })
-      const json: boolean = await res.json()
 
-      if (json === true) {
+      // 404以外のエラー
+      if (!res.ok) {
+        throw new Error('通信に失敗しました。時間を置いて再度お試しください。')
+      }
+
+      const json: boolean = await res.json()
+      if (json) {
         // 作成成功
         await mutate(memoListUrl)
         dispatch({
           type: 'createMemoSuccess',
           payload: { memo: '', marked: 'White', loading: false },
         })
-      } else if (json === false) {
+      } else {
         // パスワード認証に失敗
         dispatch({
           type: 'createMemoFailed',
           payload: { passwordModal: true, loading: false },
         })
-      } else {
-        // 通信エラー
-        throw new Error('サーバー側のエラーにより、メモの追加に失敗しました')
       }
     } catch (error) {
       catchError(error)
@@ -96,7 +98,7 @@ export const MemoModal: FC<Props> = (props) => {
   const deleteMemo = async () => {
     try {
       // API通信
-      const res = await fetch('/api/deleteMemo', {
+      const res = await fetch('/api/memo/delete', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({
@@ -106,24 +108,34 @@ export const MemoModal: FC<Props> = (props) => {
           memo_id: state.targetMemoId,
         }),
       })
-      const json: boolean = await res.json()
 
-      if (json === true) {
+      // 404エラー
+      if (res.status === 404) {
+        throw new Error(
+          '指定したプランが見つかりません。URLが誤っていないことをご確認ください。(404 Error)',
+        )
+      }
+      // 404以外のエラー
+      if (!res.ok) {
+        throw new Error(
+          'データの取得に失敗しました。時間を置いて再度お試しください。',
+        )
+      }
+
+      const json: boolean = await res.json()
+      if (json) {
         // 削除成功
         mutate(memoListUrl)
         dispatch({
           type: 'memoDialog',
           payload: { memoDialog: false },
         })
-      } else if (json === false) {
+      } else {
         // パスワード認証に失敗
         dispatch({
           type: 'deleteMemoFailed',
           payload: { memoDialog: false, passwordModal: true },
         })
-      } else {
-        // 通信エラー
-        throw new Error('サーバー側のエラーにより、メモの削除に失敗しました')
       }
     } catch (error) {
       catchError(error)
@@ -134,7 +146,7 @@ export const MemoModal: FC<Props> = (props) => {
   const deleteSpot = async () => {
     try {
       // API通信
-      const res = await fetch('/api/deleteSpot', {
+      const res = await fetch('/api/spot/delete', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({
@@ -143,27 +155,35 @@ export const MemoModal: FC<Props> = (props) => {
           spot_id: props.spotId,
         }),
       })
-      const json: boolean = await res.json()
 
-      if (json === true) {
+      // 404エラー
+      if (res.status === 404) {
+        throw new Error(
+          '指定したプランが見つかりません。URLが誤っていないことをご確認ください。(404 Error)',
+        )
+      }
+      // 404以外のエラー
+      if (!res.ok) {
+        throw new Error(
+          'データの取得に失敗しました。時間を置いて再度お試しください。',
+        )
+      }
+
+      const json: boolean = await res.json()
+      if (json) {
         // 削除成功
-        await mutate(`/api/spotList?planId=${props.planId}`)
+        await mutate(`/api/spot/readSpotList?planId=${props.planId}`)
         dispatch({
           type: 'spotDialog',
           payload: { spotDialog: false },
         })
         props.close()
-      } else if (json === false) {
+      } else {
         // パスワード認証に失敗
         dispatch({
           type: 'deleteSpotFailed',
           payload: { spotDialog: false, passwordModal: true },
         })
-      } else {
-        // 通信エラー
-        throw new Error(
-          'サーバー側のエラーにより、スポットの削除に失敗しました',
-        )
       }
     } catch (error) {
       catchError(error)

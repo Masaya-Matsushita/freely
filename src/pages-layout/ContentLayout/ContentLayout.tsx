@@ -15,8 +15,8 @@ export const ContentLayout = (page: ReactElement) => {
   const largerThanSm = useMediaQuery('sm')
 
   return (
-    <RecoilRoot>
-      <ErrorBoundary>
+    <ErrorBoundary>
+      <RecoilRoot>
         <Seo invite />
         <InitState />
         <Header />
@@ -27,7 +27,7 @@ export const ContentLayout = (page: ReactElement) => {
           </main>
         </div>
         {largerThanSm ? null : <Footer />}
-      </ErrorBoundary>
-    </RecoilRoot>
+      </RecoilRoot>
+    </ErrorBoundary>
   )
 }

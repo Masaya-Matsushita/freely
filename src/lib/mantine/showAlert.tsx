@@ -1,5 +1,6 @@
+import { Button } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
-import { IconCheck, IconX } from '@tabler/icons'
+import { IconCheck, IconRefresh, IconX } from '@tabler/icons'
 
 /**
  * @package
@@ -31,7 +32,6 @@ export const failedAlert = (title: string, message: string) => {
 /**
  * @package
  */
-
 export const successAlert = (message: string) => {
   showNotification({
     id: 'success',
@@ -50,5 +50,28 @@ export const successAlert = (message: string) => {
       },
       icon: { width: '28px', height: '28px' },
     }),
+  })
+}
+
+/**
+ * @package
+ */
+export const reloadAlert = () => {
+  showNotification({
+    id: 'reload',
+    autoClose: false,
+    disallowClose: true,
+    icon: <IconRefresh size={16} />,
+    message: (
+      <div className='flex items-center gap-4'>
+        <div className='text-dark-500'>ページを更新してください。</div>
+        <Button onClick={() => location.reload()} variant='light' size='xs'>
+          更新する
+        </Button>
+      </div>
+    ),
+    styles: {
+      icon: { width: '28px', height: '28px', margin: '8px 16px 8px 8px' },
+    },
   })
 }

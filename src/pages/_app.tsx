@@ -10,6 +10,10 @@ type AppPropsWithLayout = AppProps & {
 
 const fetcher = async (input: RequestInfo, init?: RequestInit) => {
   const res = await fetch(input, init)
+  // エラー
+  if (!res.ok) {
+    throw new Error(String(res.status))
+  }
   return res.json()
 }
 

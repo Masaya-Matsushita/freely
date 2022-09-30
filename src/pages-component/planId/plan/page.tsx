@@ -7,6 +7,7 @@ import { SkeletonLoading } from './SkeltonLoading'
 import { SpotCard } from './SpotCard'
 import { DateRange } from 'src/component/DateRange'
 import { getPath } from 'src/lib/const'
+import { reloadAlert } from 'src/lib/mantine'
 import { planIdState } from 'src/state/planId'
 import { Spot } from 'src/type/Spot'
 
@@ -18,18 +19,23 @@ export const Plan = () => {
 
   // プラン取得
   const { data: planData, error: planError } = useSWR(
-    planId ? `/api/plan?planId=${planId}` : null,
+    planId ? `/api/plan/read?planId=${planId}` : null,
   )
 
   // スポット一覧取得
   const { data: spotData, error: spotError } = useSWR(
-    planId ? `/api/spotList?planId=${planId}` : null,
+    planId ? `/api/spot/readSpotList?planId=${planId}` : null,
   )
 
-  // エラー
-  if (planError || spotError) {
-    console.log('planError:', planError)
-    console.log('spotError:', spotError)
+  // エラー処理
+  if (planError && planError.message === '404') {
+    // 404エラー
+    throw new Error(
+      'お探しのページが見つかりませんでした。URLの指定が誤っていないことをご確認ください。(404: Page Not Found)',
+    )
+  } else if (planError || spotError) {
+    // 404以外
+    reloadAlert()
   }
 
   return (
