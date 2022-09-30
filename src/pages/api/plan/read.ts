@@ -4,7 +4,9 @@ const url = require('url')
 const readPlan = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const params = await url.parse(req.url, true).query
-    const data = await fetch(`http://0.0.0.0/plan?plan_id=${params.planId}`)
+    const data = await fetch(
+      `${process.env.API_URL}/plan?plan_id=${params.planId}`,
+    )
     // エラー
     if (!data.ok) {
       throw new Error(String(data.status))

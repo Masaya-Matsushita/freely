@@ -5,7 +5,7 @@ const readSpot = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const params = await url.parse(req.url, true).query
     const data = await fetch(
-      `http://0.0.0.0/spot?plan_id=${params.planId}&spot_id=${params.spotId}`,
+      `${process.env.API_URL}/spot?plan_id=${params.planId}&spot_id=${params.spotId}`,
     )
     // エラー
     if (!data.ok) {

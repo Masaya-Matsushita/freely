@@ -4,7 +4,9 @@ const url = require('url')
 
 const readSpotList = async (req: NextApiRequest, res: NextApiResponse) => {
   const params = await url.parse(req.url, true).query
-  const data = await fetch(`http://0.0.0.0/spot-list?plan_id=${params.planId}`)
+  const data = await fetch(
+    `${process.env.API_URL}/spot-list?plan_id=${params.planId}`,
+  )
   const spotList: Spot[] = await data.json()
   // spot_idの値で並べ替え
   spotList.sort((a, b) => {

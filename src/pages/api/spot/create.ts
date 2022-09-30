@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 const createSpot = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const data = await fetch('http://0.0.0.0/spot', {
+    const data = await fetch(`${process.env.API_URL}/spot`, {
       method: 'POST',
       headers: { 'Content-type': 'application/json' },
       body: JSON.stringify(req.body),

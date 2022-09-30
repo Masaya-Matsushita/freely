@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 const deleteMemo = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const data = await fetch('http://0.0.0.0/memo', {
+    const data = await fetch(`${process.env.API_URL}/memo`, {
       method: 'DELETE',
       headers: { 'Content-type': 'application/json' },
       body: JSON.stringify(req.body),
