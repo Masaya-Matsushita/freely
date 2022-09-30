@@ -29,7 +29,7 @@ export const PrefSelectBox = () => {
     localStorage.setItem('prefId', value)
     router.push({
       pathname: getPath('WEATHER', value),
-      query: { planId: planId },
+      query: { plan_id: planId },
     })
   }
 

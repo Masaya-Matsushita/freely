@@ -23,7 +23,7 @@ export const LinkTab: FC<Props> = (props) => {
         onTabChange={(value: 'WEATHER' | 'COVID19' | 'SAKE') =>
           router.push({
             pathname: getPath(value, props.prefId),
-            query: { planId: props.planId },
+            query: { plan_id: props.planId },
           })
         }
         className='mx-2 mt-12'

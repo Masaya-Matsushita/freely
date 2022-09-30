@@ -10,8 +10,8 @@ import { prefIdState } from 'src/state/prefId'
  * @package
  */
 export const InitState = () => {
-  const router = useRouter()
-  const planId = router.query.planId
+  const { query } = useRouter()
+  const planId = query.planId ? query.planId : query.plan_id
   const setPlanId = useSetRecoilState(planIdState)
   const setPrefId = useSetRecoilState(prefIdState)
   const setPassword = useSetRecoilState(passwordState)

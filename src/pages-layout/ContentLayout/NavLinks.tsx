@@ -28,7 +28,10 @@ export const NavLinks = () => {
       activePathList: ['/[planId]/plan', '/[planId]/edit', '/[planId]/spot'],
     },
     {
-      href: { pathname: getPath('WEATHER', prefId), query: { planId: planId } },
+      href: {
+        pathname: getPath('WEATHER', prefId),
+        query: { plan_id: planId },
+      },
       label: '旅先の情報',
       icon: <WiDayCloudy size={30} />,
       activePathList: [
