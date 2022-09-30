@@ -6,7 +6,7 @@ type Covid19 = {
   }
   itemList: {
     date: string
-    infectedNum: string
+    infectedNum: number
   }[]
 }
 
