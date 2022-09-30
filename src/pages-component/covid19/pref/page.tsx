@@ -1,3 +1,4 @@
+import { IconAlertCircle } from '@tabler/icons'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,7 +12,11 @@ import {
 import { useRouter } from 'next/router'
 import { FC } from 'react'
 import { Line } from 'react-chartjs-2'
+import { useRecoilValue } from 'recoil'
 import { PrefSelectBox } from 'src/component/PrefSelectBox'
+import { prefList } from 'src/lib/const'
+import { useMediaQuery } from 'src/lib/mantine'
+import { prefIdState } from 'src/state/prefId'
 import { Covid19Data } from 'src/type/Covid19Data'
 
 ChartJS.register(
@@ -23,58 +28,6 @@ ChartJS.register(
   Tooltip,
   Legend,
 )
-
-// グラフの詳細設定
-const options = {
-  responsive: true,
-  interaction: {
-    mode: 'index' as const,
-    intersect: false,
-  },
-  stacked: false,
-  plugins: {
-    title: {
-      display: true,
-      font: {
-        size: 18,
-      },
-      text: '新型コロナウイルス新規感染者数推移（7日間平均）',
-    },
-    legend: {
-      labels: {
-        padding: 15,
-        font: {
-          size: 15,
-        },
-      },
-    },
-    tooltip: {
-      padding: 20,
-      titleFont: { size: 15 },
-      bodyFont: { size: 12 },
-      titleMarginBottom: 10,
-      backgroundColor: '#f8f9fae6',
-      titleColor: '#000',
-      bodyColor: '#000',
-      displayColors: true,
-    },
-  },
-  scales: {
-    y: {
-      type: 'linear' as const,
-      display: true,
-      position: 'left' as const,
-    },
-    y1: {
-      type: 'linear' as const,
-      display: true,
-      position: 'right' as const,
-      grid: {
-        drawOnChartArea: false,
-      },
-    },
-  },
-}
 
 // 新規感染者数の7日間平均の配列
 const averageInfectedNumList = (list: number[]) => {
@@ -96,6 +49,8 @@ const averageInfectedNumList = (list: number[]) => {
  */
 export const Covid19: FC<{ data: Covid19Data }> = (props) => {
   const router = useRouter()
+  const largerThanXs = useMediaQuery('xs')
+  const prefId = useRecoilValue(prefIdState)
   const japanData = props.data.covid19Japan
   const prefData = props.data.covid19Pref
 
@@ -116,6 +71,58 @@ export const Covid19: FC<{ data: Covid19Data }> = (props) => {
     prefData.itemList.map((item) => item.infectedNum),
   ).slice(7)
 
+  // グラフの詳細設定
+  const options = {
+    responsive: true,
+    interaction: {
+      mode: 'index' as const,
+      intersect: false,
+    },
+    stacked: false,
+    plugins: {
+      title: {
+        display: true,
+        font: {
+          size: largerThanXs ? 18 : 14,
+        },
+        text: '新型コロナウイルス新規感染者数推移（7日間平均）',
+      },
+      legend: {
+        labels: {
+          padding: largerThanXs ? 20 : 8,
+          font: {
+            size: largerThanXs ? 15 : 12,
+          },
+        },
+      },
+      tooltip: {
+        padding: largerThanXs ? 20 : 5,
+        titleFont: { size: largerThanXs ? 15 : 12 },
+        bodyFont: { size: largerThanXs ? 12 : 10 },
+        titleMarginBottom: largerThanXs ? 10 : 6,
+        backgroundColor: '#f8f9fae6',
+        titleColor: '#000',
+        bodyColor: '#000',
+        displayColors: true,
+      },
+    },
+    scales: {
+      y: {
+        type: 'linear' as const,
+        display: true,
+        position: 'left' as const,
+      },
+      y1: {
+        type: 'linear' as const,
+        display: true,
+        position: 'right' as const,
+        grid: {
+          drawOnChartArea: false,
+        },
+      },
+    },
+  }
+
   // グラフの横軸ラベル（月日）
   const labels = japanData.itemList.map((item) => item.date.slice(5)).slice(7)
 
@@ -124,10 +131,11 @@ export const Covid19: FC<{ data: Covid19Data }> = (props) => {
     labels,
     datasets: [
       {
-        label: '北海道',
+        label: prefList[Number(prefId) - 1].name,
         data: prefAverageInfectedNumList,
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        pointRadius: largerThanXs ? 3 : 1,
         yAxisID: 'y',
       },
       {
@@ -135,6 +143,7 @@ export const Covid19: FC<{ data: Covid19Data }> = (props) => {
         data: japanAverageInfectedNumList,
         borderColor: '#7779e4',
         backgroundColor: '#7779e480',
+        pointRadius: largerThanXs ? 3 : 1,
         yAxisID: 'y1',
       },
     ],
@@ -144,10 +153,15 @@ export const Covid19: FC<{ data: Covid19Data }> = (props) => {
     <>
       <PrefSelectBox />
       {prefData.errorInfo.errorFlag === '0' ? (
-        <div className='mx-3 w-[calc(100vw-24px)] max-w-[900px] rounded-lg bg-[#fdfdfd] xs:mx-6 xs:w-[calc(100vw-48px)] xs:p-4 sm:w-[calc(100vw-300px)] md:mx-auto md:w-[calc(100vw-380px)] md:p-6'>
+        <div className='mx-3 mt-8 w-[calc(100vw-24px)] max-w-[900px] rounded-lg bg-[#fdfdfd] py-2 xs:mx-6 xs:w-[calc(100vw-48px)] xs:p-4 sm:w-[calc(100vw-300px)] md:mx-auto md:w-[calc(100vw-380px)] md:p-6'>
           <Line height={200} options={options} data={data} />
         </div>
-      ) : null}
+      ) : (
+        <div className='mx-3 mt-8 flex h-[240px] w-[calc(100vw-24px)] max-w-[800px] items-center justify-center gap-1 rounded-lg bg-[#d8d8dd] xs:mx-6 xs:h-[360px] xs:w-[calc(100vw-48px)] sm:w-[calc(100vw-300px)] md:mx-auto md:w-[calc(100vw-380px)] lg:h-[440px]'>
+          <IconAlertCircle color='#dd2222' stroke={1.4} />
+          <div>データの取得に失敗しました。</div>
+        </div>
+      )}
     </>
   )
 }
