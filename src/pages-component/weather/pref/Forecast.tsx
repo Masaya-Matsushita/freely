@@ -4,6 +4,7 @@ import { IconChevronDown, IconChevronUp } from '@tabler/icons'
 import { FC } from 'react'
 import { ThreeHourlyList } from './ThreeHourlyList'
 import { WeatherCard } from './WeatherCard'
+import { WeeklyWeatherCard } from './WeeklyWeatherCard'
 import { WeatherData } from 'src/type/WeatherData'
 
 /**
@@ -25,7 +26,7 @@ export const Forecast: FC<{ data: WeatherData }> = (props) => {
             controlsOffset='xl'
             align='start'
             dragFree
-            className='mx-auto mt-6 max-w-[95vw] sm:max-w-[calc(95vw-276px)]'
+            className='mx-auto mt-6 max-w-[95vw] sm:max-w-[calc(95vw-276px)] md:mt-10'
           >
             <Carousel.Slide>
               <WeatherCard day={weeklyList[0]} label='今日' />
@@ -40,26 +41,26 @@ export const Forecast: FC<{ data: WeatherData }> = (props) => {
           <Spoiler
             maxHeight={208}
             showLabel={
-              <UnstyledButton className='flex w-[95vw] items-center justify-center border-[1px] border-solid border-slate-50 border-t-slate-200 sm:w-[calc(95vw-286px)]'>
+              <div className='flex w-[95vw] items-center justify-center border-[1px] border-solid border-slate-50 border-t-slate-200 sm:w-[calc(95vw-286px)]'>
                 <IconChevronDown
                   color='#3b82f6'
                   stroke={3}
                   size={28}
                   className='mt-1'
                 />
-              </UnstyledButton>
+              </div>
             }
             hideLabel={
-              <UnstyledButton className='flex w-[95vw] items-center justify-center border-[1px] border-solid border-slate-50 border-t-slate-200 sm:w-[calc(95vw-286px)]'>
+              <div className='flex w-[95vw] items-center justify-center border-[1px] border-solid border-slate-50 border-t-slate-200 sm:w-[calc(95vw-286px)]'>
                 <IconChevronUp
                   color='#3b82f6'
                   stroke={3}
                   size={28}
                   className='mt-1'
                 />
-              </UnstyledButton>
+              </div>
             }
-            className='mx-auto mt-4 w-[95vw] shadow-lg sm:w-[calc(95vw-286px)]'
+            className='mx-auto mt-4 w-[95vw] shadow-md sm:w-[calc(93vw-286px)]'
           >
             <div className='flex'>
               <div className='flex h-[340px] w-14 shrink-0 flex-col items-center bg-white pt-[18px] text-dark-500 shadow-lg'>
@@ -72,8 +73,31 @@ export const Forecast: FC<{ data: WeatherData }> = (props) => {
               <ThreeHourlyList threeHourlyList={props.data.threeHourly} />
             </div>
           </Spoiler>
-          <div className='mt-4 mr-4 text-end text-sm text-dark-400 sm:mr-8 md:mr-12'>
-            天気データ：{props.data.threeHourly[2].time}時発表
+          <div className='mx-auto mt-8 w-[95vw] max-w-[1000px] xxs:w-[90vw] xs:w-[85vw] sm:mt-12 sm:w-[calc(90vw-286px)] md:mt-20 lg:w-[calc(85vw-286px)]'>
+            <div className='ml-2 mb-1 text-dark-500 md:text-lg'>週間天気</div>
+            {weeklyList.slice(2, 7).map((data) => {
+              return (
+                <div key={data.day}>
+                  <WeeklyWeatherCard data={data} />
+                </div>
+              )
+            })}
+            <div className='mr-2 mt-6 text-end text-xs text-dark-400 md:text-sm'>
+              <div>
+                現在のデータ：
+                <span className='mx-1 underline'>
+                  {props.data.threeHourly[2].year}/
+                  {props.data.threeHourly[2].month}/
+                  {props.data.threeHourly[2].day}{' '}
+                  {props.data.threeHourly[2].time}時発表
+                </span>
+                (最新)
+              </div>
+              <div className='mt-1 flex flex-col md:flex-row md:justify-end md:gap-3'>
+                <div>取得元：Open Weather Map ( 3時間天気 )</div>
+                <div>Open Meteo ( 3日間・週間天気 )</div>
+              </div>
+            </div>
           </div>
         </div>
       ) : null}
