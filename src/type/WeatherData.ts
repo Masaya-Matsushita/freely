@@ -1,26 +1,25 @@
 export type WeatherData = {
   name: string
   time: string
-  daily: Daily[]
+  threeHourly: ThreeHourly[]
   weekly: Weekly[]
 }
 
-type Daily = {
+type ThreeHourly = {
   datetime: string
   icon: string
-  description: string
   windSpeed: number
   windDeg: number
+  rain: { '3h': number }
   tempFeels: number
-  tempMax: number
-  tempMin: number
   humidity: number
 }
 
 type Weekly = {
-  datetime: string
-  icon: string
+  date: string
+  code: string
   tempMax: number
   tempMin: number
-  humidity: number
+  sunrise: string
+  sunset: string
 }
