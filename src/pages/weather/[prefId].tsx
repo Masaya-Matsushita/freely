@@ -38,7 +38,10 @@ export const getStaticProps: GetStaticProps<
     .slice(0, 19)
     .map((item: any) => {
       return {
-        time: item.dt_txt.slice(11, 13),
+        year: Number(item.dt_txt.slice(0, 4)),
+        month: Number(item.dt_txt.slice(5, 7)),
+        day: Number(item.dt_txt.slice(8, 10)),
+        time: Number(item.dt_txt.slice(11, 13)),
         icon: item.weather[0].icon,
         windSpeed: Math.round(item.wind.speed * 10) / 10,
         windDeg: item.wind.deg,

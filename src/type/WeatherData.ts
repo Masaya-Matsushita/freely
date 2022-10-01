@@ -6,7 +6,10 @@ export type WeatherData = {
 }
 
 export type ThreeHourly = {
-  time: string
+  year: number
+  month: number
+  day: number
+  time: number
   icon: string
   windSpeed: number
   windDeg: number

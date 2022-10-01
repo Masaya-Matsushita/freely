@@ -28,9 +28,9 @@ export const getWeatherIcon = (type: string | number, small?: string) => {
     case '03n':
       // 晴れ時々曇り
       return (
-        <div className={`${small ? 'ml-4 -space-x-11' : '-space-x-28'}`}>
-          <AiOutlineCloud color='gray' size={small ? 24 : 66} />
-          <MdBrightnessHigh color='orange' size={small ? 28 : 66} />
+        <div className={`${small ? 'ml-[6px] -space-x-12' : '-space-x-28'}`}>
+          <AiOutlineCloud color='gray' size={small ? 26 : 66} />
+          <MdBrightnessHigh color='orange' size={small ? 32 : 66} />
         </div>
       )
     case 3:

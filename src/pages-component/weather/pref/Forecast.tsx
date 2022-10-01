@@ -1,7 +1,8 @@
 import { Carousel } from '@mantine/carousel'
 import { FC } from 'react'
+import { ThreeHourlyCard } from './ThreeHourlyCard'
 import { WeatherCard } from './WeatherCard'
-import { getWeatherIcon, getWindComment, getWindDirection } from 'src/lib/const'
+import { getDayOfWeek } from 'src/lib/func'
 import { WeatherData } from 'src/type/WeatherData'
 
 /**
@@ -10,6 +11,14 @@ import { WeatherData } from 'src/type/WeatherData'
 export const Forecast: FC<{ data: WeatherData }> = (props) => {
   const threeHourlyList = props.data.threeHourly
   const weeklyList = props.data.weekly
+
+  const todayDayOfWeek = getDayOfWeek(
+    threeHourlyList[0].year,
+    threeHourlyList[0].month,
+    threeHourlyList[0].day,
+  )
+
+  console.log(threeHourlyList)
 
   return (
     <div>
@@ -36,38 +45,57 @@ export const Forecast: FC<{ data: WeatherData }> = (props) => {
               <WeatherCard day={weeklyList[2]} label='明後日' />
             </Carousel.Slide>
           </Carousel>
-          <div className='flex'>
-            <div className='flex h-72 w-24 justify-center bg-gray-200 pt-8 text-lg text-dark-500'>
-              今日
-            </div>
-            <div className='flex h-72 w-24 flex-col items-center gap-[6px] bg-white py-2 text-lg text-dark-500'>
-              <div>{threeHourlyList[0].time}</div>
-              <div className='flex h-16 items-center'>
-                <div>{getWeatherIcon(threeHourlyList[0].icon, 'small')}</div>
+          <div className='flex w-[100vw] overflow-scroll sm:w-[calc(100vw-276px)]'>
+            <div className='flex h-[360px] w-24 shrink-0 flex-col items-center bg-gray-200 pt-8 text-dark-500'>
+              <div className='text-lg'>
+                {threeHourlyList[0].month}/{threeHourlyList[0].day}
               </div>
-              <div>
-                {threeHourlyList[0].tempFeels}
-                <span className='ml-[2px] text-sm'>℃</span>
-              </div>
-              <div>
-                {threeHourlyList[0].humidity}
-                <span className='ml-[2px] text-sm'>%</span>
-              </div>
-              <div>
-                {threeHourlyList[0].rain['3h']}
-                <span className='ml-[2px] text-sm'>mm</span>
-              </div>
-              <div className='mt-1 flex flex-col items-center -space-y-2'>
-                <div>{getWindDirection(threeHourlyList[0].windDeg)}</div>
-                <div className='text-sm'>
-                  {getWindComment(threeHourlyList[0].windDeg)}
-                </div>
-              </div>
-              <div className='-mt-1'>
-                {threeHourlyList[0].windSpeed}
-                <span className='ml-[2px] text-sm'>m/s</span>
+              <div
+                className={`${
+                  todayDayOfWeek === '土'
+                    ? 'text-blue-500'
+                    : todayDayOfWeek === '日'
+                    ? 'text-red-500'
+                    : null
+                }`}
+              >
+                ({todayDayOfWeek})
               </div>
             </div>
+            {threeHourlyList.map((data) => {
+              if (data.time === 21) {
+                return (
+                  <div className='flex' key={data.day + data.time}>
+                    <ThreeHourlyCard data={data} />
+                    <div className='flex h-[360px] w-24 shrink-0 flex-col items-center bg-gray-200 pt-8 text-dark-500'>
+                      <div className='text-lg'>
+                        {data.month}/{data.day + 1}
+                      </div>
+                      <div
+                        className={`${
+                          getDayOfWeek(data.year, data.month, data.day + 1) ===
+                          '土'
+                            ? 'text-blue-500'
+                            : getDayOfWeek(
+                                data.year,
+                                data.month,
+                                data.day + 1,
+                              ) === '日'
+                            ? 'text-red-500'
+                            : null
+                        }`}
+                      >
+                        ({getDayOfWeek(data.year, data.month, data.day + 1)})
+                      </div>
+                    </div>
+                  </div>
+                )
+              } else {
+                return (
+                  <ThreeHourlyCard data={data} key={data.day + data.time} />
+                )
+              }
+            })}
           </div>
           <div className='mt-4'>{props.data.time}発表</div>
         </div>
