@@ -1,6 +1,4 @@
 export type WeatherData = {
-  name: string
-  time: string
   threeHourly: ThreeHourly[]
   weekly: Weekly[]
 }

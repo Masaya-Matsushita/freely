@@ -15,22 +15,22 @@ import {
 export const getWindDirection = (deg: number) => {
   switch (true) {
     case 25 < deg && deg <= 70:
-      return <IconArrowUpRight size={24} stroke={2.5} color='#999999' />
+      return <IconArrowUpRight size={24} stroke={2.5} color='#6fa6ff' />
     case 70 < deg && deg <= 115:
-      return <IconArrowRight size={24} stroke={2.5} color='#999999' />
+      return <IconArrowRight size={24} stroke={2.5} color='#6fa6ff' />
     case 115 < deg && deg <= 160:
-      return <IconArrowDownRight size={24} stroke={2.5} color='#999999' />
+      return <IconArrowDownRight size={24} stroke={2.5} color='#6fa6ff' />
     case 160 < deg && deg <= 205:
-      return <IconArrowDown size={24} stroke={2.5} color='#999999' />
+      return <IconArrowDown size={24} stroke={2.5} color='#6fa6ff' />
     case 205 < deg && deg <= 250:
-      return <IconArrowDownLeft size={24} stroke={2.5} color='#999999' />
+      return <IconArrowDownLeft size={24} stroke={2.5} color='#6fa6ff' />
     case 250 < deg && deg <= 295:
-      return <IconArrowLeft size={24} stroke={2.5} color='#999999' />
+      return <IconArrowLeft size={24} stroke={2.5} color='#6fa6ff' />
     case 295 < deg && deg <= 340:
-      return <IconArrowUpLeft size={24} stroke={2.5} color='#999999' />
+      return <IconArrowUpLeft size={24} stroke={2.5} color='#6fa6ff' />
     case 340 < deg:
     case deg <= 25:
-      return <IconArrowUp size={24} stroke={2.5} color='#999999' />
+      return <IconArrowUp size={24} stroke={2.5} color='#6fa6ff' />
     default:
       break
   }

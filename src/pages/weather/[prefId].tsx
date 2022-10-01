@@ -67,8 +67,6 @@ export const getStaticProps: GetStaticProps<
   }
 
   const data = {
-    name: openWeatherData.city.name,
-    time: openWeatherData.list[2].dt_txt,
     threeHourly: threeHourlyWeatherList,
     weekly: weeklyWeatherList,
   }
