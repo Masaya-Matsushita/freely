@@ -50,8 +50,11 @@ export const getStaticProps: GetStaticProps<
 
   const weeklyWeatherList: Weekly[] = []
   for (let i = 0; i < openMeteoData.daily.time.length; i++) {
+    const date = openMeteoData.daily.time[i].split('-')
     weeklyWeatherList.push({
-      date: openMeteoData.daily.time[i],
+      year: Number(date[0]),
+      month: Number(date[1]),
+      day: Number(date[2]),
       code: openMeteoData.daily.weathercode[i],
       tempMax: openMeteoData.daily.apparent_temperature_max[i],
       tempMin: openMeteoData.daily.apparent_temperature_min[i],

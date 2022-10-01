@@ -16,7 +16,9 @@ export type ThreeHourly = {
 }
 
 export type Weekly = {
-  date: string
+  year: number
+  month: number
+  day: number
   code: string
   tempMax: number
   tempMin: number
