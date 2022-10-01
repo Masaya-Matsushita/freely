@@ -38,12 +38,12 @@ export const getStaticProps: GetStaticProps<
     .slice(0, 19)
     .map((item: any) => {
       return {
-        datetime: item.dt_txt,
+        time: item.dt_txt.slice(11, 13),
         icon: item.weather[0].icon,
-        windSpeed: item.wind.speed,
+        windSpeed: Math.round(item.wind.speed * 10) / 10,
         windDeg: item.wind.deg,
         rain: item.rain ? item.rain : { '3h': 0 },
-        tempFeels: item.main.feels_like,
+        tempFeels: Math.round(item.main.feels_like),
         humidity: item.main.humidity,
       }
     })
@@ -56,8 +56,8 @@ export const getStaticProps: GetStaticProps<
       month: Number(date[1]),
       day: Number(date[2]),
       code: openMeteoData.daily.weathercode[i],
-      tempMax: openMeteoData.daily.apparent_temperature_max[i],
-      tempMin: openMeteoData.daily.apparent_temperature_min[i],
+      tempMax: Math.round(openMeteoData.daily.apparent_temperature_max[i]),
+      tempMin: Math.round(openMeteoData.daily.apparent_temperature_min[i]),
       sunrise: openMeteoData.daily.sunrise[i],
       sunset: openMeteoData.daily.sunset[i],
     })

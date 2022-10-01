@@ -12,7 +12,7 @@ import { MdBrightnessHigh } from 'react-icons/md'
 /**
  * @package
  */
-export const getWeatherIcon = (type: string | number) => {
+export const getWeatherIcon = (type: string | number, small?: string) => {
   switch (type) {
     case 0:
     case 1:
@@ -21,16 +21,16 @@ export const getWeatherIcon = (type: string | number) => {
     case '02d':
     case '02n':
       // 晴れ
-      return <MdBrightnessHigh color='orange' size={80} />
+      return <MdBrightnessHigh color='orange' size={small ? 36 : 80} />
     case 2:
     case 45:
     case '03d':
     case '03n':
       // 晴れ時々曇り
       return (
-        <div className='-space-x-28'>
-          <AiOutlineCloud color='gray' size={66} />
-          <MdBrightnessHigh color='orange' size={66} />
+        <div className={`${small ? 'ml-4 -space-x-11' : '-space-x-28'}`}>
+          <AiOutlineCloud color='gray' size={small ? 24 : 66} />
+          <MdBrightnessHigh color='orange' size={small ? 28 : 66} />
         </div>
       )
     case 3:
@@ -38,7 +38,7 @@ export const getWeatherIcon = (type: string | number) => {
     case '04d':
     case '04n':
       // 曇り
-      return <AiOutlineCloud color='gray' size={80} />
+      return <AiOutlineCloud color='gray' size={small ? 36 : 80} />
     case 51:
     case 53:
     case 56:
@@ -48,7 +48,7 @@ export const getWeatherIcon = (type: string | number) => {
     case '09d':
     case '09n':
       // 小雨
-      return <BsCloudDrizzle color='gray' size={72} />
+      return <BsCloudDrizzle color='gray' size={small ? 34 : 72} />
     case 63:
     case 65:
     case 67:
@@ -57,7 +57,7 @@ export const getWeatherIcon = (type: string | number) => {
     case '10d':
     case '10n':
       // 雨
-      return <BsCloudRainHeavyFill color='gray' size={72} />
+      return <BsCloudRainHeavyFill color='gray' size={small ? 34 : 72} />
     case 95:
     case 96:
     case 99:
@@ -65,9 +65,13 @@ export const getWeatherIcon = (type: string | number) => {
     case '11n':
       // 雷雨
       return (
-        <div className='flex flex-col items-center -space-y-7'>
-          <BsCloudRainHeavyFill color='gray' size={72} />
-          <BsLightningFill color='orange' size={36} />
+        <div
+          className={`flex flex-col items-center ${
+            small ? '-space-y-3' : '-space-y-7'
+          }`}
+        >
+          <BsCloudRainHeavyFill color='gray' size={small ? 32 : 72} />
+          <BsLightningFill color='orange' size={small ? 20 : 36} />
         </div>
       )
     case 71:
@@ -79,16 +83,16 @@ export const getWeatherIcon = (type: string | number) => {
     case '13d':
     case '13n':
       // 雪
-      return <BsSnow3 color='lightgray' size={72} />
+      return <BsSnow3 color='lightgray' size={small ? 32 : 72} />
     case 48:
     case 55:
     case 57:
     case '50d':
     case '50n':
       // 霧
-      return <IconMist size={72} color='lightgray' />
+      return <IconMist size={small ? 36 : 72} color='lightgray' />
     default:
-      return <BsQuestionCircleFill size={60} color='lightgray' />
+      return <BsQuestionCircleFill size={small ? 32 : 60} color='lightgray' />
   }
 }
 
