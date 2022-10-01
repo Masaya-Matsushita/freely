@@ -13,10 +13,18 @@ export const Forecast: FC<{ data: WeatherData }> = (props) => {
     <div>
       {props.data ? (
         <div>
-          <Card>
-            <div>県庁所在地: {props.data.name}</div>
-            {getWeatherIcon(55)}
-          </Card>
+          <Carousel
+            slideSize='33.333%'
+            breakpoints={[
+              { maxWidth: 'lg', slideSize: '40%' },
+              { maxWidth: 'xs', slideSize: '45%' },
+            ]}
+            controlsOffset='xl'
+            align='start'
+            dragFree
+            className='mx-auto mt-6 max-w-[95vw] sm:max-w-[calc(95vw-276px)]'
+          >
+          </Carousel>
           <div className='mt-4'>{props.data.time}発表</div>
         </div>
       ) : null}
