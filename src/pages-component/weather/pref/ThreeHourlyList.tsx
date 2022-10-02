@@ -17,7 +17,7 @@ export const ThreeHourlyList: FC<{ threeHourlyList: ThreeHourly[] }> = (
   )
 
   return (
-    <div className='flex w-[calc(95vw-64px)] overflow-scroll sm:w-[calc(95vw-350px)]'>
+    <div className='flex w-[calc(95vw-40px)] overflow-scroll xs:w-[calc(95vw-64px)] sm:w-[calc(95vw-332px)]'>
       <div className='flex h-[340px] w-16 shrink-0 flex-col items-center bg-slate-200 pt-8 text-dark-500 md:w-20'>
         <div className='text-lg'>
           {props.threeHourlyList[0].month}/{props.threeHourlyList[0].day}

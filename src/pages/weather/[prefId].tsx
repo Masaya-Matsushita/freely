@@ -67,6 +67,7 @@ export const getStaticProps: GetStaticProps<
   }
 
   const data = {
+    city: openWeatherData.city.name,
     threeHourly: threeHourlyWeatherList,
     weekly: weeklyWeatherList,
   }

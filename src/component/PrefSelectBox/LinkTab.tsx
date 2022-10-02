@@ -26,7 +26,7 @@ export const LinkTab: FC<Props> = (props) => {
             query: { plan_id: props.planId },
           })
         }
-        className='mx-2 mt-12'
+        className='mx-2 mt-12 xxs:mt-16 xs:mx-4 xl:mx-auto xl:w-[1080px]'
       >
         <Tabs.List>
           <Tabs.Tab value='WEATHER' icon={<IconCloud />}>

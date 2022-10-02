@@ -1,4 +1,5 @@
 export type WeatherData = {
+  city: string
   threeHourly: ThreeHourly[]
   weekly: Weekly[]
 }

@@ -14,7 +14,9 @@ import { prefIdState } from 'src/state/prefId'
  */
 export const PrefSelectBox = () => {
   const router = useRouter()
+  const largerThanXxs = useMediaQuery('xxs')
   const largerThanXs = useMediaQuery('xs')
+  const largerThanMd = useMediaQuery('md')
   const planId = useRecoilValue(planIdState)
   const [prefId, setPrefId] = useRecoilState(prefIdState)
 
@@ -41,14 +43,16 @@ export const PrefSelectBox = () => {
       />
       <Select
         data={selectPrefList}
-        label='都道府県名'
+        label='都道府県を選択'
         value={prefId}
         onChange={handleChange}
         transition='pop-top-left'
         transitionDuration={80}
         transitionTimingFunction='ease'
+        size={largerThanMd ? 'lg' : largerThanXxs ? 'md' : 'sm'}
         classNames={{
-          root: 'max-w-md xs:mx-auto mx-8 xxs:mx-12 mt-12 xxs:mt-8',
+          root: 'max-w-md md:max-w-lg xs:mx-auto mx-8 xxs:mx-12 mt-12',
+          label: 'text-dark-500',
         }}
       />
       <LinkTab prefId={prefId} planId={planId} />
