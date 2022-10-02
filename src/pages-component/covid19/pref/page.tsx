@@ -155,6 +155,9 @@ export const Covid19: FC<{ data: Covid19Data }> = (props) => {
       {prefData.errorInfo.errorFlag === '0' ? (
         <div className='mx-3 mt-8 w-[calc(100vw-24px)] max-w-[900px] rounded-lg bg-[#fdfdfd] py-2 xs:mx-6 xs:w-[calc(100vw-48px)] xs:p-4 sm:w-[calc(100vw-300px)] md:mx-auto md:w-[calc(100vw-380px)] md:p-6'>
           <Line height={200} options={options} data={data} />
+          <div className='mr-2 mt-10 text-end text-xs text-dark-400'>
+            取得元：内閣官房新型コロナウイルス等感染症対策推進室 (Open Data)
+          </div>
         </div>
       ) : (
         <div className='mx-3 mt-8 flex h-[240px] w-[calc(100vw-24px)] max-w-[800px] items-center justify-center gap-1 rounded-lg bg-[#d8d8dd] xs:mx-6 xs:h-[360px] xs:w-[calc(100vw-48px)] sm:w-[calc(100vw-300px)] md:mx-auto md:w-[calc(100vw-380px)] lg:h-[440px]'>

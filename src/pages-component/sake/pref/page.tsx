@@ -20,8 +20,10 @@ export const Sake: FC<{ data: SakeData }> = (props) => {
   return (
     <>
       <PrefSelectBox />
-      <div className='mt-8 ml-4 text-xl'>地酒一覧</div>
-      <div className='mx-4 mt-6 space-y-2'>
+      <div className='mt-8 ml-6 space-y-2 text-xl xs:ml-8 xl:mx-auto xl:w-[1048px]'>
+        地酒一覧
+      </div>
+      <div className='mx-4 mt-6 space-y-2 xs:mx-6 xl:mx-auto xl:w-[1056px]'>
         {props.data.map((sake) => {
           return (
             <div key={sake.name}>
@@ -45,6 +47,9 @@ export const Sake: FC<{ data: SakeData }> = (props) => {
             </div>
           )
         })}
+        <div className='mr-2 text-end text-xs text-dark-400 md:text-sm'>
+          取得元：Sakenote Database API
+        </div>
       </div>
     </>
   )
