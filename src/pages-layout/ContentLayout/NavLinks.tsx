@@ -28,7 +28,10 @@ export const NavLinks = () => {
       activePathList: ['/[planId]/plan', '/[planId]/edit', '/[planId]/spot'],
     },
     {
-      href: getPath('WEATHER', prefId),
+      href: {
+        pathname: getPath('WEATHER', prefId),
+        query: { plan_id: planId },
+      },
       label: '旅先の情報',
       icon: <WiDayCloudy size={30} />,
       activePathList: [
@@ -49,7 +52,7 @@ export const NavLinks = () => {
     <div className='mx-4 mt-10 space-y-5'>
       {LINKS.map((link) => {
         return (
-          <Link href={link.href} key={link.href} passHref>
+          <Link href={link.href} key={link.label} passHref>
             <a
               className={`flex items-center rounded-sm no-underline hover:bg-main-300 ${
                 link.activePathList.some((path) => path === pathname)

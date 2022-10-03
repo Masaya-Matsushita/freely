@@ -29,17 +29,24 @@ export const getStaticProps: GetStaticProps<
   const japanData = await japanRes.json()
 
   // 取得したデータを整形
-  const japanRecentData = japanData.itemList.filter(
-    (item: any, index: number) => {
-      return 1 <= index && index <= 31
-    },
-  )
-  const japanTrimmedData = japanRecentData.map((item: any) => {
-    return { date: item.date, infectedNum: item.infectedNum }
-  })
+  const japanTrimmedData = japanData.itemList
+    .slice(0, 98)
+    .map((item: any, index: number) => {
+      return {
+        date: item.date,
+        infectedNum:
+          index < 97
+            ? parseInt(item.infectedNum.replace(/,/g, ''), 10) -
+              parseInt(
+                japanData.itemList[index + 1].infectedNum.replace(/,/g, ''),
+                10,
+              )
+            : 0,
+      }
+    })
   const japanRebuildData = {
     errorInfo: japanData.errorInfo,
-    itemList: japanTrimmedData,
+    itemList: japanTrimmedData.reverse().slice(1),
   }
 
   // 都道府県
@@ -50,17 +57,21 @@ export const getStaticProps: GetStaticProps<
   const prefData = await prefRes.json()
 
   // 取得したデータを整形
-  const prefRecentData = prefData.itemList.filter(
-    (item: any, index: number) => {
-      return index <= 30
-    },
-  )
-  const prefTrimmedData = prefRecentData.map((item: any) => {
-    return { date: item.date, infectedNum: item.npatients }
-  })
+  const prefTrimmedData = prefData.itemList
+    .slice(0, 98)
+    .map((item: any, index: number) => {
+      return {
+        date: item.date,
+        infectedNum:
+          index < 97
+            ? Number(item.npatients) -
+              Number(prefData.itemList[index + 1].npatients)
+            : 0,
+      }
+    })
   const prefRebuildData = {
     errorInfo: prefData.errorInfo,
-    itemList: prefTrimmedData,
+    itemList: prefTrimmedData.reverse().slice(1),
   }
 
   return {

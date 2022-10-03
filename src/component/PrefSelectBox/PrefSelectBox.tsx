@@ -1,11 +1,12 @@
 import { Select } from '@mantine/core'
 import { IconMapPin } from '@tabler/icons'
 import { useRouter } from 'next/router'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { LinkTab } from './LinkTab'
 import { ContentLabel } from 'src/component/ContentLabel'
 import { getPath, prefList } from 'src/lib/const'
 import { useMediaQuery } from 'src/lib/mantine'
+import { planIdState } from 'src/state/planId'
 import { prefIdState } from 'src/state/prefId'
 
 /**
@@ -13,7 +14,10 @@ import { prefIdState } from 'src/state/prefId'
  */
 export const PrefSelectBox = () => {
   const router = useRouter()
+  const largerThanXxs = useMediaQuery('xxs')
   const largerThanXs = useMediaQuery('xs')
+  const largerThanMd = useMediaQuery('md')
+  const planId = useRecoilValue(planIdState)
   const [prefId, setPrefId] = useRecoilState(prefIdState)
 
   // セレクトボックス用に加工した都道府県データ
@@ -25,7 +29,10 @@ export const PrefSelectBox = () => {
   const handleChange = (value: string) => {
     setPrefId(value)
     localStorage.setItem('prefId', value)
-    router.push(getPath('WEATHER', value))
+    router.push({
+      pathname: getPath('WEATHER', value),
+      query: { plan_id: planId },
+    })
   }
 
   return (
@@ -36,17 +43,19 @@ export const PrefSelectBox = () => {
       />
       <Select
         data={selectPrefList}
-        label='都道府県名'
+        label='都道府県を選択'
         value={prefId}
         onChange={handleChange}
         transition='pop-top-left'
         transitionDuration={80}
         transitionTimingFunction='ease'
+        size={largerThanMd ? 'lg' : largerThanXxs ? 'md' : 'sm'}
         classNames={{
-          root: 'max-w-md xs:mx-auto mx-8 xxs:mx-12 mt-12 xxs:mt-8',
+          root: 'max-w-md md:max-w-lg xs:mx-auto mx-8 xxs:mx-12 mt-12',
+          label: 'text-dark-500',
         }}
       />
-      <LinkTab prefId={prefId} />
+      <LinkTab prefId={prefId} planId={planId} />
     </div>
   )
 }

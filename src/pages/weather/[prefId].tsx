@@ -4,7 +4,7 @@ import { prefList } from 'src/lib/const'
 import { NextPageWithLayout } from 'src/lib/next'
 import { Weather } from 'src/pages-component/weather/pref'
 import { ContentLayout } from 'src/pages-layout/ContentLayout'
-import { WeatherData } from 'src/type/WeatherData'
+import { ThreeHourly, WeatherData, Weekly } from 'src/type/WeatherData'
 
 export const getStaticPaths: GetStaticPaths<{ prefId: string }> = () => {
   const paths = prefList.map((pref) => ({ params: { prefId: pref.id } }))
@@ -23,44 +23,53 @@ export const getStaticProps: GetStaticProps<
   }
 
   // データを取得
-  const API_URL = `https://api.openweathermap.org/data/2.5/forecast?q=${
-    prefList[Number(ctx.params.prefId) - 1].city
-  },JP&appid=${process.env.OPENWEATHERMAP_APPID}&lang=ja&units=metric`
-  const res = await fetch(API_URL)
-  const json = await res.json()
+  const prefData = prefList[Number(ctx.params.prefId) - 1]
+
+  const OPENWEATHER_URL = `https://api.openweathermap.org/data/2.5/forecast?q=${prefData.city},JP&appid=${process.env.OPENWEATHERMAP_APPID}&lang=ja&units=metric`
+  const openWeatherRes = await fetch(OPENWEATHER_URL)
+  const openWeatherData = await openWeatherRes.json()
+
+  const OPENMETEO_URL = `https://api.open-meteo.com/v1/forecast?latitude=${prefData.latitude}&longitude=${prefData.longlatitude}&daily=weathercode,apparent_temperature_max,apparent_temperature_min,sunrise,sunset&timezone=Asia%2FTokyo`
+  const openMeteoRes = await fetch(OPENMETEO_URL)
+  const openMeteoData = await openMeteoRes.json()
 
   // 取得したデータを整形
-  const daily = []
-  for (let i = 0; i < 19; i++) {
-    daily.push({
-      datetime: json.list[i].dt_txt,
-      icon: json.list[i].weather[0].icon,
-      description: json.list[i].weather[0].description,
-      windSpeed: json.list[i].wind.speed,
-      windDeg: json.list[i].wind.deg,
-      tempFeels: json.list[i].main.feels_like,
-      tempMax: json.list[i].main.temp_max,
-      tempMin: json.list[i].main.temp_min,
-      humidity: json.list[i].main.humidity,
+  const threeHourlyWeatherList: ThreeHourly[] = openWeatherData.list
+    .slice(0, 19)
+    .map((item: any) => {
+      return {
+        year: Number(item.dt_txt.slice(0, 4)),
+        month: Number(item.dt_txt.slice(5, 7)),
+        day: Number(item.dt_txt.slice(8, 10)),
+        time: Number(item.dt_txt.slice(11, 13)),
+        icon: item.weather[0].icon,
+        windSpeed: Math.round(item.wind.speed * 10) / 10,
+        windDeg: item.wind.deg,
+        rain: item.rain ? item.rain : { '3h': 0 },
+        tempFeels: Math.round(item.main.feels_like),
+        humidity: item.main.humidity,
+      }
     })
-  }
 
-  const weekly = []
-  for (let i = 19; i < 40; i++) {
-    weekly.push({
-      datetime: json.list[i].dt_txt,
-      icon: json.list[i].weather[0].icon,
-      tempMax: json.list[i].main.temp_max,
-      tempMin: json.list[i].main.temp_min,
-      humidity: json.list[i].main.humidity,
+  const weeklyWeatherList: Weekly[] = []
+  for (let i = 0; i < openMeteoData.daily.time.length; i++) {
+    const date = openMeteoData.daily.time[i].split('-')
+    weeklyWeatherList.push({
+      year: Number(date[0]),
+      month: Number(date[1]),
+      day: Number(date[2]),
+      code: openMeteoData.daily.weathercode[i],
+      tempMax: Math.round(openMeteoData.daily.apparent_temperature_max[i]),
+      tempMin: Math.round(openMeteoData.daily.apparent_temperature_min[i]),
+      sunrise: openMeteoData.daily.sunrise[i],
+      sunset: openMeteoData.daily.sunset[i],
     })
   }
 
   const data = {
-    name: json.city.name,
-    time: json.list[2].dt_txt,
-    daily: daily,
-    weekly: weekly,
+    city: openWeatherData.city.name,
+    threeHourly: threeHourlyWeatherList,
+    weekly: weeklyWeatherList,
   }
 
   return {
