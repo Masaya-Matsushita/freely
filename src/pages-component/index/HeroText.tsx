@@ -25,8 +25,8 @@ export const HeroText = () => {
       <div className='mb-20 mt-10 text-5xl font-bold tracking-widest text-white xxs:mb-0 xxs:text-6xl md:mt-14 md:text-7xl'>
         Freely
       </div>
-      <div className='mx-12 mt-16 mb-12 hidden text-center text-xl tracking-widest text-white xxs:block xs:mb-16 xs:max-w-[450px] xs:text-2xl md:mb-[88px] md:mt-20'>
-        全ての面倒を省いた、世界一シンプル＆簡単な計画表作成サービスです
+      <div className='mx-12 mt-16 mb-12 hidden max-w-[340px] text-center text-xl tracking-widest text-white xxs:block xs:mb-16 xs:max-w-[432px] xs:text-2xl md:mb-[88px] md:mt-20'>
+        「きっちりしすぎない旅行計画」を手軽に作れるサービスです
       </div>
       <div className='flex flex-col items-center gap-6'>
         <LinkButton href={getPath('CREATE')} text='プランを新規作成' />

@@ -1,14 +1,13 @@
 import { Carousel } from '@mantine/carousel'
 import { Spoiler } from '@mantine/core'
 import { IconChevronDown, IconChevronUp } from '@tabler/icons'
+import { useRouter } from 'next/router'
 import { FC } from 'react'
-import { useRecoilValue } from 'recoil'
 import { ThreeHourlyList } from './ThreeHourlyList'
 import { WeatherCard } from './WeatherCard'
 import { WeeklyWeatherCard } from './WeeklyWeatherCard'
 import { prefList } from 'src/lib/const'
 import { useMediaQuery } from 'src/lib/mantine'
-import { prefIdState } from 'src/state/prefId'
 import { WeatherData } from 'src/type/WeatherData'
 
 /**
@@ -16,7 +15,8 @@ import { WeatherData } from 'src/type/WeatherData'
  */
 export const Forecast: FC<{ data: WeatherData }> = (props) => {
   const largerThanLg = useMediaQuery('lg')
-  const prefId = useRecoilValue(prefIdState)
+  const router = useRouter()
+  const prefId = router.query.prefId
   const prefData = prefList.filter((pref) => pref.id === prefId)
   const cityName = props.data.city
   const weeklyList = props.data.weekly
