@@ -21,65 +21,37 @@ export const getStaticProps: GetStaticProps<
   if (!ctx.params) {
     return { notFound: true }
   }
-
-  // 日本全体
-  const API_URL_JAPAN =
-    'https://opendata.corona.go.jp/api/OccurrenceStatusOverseas?dataName=%E6%97%A5%E6%9C%AC'
-  const japanRes = await fetch(API_URL_JAPAN)
-  const japanData = await japanRes.json()
+  // 都道府県のコロナデータ取得
+  const API_URL = `https://opendata.corona.go.jp/api/Covid19JapanAll?dataName=${
+    prefList[Number(ctx.params.prefId) - 1].name
+  }`
+  const res = await fetch(API_URL)
+  const data = await res.json()
 
   // 取得したデータを整形
-  const japanTrimmedData = japanData.itemList
+  const trimmedData = data.itemList
     .slice(0, 98)
     .map((item: any, index: number) => {
       return {
         date: item.date,
         infectedNum:
           index < 97
-            ? parseInt(item.infectedNum.replace(/,/g, ''), 10) -
-              parseInt(
-                japanData.itemList[index + 1].infectedNum.replace(/,/g, ''),
-                10,
+            ? Math.max(
+                Number(item.npatients) -
+                  Number(data.itemList[index + 1].npatients),
+                0,
               )
             : 0,
       }
     })
-  const japanRebuildData = {
-    errorInfo: japanData.errorInfo,
-    itemList: japanTrimmedData.reverse().slice(1),
-  }
-
-  // 都道府県
-  const API_URL_PREF = `https://opendata.corona.go.jp/api/Covid19JapanAll?dataName=${
-    prefList[Number(ctx.params.prefId) - 1].name
-  }`
-  const prefRes = await fetch(API_URL_PREF)
-  const prefData = await prefRes.json()
-
-  // 取得したデータを整形
-  const prefTrimmedData = prefData.itemList
-    .slice(0, 98)
-    .map((item: any, index: number) => {
-      return {
-        date: item.date,
-        infectedNum:
-          index < 97
-            ? Number(item.npatients) -
-              Number(prefData.itemList[index + 1].npatients)
-            : 0,
-      }
-    })
-  const prefRebuildData = {
-    errorInfo: prefData.errorInfo,
-    itemList: prefTrimmedData.reverse().slice(1),
+  const rebuildData = {
+    errorInfo: data.errorInfo,
+    itemList: trimmedData.reverse().slice(1),
   }
 
   return {
     props: {
-      covid19: {
-        covid19Japan: japanRebuildData,
-        covid19Pref: prefRebuildData,
-      },
+      covid19: rebuildData,
     },
     revalidate: 86400,
   }

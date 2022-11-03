@@ -12,6 +12,7 @@ export const EnterLayout = (page: ReactElement) => {
     <ErrorBoundary>
       <Seo />
       <Header />
+      <div className='h-[108px] bg-main-100 xs:h-24' />
       <main className='min-h-[calc(100vh-96px)] bg-main-100 pt-16 pb-40'>
         {page}
       </main>

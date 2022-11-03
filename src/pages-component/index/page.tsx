@@ -1,15 +1,16 @@
 /* eslint-disable tailwindcss/enforces-negative-arbitrary-values */
+import { IconCircleCheck, IconCircleX } from '@tabler/icons'
 import Image from 'next/image'
 import Link from 'next/link'
 import { HeroText } from './HeroText'
 import { useMediaQuery } from 'src/lib/mantine'
 
-const APP_FEATURES = [
+const FEATURES = [
   {
     src: '/Features1.svg',
     text: '面倒な入力フォームは徹底的に排除。最低限の入力だけで旅行プランが完成します。',
     href: 'https://freely-azure.vercel.app/3db85a60-e343-44f4-8778-dce6ff194996/plan',
-    link: 'プラン例を見る →',
+    link: 'プラン作成例を見る →',
   },
   {
     src: '/Features2.svg',
@@ -23,10 +24,19 @@ const APP_FEATURES = [
   },
 ]
 
+const OK_SITUATIONS = [
+  '国内・短期間の旅行',
+  'みんなでワイワイ計画したい',
+  '時間に縛られない旅行がしたい',
+]
+
+const NG_SITUATIONS = ['海外・長期間の旅行', 'しっかり計画を立てたい']
+
 /**
  * @package
  */
 export const Index = () => {
+  const largerThanXxs = useMediaQuery('xxs')
   const largerThanMd = useMediaQuery('md')
 
   return (
@@ -46,8 +56,8 @@ export const Index = () => {
           <HeroText />
         </div>
       )}
-      <div className='mt-48 flex items-center justify-center gap-[10vw]'>
-        <div className='relative hidden h-96 w-96 opacity-90 md:block'>
+      <div className='mt-48 flex items-center justify-center gap-[6vw]'>
+        <div className='relative hidden h-80 w-80 opacity-90 md:block xl:h-[360px] xl:w-[360px]'>
           <Image src='/DreamerImage.svg' alt='' layout='fill' />
         </div>
         <div className='mx-auto max-w-[416px] xs:max-w-[520px] md:mx-0'>
@@ -69,7 +79,7 @@ export const Index = () => {
           </div>
         </div>
       </div>
-      <div className='mx-8 mt-56 flex items-center justify-center gap-4'>
+      <div className='mx-8 mt-48 flex items-center justify-center gap-4'>
         <div className='h-[1px] flex-1 bg-dark-300 xs:max-w-[160px]' />
         <div className='text-xl tracking-widest text-dark-500 xs:text-2xl'>
           Features
@@ -81,7 +91,7 @@ export const Index = () => {
       </div>
       <div className='mx-auto mt-20'>
         <div className='flex flex-col items-center gap-20 sm:flex-row sm:flex-wrap sm:justify-center md:gap-[4vw] lg:gap-[5vw]'>
-          {APP_FEATURES.map((item) => {
+          {FEATURES.map((item) => {
             return (
               <div key={item.src}>
                 <div className='relative h-64 w-64 xxs:h-[300px] xxs:w-[300px] xl:h-[340px] xl:w-[340px]'>
@@ -102,6 +112,57 @@ export const Index = () => {
               </div>
             )
           })}
+        </div>
+      </div>
+      <div className='mx-auto mt-48 w-[280px] xxs:w-80 sm:w-[700px] md:w-[900px]'>
+        <div className='flex items-center justify-center gap-4 lg:gap-7'>
+          <div className='h-[1px] flex-1 bg-dark-300 sm:max-w-[96px] lg:max-w-[120px]' />
+          <div className='text-xl tracking-wide text-dark-500 xxs:text-2xl'>
+            こんな場面でおすすめ
+          </div>
+        </div>
+        <div className='ml-11 mt-6 flex xxs:ml-12 xxs:mt-6 sm:ml-0 sm:mt-10 sm:justify-center sm:gap-20 md:gap-36'>
+          <div className='relative hidden h-52 w-52 sm:block md:h-72 md:w-72 lg:h-80 lg:w-80'>
+            <Image src='/SituationImage.svg' alt='' layout='fill' />
+          </div>
+          <div className='flex flex-col space-y-5 sm:justify-center lg:space-y-7'>
+            <div className='space-y-2 lg:space-y-[10px]'>
+              {OK_SITUATIONS.map((text) => {
+                return (
+                  <div
+                    className='flex items-center gap-[6px] xxs:gap-2 lg:gap-3'
+                    key={text}
+                  >
+                    <IconCircleCheck
+                      color='#20c997'
+                      size={largerThanXxs ? 26 : 23}
+                    />
+                    <div className='text-sm text-dark-500 xxs:text-base lg:text-lg'>
+                      {text}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            <div className='space-y-2 lg:space-y-[10px]'>
+              {NG_SITUATIONS.map((text) => {
+                return (
+                  <div
+                    className='flex items-center gap-[6px] xxs:gap-2 lg:gap-3'
+                    key={text}
+                  >
+                    <IconCircleX
+                      color='#ff6b6b'
+                      size={largerThanXxs ? 26 : 23}
+                    />
+                    <div className='text-sm text-dark-500 xxs:text-base lg:text-lg'>
+                      {text}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </>
