@@ -52,7 +52,7 @@ export const Plan = () => {
             </UnstyledButton>
           </Link>
           <Link href={getPath('EDIT', planId)} passHref>
-            <a className='mx-6 mt-2 block no-underline xs:mx-8 xs:mt-4 sm:mx-14'>
+            <a className='ml-6 mt-2 block no-underline xs:mx-8 xs:mt-4 sm:mx-14'>
               <DateRange
                 dateList={[planData[0].start_date, planData[0].end_date]}
               />
@@ -60,7 +60,7 @@ export const Plan = () => {
           </Link>
 
           {/* スポット一覧 */}
-          <div className='ml-4 mt-10 text-2xl font-bold text-dark-500 xs:mt-12 xs:ml-6 xs:text-3xl sm:mt-14 sm:ml-11'>
+          <div className='mx-4 mt-10 text-2xl font-bold text-dark-500 xs:mt-12 xs:ml-6 xs:text-3xl sm:mt-14 sm:ml-11'>
             スポット一覧
           </div>
           <hr className='mx-3 mt-1 h-[3px] border-0 bg-main-200 xs:mx-5 sm:mx-8' />

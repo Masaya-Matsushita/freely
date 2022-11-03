@@ -51,7 +51,7 @@ export const History = () => {
                   name: json[0].plan_name,
                   startDate: json[0].start_date,
                   endDate: json[0].end_date,
-                  timestamp: '2022/09/04',
+                  timestamp: '2022/11/04',
                 }
               }),
             ),
