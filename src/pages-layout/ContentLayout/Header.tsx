@@ -50,7 +50,7 @@ export const Header = () => {
           color='#495057'
           className='ml-6 sm:hidden'
         />
-        <div className='text-2xl font-medium tracking-wider text-dark-500 xs:text-3xl xs:font-normal sm:ml-4'>
+        <div className='text-2xl font-medium tracking-wider text-dark-600 xs:text-3xl xs:font-normal sm:ml-4'>
           Freely
         </div>
       </div>

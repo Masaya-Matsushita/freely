@@ -1,3 +1,4 @@
+import { useDisclosure } from '@mantine/hooks'
 import { ReactElement } from 'react'
 import { RecoilRoot } from 'recoil'
 import { Header } from './Header'
@@ -13,6 +14,7 @@ import { Seo } from 'src/pages-layout/Seo'
  */
 export const ContentLayout = (page: ReactElement) => {
   const largerThanSm = useMediaQuery('sm')
+  const [opened, { toggle }] = useDisclosure(true)
 
   return (
     <ErrorBoundary>
@@ -20,9 +22,15 @@ export const ContentLayout = (page: ReactElement) => {
         <Seo invite />
         <InitState />
         <Header />
+        <div className='h-[108px] bg-main-100 xs:h-24' />
         <div className='flex'>
-          <SideNav />
-          <main className='min-h-[calc(100vh-96px)] flex-1 bg-main-100 pt-16 pb-40'>
+          <SideNav opened={opened} toggle={toggle} />
+          <main
+            style={{ transition: 'all 0.3s' }}
+            className={`min-h-[calc(100vh-96px)] flex-1 bg-main-100 pt-16 pb-40 ${
+              opened ? 'sm:ml-[276px]' : 'sm:ml-[90px]'
+            }`}
+          >
             {page}
           </main>
         </div>
