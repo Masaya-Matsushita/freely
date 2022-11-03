@@ -1,4 +1,4 @@
-type Covid19 = {
+export type Covid19Data = {
   errorInfo: {
     errorFlag: string
     errorCode: string | null
@@ -8,9 +8,4 @@ type Covid19 = {
     date: string
     infectedNum: number
   }[]
-}
-
-export type Covid19Data = {
-  covid19Japan: Covid19
-  covid19Pref: Covid19
 }

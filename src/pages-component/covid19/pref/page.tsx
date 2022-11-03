@@ -8,6 +8,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler,
 } from 'chart.js'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
@@ -26,6 +27,7 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
+  Filler,
   Legend,
 )
 
@@ -51,8 +53,6 @@ export const Covid19: FC<{ data: Covid19Data }> = (props) => {
   const router = useRouter()
   const largerThanXs = useMediaQuery('xs')
   const prefId = useRecoilValue(prefIdState)
-  const japanData = props.data.covid19Japan
-  const prefData = props.data.covid19Pref
 
   // パスのクエリにplanIdが無いとき
   if (router.isReady && !router.query.plan_id) {
@@ -61,24 +61,14 @@ export const Covid19: FC<{ data: Covid19Data }> = (props) => {
     )
   }
 
-  // 全国の新規感染者数の7日間平均
-  const japanAverageInfectedNumList = averageInfectedNumList(
-    japanData.itemList.map((item) => item.infectedNum),
-  ).slice(7)
-
   // 都道府県の新規感染者数の7日間平均
   const prefAverageInfectedNumList = averageInfectedNumList(
-    prefData.itemList.map((item) => item.infectedNum),
+    props.data.itemList.map((item) => item.infectedNum),
   ).slice(7)
 
   // グラフの詳細設定
   const options = {
     responsive: true,
-    interaction: {
-      mode: 'index' as const,
-      intersect: false,
-    },
-    stacked: false,
     plugins: {
       title: {
         display: true,
@@ -106,45 +96,22 @@ export const Covid19: FC<{ data: Covid19Data }> = (props) => {
         displayColors: true,
       },
     },
-    scales: {
-      y: {
-        type: 'linear' as const,
-        display: true,
-        position: 'left' as const,
-      },
-      y1: {
-        type: 'linear' as const,
-        display: true,
-        position: 'right' as const,
-        grid: {
-          drawOnChartArea: false,
-        },
-      },
-    },
   }
 
   // グラフの横軸ラベル（月日）
-  const labels = japanData.itemList.map((item) => item.date.slice(5)).slice(7)
+  const labels = props.data.itemList.map((item) => item.date.slice(5, 7) + '/' + item.date.slice(8)).slice(7)
 
   // グラフのデータ
   const data = {
     labels,
     datasets: [
       {
+        fill: true,
         label: prefList[Number(prefId) - 1].name,
         data: prefAverageInfectedNumList,
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
         pointRadius: largerThanXs ? 3 : 1,
-        yAxisID: 'y',
-      },
-      {
-        label: '全国',
-        data: japanAverageInfectedNumList,
-        borderColor: '#7779e4',
-        backgroundColor: '#7779e480',
-        pointRadius: largerThanXs ? 3 : 1,
-        yAxisID: 'y1',
       },
     ],
   }
@@ -152,7 +119,7 @@ export const Covid19: FC<{ data: Covid19Data }> = (props) => {
   return (
     <>
       <PrefSelectBox />
-      {prefData.errorInfo.errorFlag === '0' ? (
+      {props.data.errorInfo.errorFlag === '0' ? (
         <div className='mx-3 mt-8 w-[calc(100vw-24px)] max-w-[900px] rounded-lg bg-[#fdfdfd] py-2 xs:mx-6 xs:w-[calc(100vw-48px)] xs:p-4 sm:w-[calc(100vw-300px)] md:mx-auto md:w-[calc(100vw-380px)] md:p-6'>
           <Line height={200} options={options} data={data} />
           <div className='mr-2 mt-10 text-end text-xs text-dark-400'>
