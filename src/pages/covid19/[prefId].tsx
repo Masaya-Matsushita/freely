@@ -36,8 +36,11 @@ export const getStaticProps: GetStaticProps<
         date: item.date,
         infectedNum:
           index < 97
-            ? Number(item.npatients) -
-              Number(data.itemList[index + 1].npatients)
+            ? Math.max(
+                Number(item.npatients) -
+                  Number(data.itemList[index + 1].npatients),
+                0,
+              )
             : 0,
       }
     })

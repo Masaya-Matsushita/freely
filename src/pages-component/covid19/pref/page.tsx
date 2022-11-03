@@ -9,26 +9,29 @@ import {
   Tooltip,
   Legend,
   Filler,
+  BarElement,
+  LineController,
+  BarController,
 } from 'chart.js'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
-import { Line } from 'react-chartjs-2'
-import { useRecoilValue } from 'recoil'
+import { Chart } from 'react-chartjs-2'
 import { PrefSelectBox } from 'src/component/PrefSelectBox'
-import { prefList } from 'src/lib/const'
 import { useMediaQuery } from 'src/lib/mantine'
-import { prefIdState } from 'src/state/prefId'
 import { Covid19Data } from 'src/type/Covid19Data'
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
+  BarElement,
   PointElement,
   LineElement,
   Title,
   Tooltip,
   Filler,
   Legend,
+  LineController,
+  BarController,
 )
 
 // 新規感染者数の7日間平均の配列
@@ -52,7 +55,7 @@ const averageInfectedNumList = (list: number[]) => {
 export const Covid19: FC<{ data: Covid19Data }> = (props) => {
   const router = useRouter()
   const largerThanXs = useMediaQuery('xs')
-  const prefId = useRecoilValue(prefIdState)
+  const largerThanMd = useMediaQuery('md')
 
   // パスのクエリにplanIdが無いとき
   if (router.isReady && !router.query.plan_id) {
@@ -69,13 +72,18 @@ export const Covid19: FC<{ data: Covid19Data }> = (props) => {
   // グラフの詳細設定
   const options = {
     responsive: true,
+    interaction: {
+      mode: 'index' as const,
+      intersect: false,
+    },
+    stacked: false,
     plugins: {
       title: {
         display: true,
         font: {
           size: largerThanXs ? 18 : 14,
         },
-        text: '新型コロナウイルス新規感染者数推移（7日間平均）',
+        text: '新型コロナウイルス感染者数推移',
       },
       legend: {
         labels: {
@@ -99,19 +107,30 @@ export const Covid19: FC<{ data: Covid19Data }> = (props) => {
   }
 
   // グラフの横軸ラベル（月日）
-  const labels = props.data.itemList.map((item) => item.date.slice(5, 7) + '/' + item.date.slice(8)).slice(7)
+  const labels = props.data.itemList
+    .map((item) => item.date.slice(5, 7) + '/' + item.date.slice(8))
+    .slice(7)
 
   // グラフのデータ
   const data = {
     labels,
     datasets: [
       {
-        fill: true,
-        label: prefList[Number(prefId) - 1].name,
+        type: 'bar' as const,
+        label: '新規感染者',
+        borderColor: '#7779e4',
+        backgroundColor: '#7779e480',
+        data: props.data.itemList.slice(7).map((item) => item.infectedNum),
+        borderWidth: 0.5,
+      },
+      {
+        type: 'line' as const,
+        fill: false,
+        label: '7日間平均',
         data: prefAverageInfectedNumList,
-        borderColor: 'rgb(255, 99, 132)',
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        pointRadius: largerThanXs ? 3 : 1,
+        borderColor: '#4c51e1',
+        backgroundColor: '#4c51e1',
+        pointRadius: largerThanMd ? 3 : 1,
       },
     ],
   }
@@ -121,7 +140,7 @@ export const Covid19: FC<{ data: Covid19Data }> = (props) => {
       <PrefSelectBox />
       {props.data.errorInfo.errorFlag === '0' ? (
         <div className='mx-3 mt-8 w-[calc(100vw-24px)] max-w-[900px] rounded-lg bg-[#fdfdfd] py-2 xs:mx-6 xs:w-[calc(100vw-48px)] xs:p-4 sm:w-[calc(100vw-300px)] md:mx-auto md:w-[calc(100vw-380px)] md:p-6'>
-          <Line height={200} options={options} data={data} />
+          <Chart type='bar' height={200} data={data} options={options} />
           <div className='mr-2 mt-10 text-end text-xs text-dark-400'>
             取得元：内閣官房新型コロナウイルス等感染症対策推進室 (Open Data)
           </div>
